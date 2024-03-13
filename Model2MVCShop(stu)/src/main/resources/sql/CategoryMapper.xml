@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CategoryMapper">
+
+	<resultMap id="categorySelectMap" type="category">
+		<id property="categoryNo" column="category_no" jdbcType="NUMERIC"/>
+		<result property="parentCategoryNo" column="parent_category_no" jdbcType="NUMERIC"/>
+		<result property="categoryName" column="category_name" jdbcType="VARCHAR"/>
+		<result property="regDate" column="reg_date" jdbcType="DATE"/>
+	</resultMap>
+	
+	<insert id="insertCategory" parameterType="category" >
+	 	INSERT
+		INTO categories(category_no, parent_category_no, category_name, reg_date)
+		VALUES(seq_categories_category_no.NEXTVAL, #{parentCategoryNo:NUMERIC}, #{categoryName:VARCHAR}, SYSDATE)
+	 </insert>
+	 
+	 <select id="findCategory" parameterType="int" resultMap="categorySelectMap">
+	 	SELECT category_no, parent_category_no, category_name, reg_date 
+		FROM categories 
+		WHERE category_no= #{categoryNo}
+	 </select>
+
+	<select id="getCategoryList" resultMap="categorySelectMap">
+		SELECT category_no, parent_category_no, category_name, reg_date 
+		FROM categories 
+		CONNECT BY PRIOR category_no = parent_category_no 
+		START WITH parent_category_no = 0
+		ORDER SIBLINGS BY category_name
+	</select>
+</mapper>
