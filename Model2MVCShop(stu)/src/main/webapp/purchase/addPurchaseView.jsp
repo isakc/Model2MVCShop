@@ -45,11 +45,12 @@ function fncAddPurchase() {
 </table>
 
 <table width="600" border="0" cellspacing="0" cellpadding="0"	align="center" style="margin-top: 13px;">
-
+	<c:forEach var="cart" items="${cartNoList}">
+		<input type="hidden" name="cartNo" value="${cart }" />
+	</c:forEach>
 	<c:forEach var="product" items="${productList }">
 	<input type="hidden" name="prodNo" value="${product.prodNo }" />
 	<input type="hidden" name="quantity" value="${product.quantity }" />
-	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>

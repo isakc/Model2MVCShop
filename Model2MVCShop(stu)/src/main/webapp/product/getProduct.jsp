@@ -21,7 +21,7 @@ function addCart(prodNo) {
     window.location.href = url;
 }
 
-function fncChangeQuantity(type, maxQuantity){
+function changeQuantity(type, maxQuantity){
 	
 	const quantity = document.getElementById('quantity');
 	
@@ -77,6 +77,7 @@ function submitForm() {
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 13px;">
 	<input type="hidden" name="prodNo" id="prodNo" value="${product.prodNo }"/>
+	<input type="hidden" name="cartNo"/>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -149,10 +150,10 @@ function submitForm() {
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01"><input	type="text" id="quantity" name="quantity" class="ct_input_g" 
 							style="width: 100px; height: 19px" maxLength="13" value="1"/>
-							<button type="button" id="quantityPlus" onclick='fncChangeQuantity("plus", ${product.quantity})'>
+							<button type="button" id="quantityPlus" onclick='changeQuantity("plus", ${product.quantity})'>
 							¡ã
 							</button>
-							<button type="button"  id="quantityMinus" onclick='fncChangeQuantity("minus", ${product.quantity})'>
+							<button type="button"  id="quantityMinus" onclick='changeQuantity("minus", ${product.quantity})'>
 							¡å
 							</button>
 							</td>

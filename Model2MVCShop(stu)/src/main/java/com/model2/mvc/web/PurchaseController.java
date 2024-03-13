@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.model2.mvc.common.Paginate;
 import com.model2.mvc.common.Search;
+import com.model2.mvc.service.cart.CartService;
 import com.model2.mvc.service.domain.OrderDetail;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.domain.Purchase;
@@ -44,6 +45,10 @@ public class PurchaseController {
 	@Autowired
 	@Qualifier("orderDetailServiceImpl")
 	private OrderDetailService orderDetailService;
+	
+	@Autowired
+	@Qualifier("cartServiceImpl")
+	private CartService cartService;
 
 	@Value("#{commonProperties['pageUnit']}")
 	int pageUnit;
@@ -58,7 +63,7 @@ public class PurchaseController {
 
 	@PostMapping("addPurchaseView")
 	public ModelAndView addPurchaseView(@RequestParam("prodNo") List<Integer> prodNoList,
-			@RequestParam("quantity") List<Integer> quantityList) throws Exception {
+			@RequestParam("quantity") List<Integer> quantityList, @RequestParam("cartNo") List<Integer> cartNoList) throws Exception {
 
 		System.out.println("/purchase/addPurchaseView : POST");
 		
@@ -71,18 +76,19 @@ public class PurchaseController {
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("productList", productList);
+		modelAndView.addObject("cartNoList", cartNoList);
 		modelAndView.setViewName("forward:/purchase/addPurchaseView.jsp");
 
 		return modelAndView;
 	}
 	
 	@PostMapping("addPurchase")
-	public ModelAndView addPurchase(@ModelAttribute("purchase") Purchase purchase, @RequestParam("prodNo") List<Integer> prodNoList,
-			@RequestParam("quantity") List<Integer> quantityList,
-			@RequestParam("buyerId") String userId) throws Exception {
+	public ModelAndView addPurchase(@ModelAttribute("purchase") Purchase purchase,
+			@RequestParam("prodNo") List<Integer> prodNoList, @RequestParam("quantity") List<Integer> quantityList,
+			@RequestParam("buyerId") String userId, @RequestParam(value="cartNo", required = false) List<Integer> cartNoList) throws Exception {
 
 		System.out.println("/purchase/addPurchase POST");
-
+		
 		User user = new User();
 		user.setUserId(userId);
 		
@@ -98,6 +104,12 @@ public class PurchaseController {
 			
 			orderDetailService.insertOrderDetail(orderDetail);
 			productService.updateQuantity(prodNoList.get(i), quantityList.get(i));
+		}
+		
+		if(cartNoList != null) {
+			for(Integer cartNo : cartNoList) {
+				cartService.deleteCart(cartNo);
+			}
 		}
 
 		purchase = purchaseService.findPurchase(purchase.getTranNo());
@@ -208,7 +220,7 @@ public class PurchaseController {
 		return modelAndView;
 	}
 
-	@PostMapping("/purchase/updateTranCodeByProd")
+	@PostMapping("purchase/updateTranCodeByProd")
 	public ModelAndView updateTranCodeByProd(@ModelAttribute("purchase") Purchase purchase,
 			@RequestParam("prodNo") int prodNo) throws Exception {
 
