@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.Servlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,7 +53,7 @@ public class ProductController {
 
 	@Value("#{commonProperties['pageSize']}")
 	int pageSize;
-
+	
 	/// Constructor
 	public ProductController() {
 		System.out.println("==> ProductController default Constructor call");
@@ -69,15 +70,14 @@ public class ProductController {
 	}
 
 	@PostMapping("addProduct")
-	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, Model model) throws Exception {
+	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, Model model, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/addProduct : POST");
 		
-		//파일이름 중복을 막기 위해서
-		//범용식별자를 이용
+		String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
 		UUID uuid = UUID.randomUUID();
 		String fileName = uuid+"_"+upload.getOriginalFilename();
-		File destFile = new File("C:/imageFolder/" + fileName);
+		File destFile = new File(root + fileName);
 		upload.transferTo(destFile);
 		product.setFileName(fileName);
 		
@@ -204,15 +204,14 @@ public class ProductController {
 
 	@PostMapping("updateProduct")
 	public String updateProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, 
-			Model model) throws Exception {
+			Model model, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/updateProduct : POST");
 		
-		//파일이름 중복을 막기 위해서
-		//범용식별자를 이용
+		String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
 		UUID uuid = UUID.randomUUID();
 		String fileName = uuid+"_"+upload.getOriginalFilename();
-		File destFile = new File("C:/imageFolder/" + fileName);
+		File destFile = new File(root + fileName);
 		upload.transferTo(destFile);
 		product.setFileName(fileName);
 

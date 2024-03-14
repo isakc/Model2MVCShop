@@ -68,7 +68,7 @@ function fncAddPurchase() {
 	<tr>
 		<td width="104" class="ct_write">가격</td>
 		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01"><fmt:formatNumber value="${ product.price }" pattern="#,##0원"/></td>
+		<td class="ct_write01"><fmt:formatNumber value="${ product.price * product.quantity }" pattern="#,##0원"/></td>
 	</tr>
 	
 	<tr>
