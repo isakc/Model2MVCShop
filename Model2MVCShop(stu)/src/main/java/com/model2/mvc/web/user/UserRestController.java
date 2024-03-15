@@ -1,5 +1,6 @@
-package com.model2.mvc.web;
+package com.model2.mvc.web.user;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -11,18 +12,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.model2.mvc.common.Paginate;
 import com.model2.mvc.common.Search;
 import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.user.UserService;
 
-@Controller
+@RestController
 @RequestMapping("/user/*")
-public class UserController {
+public class UserRestController {
 
 	/// Field
 	@Autowired
@@ -36,56 +39,57 @@ public class UserController {
 	int pageSize;
 
 	/// Constructor
-	public UserController() {
-		System.out.println("==> UserController default Constructor call");
-	}
-	
-	@RequestMapping(value="addUser", method = RequestMethod.GET)
-	public String addUser() throws Exception {
-
-		System.out.println("/user/addUser: GET");
-		
-		return "redirect:/user/addUserView.jsp";
+	public UserRestController() {
+		System.out.println(this.getClass());
 	}
 
-	@RequestMapping(value="addUser", method = RequestMethod.POST)
-	public String addUser(@ModelAttribute("user") User user) throws Exception {
+	@RequestMapping(value="json/addUser", method = RequestMethod.POST)
+	public Map addUser(@RequestBody User user) throws Exception {
 
-		System.out.println("/user/addUser: POST");
+		System.out.println("/user/json/addUser: POST");
+		System.out.println("받은 데이터: " + user);
 		
 		userService.addUser(user);
-
-		return "redirect:/user/loginView.jsp";
+		
+		Map map = new HashMap();
+		map.put("user", user);
+		map.put("message", "ok");
+		
+		return map;
 	}
 
-	@RequestMapping(value="getUser/{userId}", method = RequestMethod.GET)
-	public String getUser(@PathVariable("userId") String userId, Model model) throws Exception {
+	@RequestMapping(value="json/getUser/{userId}", method = RequestMethod.GET)
+	public Map getUser(@PathVariable("userId") String userId) throws Exception {
 
-		System.out.println("/user/getUser: GET");
+		System.out.println("/user/json/getUser: GET");
 		
 		User findUser = userService.getUser(userId);
 		
-		model.addAttribute("user", findUser);
-
-		return "/user/getUser.jsp";
+		Map map = new HashMap();
+		map.put("user", findUser);
+		map.put("message", "ok");
+		
+		return map;
 	}
 	
-	@RequestMapping(value="updateUser/{userId}" , method = RequestMethod.GET)
-	public String updateUser(@PathVariable("userId") String userId, Model model) throws Exception {
+	@RequestMapping(value="json/updateUser/{userId}" , method = RequestMethod.GET)
+	public Map updateUser(@PathVariable("userId") String userId) throws Exception {
 		
-		System.out.println("/user/updateUser : GET");
+		System.out.println("/user/json/updateUser : GET");
 		
 		User findUser = userService.getUser(userId);
-		
-		model.addAttribute("user", findUser);
 
-		return "/user/updateUser.jsp";
+		Map map = new HashMap();
+		map.put("user", findUser);
+		map.put("message", "ok");
+		
+		return map;
 	}
 	
-	@RequestMapping(value="updateUser", method = RequestMethod.POST)
+	@RequestMapping(value="json/updateUser", method = RequestMethod.POST)
 	public String updateUser(@ModelAttribute("user") User user, Model model, HttpSession session) throws Exception {
 
-		System.out.println("/user/updateUser : POST");
+		System.out.println("/user/json/updateUser : POST");
 		
 		userService.updateUser(user);
 		
@@ -97,18 +101,18 @@ public class UserController {
 		return "redirect:/user/getUser/"+user.getUserId();
 	}
 	
-	@RequestMapping(value="login", method = RequestMethod.GET)
+	@RequestMapping(value="json/login", method = RequestMethod.GET)
 	public String login() throws Exception{
 		
-		System.out.println("/user/login");
+		System.out.println("/user/json/login");
 
 		return "redirect:/user/loginView.jsp";
 	}
 	
-	@RequestMapping(value= "login", method = RequestMethod.POST)
+	@RequestMapping(value= "json/login", method = RequestMethod.POST)
 	public String login(@ModelAttribute("user") User user, HttpSession session) throws Exception {
 
-		System.out.println("/user/login: POST");
+		System.out.println("/user/json/login: POST");
 		
 		User dbUser = userService.loginUser(user);
 		
@@ -119,19 +123,19 @@ public class UserController {
 		return "redirect:/index.jsp";
 	}
 	
-	@RequestMapping(value="logout", method = RequestMethod.GET)
+	@RequestMapping(value="json/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
-		System.out.println("/user/logout");
+		System.out.println("/user/json/logout");
 
 		session.removeAttribute("user");
 
 		return "redirect:/index.jsp";
 	}
 	
-	@RequestMapping(value= "checkDuplication", method = RequestMethod.POST)
+	@RequestMapping(value= "json/checkDuplication", method = RequestMethod.POST)
 	public String checkDuplication( @RequestParam("userId") String userId , Model model ) throws Exception{
 
-		System.out.println("/user/checkDuplication : POST");
+		System.out.println("/user/json/checkDuplication : POST");
 		
 		boolean result=userService.checkDuplication(userId);
 		
@@ -141,10 +145,10 @@ public class UserController {
 		return "forward:/user/checkDuplication.jsp";
 	}
 	
-	@RequestMapping(value="listUser")
+	@RequestMapping(value="json/listUser")
 	public String listUser(@ModelAttribute("serach") Search search, Model model) throws Exception {
 
-		System.out.println("/user/listUser : GET / POST");
+		System.out.println("/user/json/listUser : GET / POST");
 		
 		int currentPage = 1;
 		if (search.getCurrentPage() != 0 && search.getSearchKeyword().equals("")) {

@@ -178,7 +178,9 @@ function resetData(){
 				</c:when>
 						
 				<c:otherwise>
-					<td class="ct_write01">${result.fileName}</td>
+					<td class="ct_write01">
+						<img src = "/images/uploadFiles/${product.fileName }" width="700" height="700"/>
+					</td>
 				</c:otherwise>
 			</c:choose>
 	</tr>

@@ -1,4 +1,4 @@
-package com.model2.mvc.web;
+package com.model2.mvc.web.purchase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.model2.mvc.common.Paginate;
@@ -29,9 +30,9 @@ import com.model2.mvc.service.orderDetail.OrderDetailService;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.purchase.PurchaseService;
 
-@Controller
+@RestController
 @RequestMapping("/purchase/*")
-public class PurchaseController {
+public class PurchaseRestController {
 
 	/// Field
 	@Autowired
@@ -57,15 +58,15 @@ public class PurchaseController {
 	int pageSize;
 	
 	/// Constructor
-	public PurchaseController() {
+	public PurchaseRestController() {
 		System.out.println("==> PurchaseController default Constructor call");
 	}
 
-	@PostMapping("addPurchaseView")
+	@PostMapping("json/addPurchaseView")
 	public ModelAndView addPurchaseView(@RequestParam("prodNo") List<Integer> prodNoList,
 			@RequestParam("quantity") List<Integer> quantityList, @RequestParam("cartNo") List<Integer> cartNoList) throws Exception {
 
-		System.out.println("/purchase/addPurchaseView : POST");
+		System.out.println("/purchase/json/addPurchaseView : POST");
 		
 		List<Product> productList = new ArrayList<Product>();
 		
@@ -82,12 +83,12 @@ public class PurchaseController {
 		return modelAndView;
 	}
 	
-	@PostMapping("addPurchase")
+	@PostMapping("json/addPurchase")
 	public ModelAndView addPurchase(@ModelAttribute("purchase") Purchase purchase,
 			@RequestParam("prodNo") List<Integer> prodNoList, @RequestParam("quantity") List<Integer> quantityList,
 			@RequestParam("buyerId") String userId, @RequestParam(value="cartNo", required = false) List<Integer> cartNoList) throws Exception {
 
-		System.out.println("/purchase/addPurchase POST");
+		System.out.println("/purchase/json/addPurchase POST");
 		
 		User user = new User();
 		user.setUserId(userId);
@@ -121,11 +122,11 @@ public class PurchaseController {
 		return modelAndView;
 	}
 
-	@RequestMapping("listPurchase")
+	@RequestMapping("json/listPurchase")
 	public ModelAndView getListPurchase(@ModelAttribute(value = "search") Search search, HttpSession session)
 			throws Exception {
 
-		System.out.println("/purchase/listPurchase : GET");
+		System.out.println("/purchase/json/listPurchase : GET");
 
 		User user = (User) session.getAttribute("user");
 
@@ -156,10 +157,10 @@ public class PurchaseController {
 		return modelAndView;
 	}
 
-	@GetMapping("getPurchase/{tranNo}")
+	@GetMapping("json/getPurchase/{tranNo}")
 	public ModelAndView getPurchase(@PathVariable("tranNo") int tranNo) throws Exception {
 
-		System.out.println("/purchase/getPurchase/{tranNo} : GET");
+		System.out.println("/purchase/json/getPurchase/{tranNo} : GET");
 
 		Purchase purchase = purchaseService.findPurchase(tranNo);
 		List<OrderDetail> list = orderDetailService.getOrderDetailList(tranNo);
@@ -172,10 +173,10 @@ public class PurchaseController {
 		return modelAndView;
 	}
 
-	@RequestMapping("updatePurchase/{tranNo}")
+	@RequestMapping("json/updatePurchase/{tranNo}")
 	public ModelAndView updatePurchase(@PathVariable("tranNo") int tranNo) throws Exception {
 
-		System.out.println("/purchase/updatePurchase/{tranNo} : GET");
+		System.out.println("/purchase/json/updatePurchase/{tranNo} : GET");
 
 		Purchase purchase = purchaseService.findPurchase(tranNo);
 
@@ -186,10 +187,10 @@ public class PurchaseController {
 		return modelAndView;
 	}
 
-	@PostMapping("updatePurchase")
+	@PostMapping("json/updatePurchase")
 	public ModelAndView updatePurchase(@ModelAttribute("purchase") Purchase purchase, @RequestParam("userId") String userId) throws Exception {
 
-		System.out.println("/purchase/updatePurchase");
+		System.out.println("/purchase/json/updatePurchase");
 		
 		User user = new User();
 		user.setUserId(userId);
@@ -203,10 +204,10 @@ public class PurchaseController {
 		return modelAndView;
 	}
 
-	@GetMapping("updateTranCode/{tranNo}/{tranCode}")
+	@GetMapping("json/updateTranCode/{tranNo}/{tranCode}")
 	public ModelAndView updateTranCode(@PathVariable("tranNo") int tranNo, @PathVariable("tranCode") String tranCode) throws Exception {
 
-		System.out.println("/purchase/updateTranCode : GET");
+		System.out.println("/purchase/json/updateTranCode : GET");
 		
 		Purchase purchase = new Purchase();
 		purchase.setTranNo(tranNo);
@@ -220,11 +221,11 @@ public class PurchaseController {
 		return modelAndView;
 	}
 
-	@PostMapping("purchase/updateTranCodeByProd")
+	@PostMapping("json/purchase/updateTranCodeByProd")
 	public ModelAndView updateTranCodeByProd(@ModelAttribute("purchase") Purchase purchase,
 			@RequestParam("prodNo") int prodNo) throws Exception {
 
-		System.out.println("/purchase/updateTranCodeByProd");
+		System.out.println("/purchase/json/updateTranCodeByProd");
 
 		purchaseService.updateTranCodeByProd(purchase);
 

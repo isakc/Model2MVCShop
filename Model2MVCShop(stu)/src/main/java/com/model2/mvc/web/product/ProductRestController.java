@@ -1,4 +1,4 @@
-package com.model2.mvc.web;
+package com.model2.mvc.web.product;
 
 import java.io.File;
 import java.util.HashMap;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.model2.mvc.common.Paginate;
@@ -31,9 +32,9 @@ import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.orderDetail.OrderDetailService;
 import com.model2.mvc.service.product.ProductService;
 
-@Controller
+@RestController
 @RequestMapping("/product/*")
-public class ProductController {
+public class ProductRestController {
 
 	/// Field
 	@Autowired
@@ -55,24 +56,24 @@ public class ProductController {
 	int pageSize;
 	
 	/// Constructor
-	public ProductController() {
+	public ProductRestController() {
 		System.out.println("==> ProductController default Constructor call");
 	}
 	
-	@GetMapping("addProduct")
+	@GetMapping("json/addProduct")
 	public String addProductView(Model model) throws Exception {
 
-		System.out.println("/product/addProductView : GET");
+		System.out.println("/product/json/addProductView : GET");
 
 		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
 
 		return "forward:/product/addProductView.jsp";
 	}
 
-	@PostMapping("addProduct")
+	@PostMapping("json/addProduct")
 	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, Model model, HttpServletRequest request) throws Exception {
 
-		System.out.println("/product/addProduct : POST");
+		System.out.println("/product/json/addProduct : POST");
 		
 		String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
 		UUID uuid = UUID.randomUUID();
@@ -97,11 +98,11 @@ public class ProductController {
 		return "forward:/product/addProductView.jsp";
 	}
 
-	@GetMapping("getProduct/{prodNo}/{menu}")
+	@GetMapping("json/getProduct/{prodNo}/{menu}")
 	public String getProduct(@PathVariable("prodNo") int prodNo, @PathVariable("menu") String menu, Model model,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		System.out.println("/product/getProduct : GET");
+		System.out.println("/product/json/getProduct : GET");
 		
 		Product findProduct = productService.findProduct(prodNo);
 
@@ -138,7 +139,7 @@ public class ProductController {
 		}
 	}
 
-	@RequestMapping("listProduct/{menu}")
+	@RequestMapping("json/listProduct/{menu}")
 	public String getListProduct(@ModelAttribute(value = "search") Search search, Model model,
 			@PathVariable("menu") String menu,
 			@RequestParam(value = "searchKeyword2", defaultValue = "") String searchKeyword2,
@@ -147,7 +148,7 @@ public class ProductController {
 			@RequestParam(value = "preSearchKeyword", defaultValue = "") String preSearchKeyword,
 			@RequestParam(value = "categoryNo", defaultValue = "-1") int categoryNo) throws Exception {
 
-		System.out.println("/product/listProduct GET/POST");
+		System.out.println("/product/json/listProduct GET/POST");
 
 		if (search.getSearchCondition() != null && search.getSearchCondition().equals("2")) {
 			search.setSearchKeyword(search.getSearchKeyword() + "-" + searchKeyword2);
@@ -189,10 +190,10 @@ public class ProductController {
 		return "forward:/product/listProduct.jsp?menu=" + menu;
 	}
 
-	@GetMapping("updateProduct/{prodNo}")
+	@GetMapping("json/updateProduct/{prodNo}")
 	public String updateProduct(@PathVariable("prodNo") int prodNo, Model model) throws Exception {
 
-		System.out.println("/product/updateProduct : GET");
+		System.out.println("/product/json/updateProduct : GET");
 
 		Product findProduct = productService.findProduct(prodNo);
 
@@ -202,11 +203,11 @@ public class ProductController {
 		return "forward:/product/updateProduct.jsp";
 	}
 
-	@PostMapping("updateProduct")
+	@PostMapping("json/updateProduct")
 	public String updateProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, 
 			Model model, HttpServletRequest request) throws Exception {
 
-		System.out.println("/product/updateProduct : POST");
+		System.out.println("/product/json/updateProduct : POST");
 		
 		String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
 		UUID uuid = UUID.randomUUID();
@@ -223,10 +224,10 @@ public class ProductController {
 		return "redirect:/product/getProduct/+" + product.getProdNo() + "/search";
 	}
 	
-	@GetMapping("getOrderDetail/{prodNo}")
+	@GetMapping("json/getOrderDetail/{prodNo}")
 	public String getOrderDetail(@PathVariable("prodNo") int prodNo, Model model) throws Exception {
 
-		System.out.println("/product/getOrderDetail");
+		System.out.println("/product/json/getOrderDetail");
 		
 		Map<String, Object> map = orderDetailService.getOrderDetailListByProdNo(prodNo);
 		
