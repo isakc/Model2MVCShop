@@ -1,6 +1,7 @@
 package com.model2.mvc.web.product;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -53,6 +54,9 @@ public class ProductController {
 
 	@Value("#{commonProperties['pageSize']}")
 	int pageSize;
+
+	@Value("#{commonProperties['copy']}")
+	String copy;
 	
 	/// Constructor
 	public ProductController() {
@@ -79,6 +83,7 @@ public class ProductController {
 		String fileName = uuid+"_"+upload.getOriginalFilename();
 		File destFile = new File(root + fileName);
 		upload.transferTo(destFile);
+		
 		product.setFileName(fileName);
 		
 		product.setManuDate(product.getManuDate().replace("-", ""));

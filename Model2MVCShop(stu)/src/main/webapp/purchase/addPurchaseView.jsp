@@ -51,6 +51,7 @@ function fncAddPurchase() {
 	<c:forEach var="product" items="${productList }">
 	<input type="hidden" name="prodNo" value="${product.prodNo }" />
 	<input type="hidden" name="quantity" value="${product.quantity }" />
+	<c:set var="totalPrice" value="${ totalPrice + (product.price * product.quantity) }"/>
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -86,6 +87,16 @@ function fncAddPurchase() {
 	
 	</c:forEach>	
 	<!-- 여기까지 for문 -->
+	<tr>
+		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
+	</tr>
+	<tr>
+		<td width="104" class="ct_write">
+			총가격 <img 	src="/images/ct_icon_red.gif" width="3" height="3" align="absmiddle"/>
+		</td>
+		<td bgcolor="D6D6D6" width="1"></td>
+		<td class="ct_write01"><fmt:formatNumber value="${totalPrice}" pattern="#,##0원"/></td>
+	</tr>
 	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>

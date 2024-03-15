@@ -47,8 +47,7 @@
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="105">
-					<%-- <a href="/getProduct.do?prodNo=${purchase.purchaseProd.prodNo }" style="text-decoration:underline;">${purchase.purchaseProd.prodName }</a> </td> --%>
-					${orderDetail.product.prodName } <td/>
+						<a href="/product/getProduct/${orderDetail.product.prodNo }/search" style="text-decoration:underline;">${orderDetail.product.prodName }</a><td/>
 					<td></td>
 				</tr>
 			</table>
