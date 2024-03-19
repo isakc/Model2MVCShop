@@ -13,6 +13,7 @@
 
 <script type="text/javascript">
 
+
 	$(function() {
 		$(".clickButton").on("mouseenter", function() {
 			$(this).css("cursor", "pointer");
@@ -51,23 +52,30 @@
 			return;
 		}
 
-		$("form").attr("method", "POST").attr("action", "/product/addProduct").attr("enctype", "multipart/form-data")
-				.submit();
+		$("form").attr("method", "POST").attr("action", "/product/addProduct")
+				.attr("enctype", "multipart/form-data").submit();
 	}
+	
+	$(function () {
+		$("td.ct_btn01:contains('등록')").on("click", function() {
+			fncAddProduct();
+		});
+	})
 
 	$(function() {
 		$("td.ct_btn01:contains('취소')").on("click", function() {
 			$("form")[0].reset();
 		});
 	});
-	
+
 	$(function() {
-		$("td.ct_write01 > img")
-		.on("click",function() {
-			show_calendar('document.detailForm.manuDate', $('input[name=manuDate]').value);
-		   });
+		$("td.ct_write01 > img").on(
+				"click",
+				function() {
+					show_calendar('document.detailForm.manuDate',
+							$('input[name=manuDate]').value);
+				});
 	});
-	
 </script>
 </head>
 
@@ -157,7 +165,7 @@
 					<td class="ct_write01">
 						<input type="text" name="manuDate" readonly="readonly" class="ct_input_g"  
 						style="width: 100px; height: 19px"	maxLength="10" minLength="6"/>
-							&nbsp;<img src="../images/ct_icon_date.gif" width="15" height="15"/>
+							&nbsp;<img class="clickButton" src="../images/ct_icon_date.gif" width="15" height="15"/>
 					</td>
 				</c:when>
 						
@@ -277,12 +285,10 @@
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01"  style="padding-top: 3px;">
 					<c:choose>
 						<c:when test="${result == null }">
-							<!-- <a href="javascript:fncAddProduct();">등록</a> -->
 							<span class="clickButton">등록</span>
 						</c:when>
 					
 						<c:otherwise>
-							<!-- <a href="/product/addProduct" target="rightFrame">추가등록</a> -->
 							<span class="clickButton">추가등록</span>
 						</c:otherwise>
 					</c:choose>
@@ -295,7 +301,6 @@
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01"	 style="padding-top: 3px;">
-					<!-- <a href="javascript:resetData();">취소</a> -->
 					<span class="clickButton">취소</span>
 				</td>
 				<td width="14" height="23">

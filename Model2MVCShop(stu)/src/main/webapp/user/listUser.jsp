@@ -13,8 +13,7 @@
 	// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
 	function getList(currentPage) {
 		$("#currentPage").val(currentPage)
-		$("form").attr("method", "POST").attr("action", "/user/listUser")
-				.submit();
+		$("form").attr("method", "POST").attr("action", "/user/listUser").submit();
 	}
 
 	$(function() {
