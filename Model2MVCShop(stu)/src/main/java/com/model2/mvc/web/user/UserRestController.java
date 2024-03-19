@@ -87,7 +87,7 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value="json/updateUser", method = RequestMethod.POST)
-	public String updateUser(@ModelAttribute("user") User user, Model model, HttpSession session) throws Exception {
+	public Map updateUser(@RequestBody User user, Model model, HttpSession session) throws Exception {
 
 		System.out.println("/user/json/updateUser : POST");
 		
@@ -98,7 +98,11 @@ public class UserRestController {
 			session.setAttribute("user", user);
 		}
 
-		return "redirect:/user/getUser/"+user.getUserId();
+		Map map = new HashMap();
+		map.put("message", "ok");
+		
+		return map;
+		//return "redirect:/user/getUser/"+user.getUserId();
 	}
 	
 	@RequestMapping(value="json/login", method = RequestMethod.GET)
