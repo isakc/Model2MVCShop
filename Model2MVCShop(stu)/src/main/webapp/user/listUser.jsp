@@ -8,14 +8,45 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
+	// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
+	function getList(currentPage) {
+		$("#currentPage").val(currentPage)
+		$("form").attr("method", "POST").attr("action", "/user/listUser")
+				.submit();
+	}
 
-// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
-function getList(currentPage) {
-	document.getElementById("currentPage").value = currentPage;
-   	document.detailForm.submit();		
-}
+	$(function() {
 
+		$("td.ct_btn01:contains('검색')").on("click", function() {
+			fncGetUserList(1);
+		});
+		$(".ct_list_pop td:nth-child(3)").on("click", function() {
+			self.location = "/user/getUser/${user.userId}";
+		});
+
+		$(".ct_list_pop td:nth-child(3)").css("color", "red");
+		$("h7").css("color", "red");
+
+		$(".ct_list_pop:nth-child(4n+6)").css("background-color", "whitesmoke");
+		//console.log ( $(".ct_list_pop:nth-child(1)" ).html() );
+		//console.log ( $(".ct_list_pop:nth-child(2)" ).html() );
+		//console.log ( $(".ct_list_pop:nth-child(3)" ).html() );
+		//console.log ( $(".ct_list_pop:nth-child(4)" ).html() ); //==> ok
+		//console.log ( $(".ct_list_pop:nth-child(5)" ).html() ); 
+		//console.log ( $(".ct_list_pop:nth-child(6)" ).html() ); //==> ok
+		//console.log ( $(".ct_list_pop:nth-child(7)" ).html() ); 
+	});
+	
+	$(function() {
+		$(".clickButton").on("mouseenter", function() {
+			$(this).css("cursor", "pointer");
+			$(this).css("color", "blue");
+		}).on("mouseleave", function() {
+			$(this).css("color", "red");
+		})
+	})
 </script>
 </head>
 
@@ -58,8 +89,8 @@ function getList(currentPage) {
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="17" height="23"><img src="/images/ct_btnbg01.gif" width="17" height="23"></td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:fncGetUserList('1');">검색</a>
+					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;"  class="clickButton">
+						<span class="clickButton">검색</span>
 					</td>
 					<td width="14" height="23"><img src="/images/ct_btnbg03.gif" width="14" height="23"></td>
 				</tr>
@@ -77,7 +108,10 @@ function getList(currentPage) {
 	<tr>
 		<td class="ct_list_b" width="100">No</td>
 		<td class="ct_line02"></td>
-		<td class="ct_list_b" width="150">회원ID</td>
+		<td class="ct_list_b" width="150">
+			회원ID<br>
+			<h7 >(id click:상세정보)</h7>
+		</td>
 		<td class="ct_line02"></td>
 		<td class="ct_list_b" width="150">회원명</td>
 		<td class="ct_line02"></td>
@@ -93,7 +127,9 @@ function getList(currentPage) {
 		<tr class="ct_list_pop">
 			<td align="center">${ i }</td>
 			<td></td>
-			<td align="left"><a href="/user/getUser/${user.userId}">${user.userId}</a></td>
+			<td align="left" class="clickButton">
+				<span>${user.userId }</span>
+			</td>
 			<td></td>
 			<td align="left">${user.userName}</td>
 			<td></td>

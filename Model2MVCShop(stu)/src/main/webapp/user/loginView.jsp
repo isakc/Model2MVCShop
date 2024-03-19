@@ -6,34 +6,83 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-	function fncLogin() {
-		var id=document.loginForm.userId.value;
-		var pw=document.loginForm.password.value;
-		if(id == null || id.length <1) {
-			alert('ID 를 입력하지 않으셨습니다.');
-			document.loginForm.userId.focus();
-			return;
-		}
-		
-		if(pw == null || pw.length <1) {
-			alert('패스워드를 입력하지 않으셨습니다.');
-			document.loginForm.password.focus();
-			return;
-		}
-	    document.loginForm.submit();
-	}
+	/*=============jQuery 변경 주석처리 =============
+	 function fncLogin() {
+	 var id=document.loginForm.userId.value;
+	 var pw=document.loginForm.password.value;
 	
-	//Call Back Method 이용 onload 시 Event 처리
-	window.onload = function(){
-		document.getElementById("userId").focus();
-	}
+	 if(id == null || id.length <1) {
+	 alert('ID 를 입력하지 않으셨습니다.');
+	 document.loginForm.userId.focus();
+	 return;
+	 }
+	
+	 if(pw == null || pw.length <1) {
+	 alert('패스워드를 입력하지 않으셨습니다.');
+	 document.loginForm.password.focus();
+	 return;
+	 }
+	 }
+
+	 //Call Back Method 이용 onload 시 Event 처리
+	 window.onload = function(){
+	 document.getElementById("userId").focus();
+	 }========================================	*/
+	$(function() {
+
+		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+		$("#userId").focus();
+
+		//==> 추가된부분 : "Login"  Event 연결
+		$("img[src='/images/btn_login.gif']").on("click", function() {
+
+					var id = $("input:text").val();
+					var pw = $("input:password").val();
+
+					if (id == null || id.length < 1) {
+						alert('ID 를 입력하지 않으셨습니다.');
+						$("input:text").focus();
+						return;
+					}
+
+					if (pw == null || pw.length < 1) {
+						alert('패스워드를 입력하지 않으셨습니다.');
+						$("input:password").focus();
+						return;
+					}
+
+					//$("form").attr("method" , "POST");
+					//$("form").attr("action" , "/login.do");
+					//$("form").attr("target" , "_parent");
+					//$("form").submit();
+					//==> 위의 4실행문과 같은의미			    
+					$("form").attr("method", "POST").attr("action","/user/login")
+					.attr("target", "_parent").submit();
+				});
+	});
+
+	//*=============jQuery 추가된부부분 : 회원원가입화면이동 =============
+	$(function() {
+		//==> 추가된부분 : "addUser"  Event 연결
+		$("img[src='/images/btn_add.gif']").on("click", function() {
+			self.location = "/user/addUser"
+		});
+	});
+	
+	$(function() {
+		$(".clickButton").on("mouseenter", function() {
+			$(this).css("cursor", "pointer");
+		})
+	})
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000" >
 
-<form name="loginForm"  method="post" action="/user/login" target="_parent">
+<form>
+<!-- <form name="loginForm"  method="post" action="/user/login" target="_parent"> -->
 
 <div align="center">
 
@@ -97,16 +146,18 @@
                 <td height="20" align="center">
       				<table width="136" height="20" border="0" cellpadding="0" cellspacing="0">
                           <tr> 
-                            <td width="56">
+                            <td width="56" class="clickButton"><!-- 
                             	<a href="javascript:fncLogin();">
                             		<img src="/images/btn_login.gif" width="56" height="20" border="0">
-                            	</a>
+                            	</a> -->
+                            	<img src="/images/btn_login.gif" width="56" height="20" border="0"/>
                             </td>
                             <td width="10">&nbsp;</td>
-                            <td width="70">
-                            	<a href="addUserView.jsp;">
+                            <td width="70" class="clickButton">
+<!--                             	<a href="addUserView.jsp;">
                             		<img src="/images/btn_add.gif" width="70" height="20" border="0">
-                            	</a>
+                            	</a> -->
+                            	<img src="/images/btn_add.gif" width="70" height="20" border="0">
                             </td>
                           </tr>
                     </table>

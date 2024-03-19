@@ -8,44 +8,115 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-
+/*=============jQuery 변경 주석처리 =============
 window.onload = function(){
-	document.getElementById("userId").focus();
-	document.getElementById("userId").onkeydown = function(){
-		if(event.keyCode == '13') {
-			fncCheckDuplication();
-		}
+	 document.getElementById("userId").focus();
+	 document.getElementById("userId").onkeydown = function(){
+		if(event.keyCode == '13')	fncCheckDuplication();
 	}
-}
+} //========================================	*/
 
-function fncCheckDuplication() {
-	// Form 유효성 검증
-	if(document.detailForm.userId.value != null && document.detailForm.userId.value.length >0) {
-	   	
-	    document.detailForm.action='/user/checkDuplication';
-	    
-		document.detailForm.submit();
-		
-	}else {
-		alert('아이디는 반드시 입력하셔야 합니다.');
-	}
-	document.getElementById("userId").focus(); 
-}
+	$(function() {
 
-function fncUseId() {
-	if(opener) {
-		opener.document.detailForm.userId.value = "${userId}";
-	}
-	window.close();
-}
+		$("#userId").focus();
 
+		//==> keydown Event 연결
+		//==> CallBackFunction  :  EventObject 인자로 받을수 있다.
+		//==> 본실습 에서는
+		//==> - Event Object 를 인자로 받을 수 있는 것 확인.
+		//==> - keyCode 값 alert() 확인하는 것 으로 종료
+		$("#userId").on("keydown", function(event) {
+
+			if (event.keyCode == '13') {
+				fncCheckDuplication();
+			}
+		});
+
+	});
+
+	/*=============jQuery 변경 주석처리 =============
+	 function fncCheckDuplication() {
+	 // Form 유효성 검증
+	 if(document.detailForm.userId.value != null && document.detailForm.userId.value.length >0) {
+	 document.detailForm.action='/user/checkDuplication';
+	 document.detailForm.submit();
+	 }else {
+	 alert('아이디는 반드시 입력하셔야 합니다.');
+	 }
+	 document.getElementById("userId").focus(); 
+	 }========================================	*/
+	//==> "중복확인"  Event 처리
+	$(function() {
+		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+		//==> 1 과 3 방법 조합 : $("tagName.className:filter함수") 사용함.				
+		$("td.ct_btn:contains('중복확인')").on("click", function() {
+
+			//==>Debug
+			//alert($("td.ct_btn:contains('중복확인')").html())
+
+			// Form 유효성 검증
+			if ($("#userId").val() != null && $("#userId").val().length > 0) {
+				$("form").attr("method", "POST");
+				$("form").attr("action", "/user/checkDuplication");
+				$("form").submit();
+			} else {
+				alert('아이디는 반드시 입력하셔야 합니다.');
+			}
+			$("#userId").focus();
+		});
+	});
+
+	/*=============jQuery 변경 주석처리 =============
+	 function fncUseId() {
+	 if(opener) {
+	 opener.document.detailForm.userId.value = "${userId}";
+	 }
+	 window.close();
+	 }========================================	*/
+	//==>"사용"  Event 처리
+	$(function() {
+		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+		//==> 1 과 3 방법 조합 : $("tagName.className:filter함수") 사용함.	
+		$("td.ct_btn01:contains('사용')").on("click", function() {
+
+			//==>Debug
+			//alert($("td.ct_btn01:contains('사용')").html())
+
+			if (opener) {
+				opener.$("input[name='userId']").val("${userId}");
+				opener.$("input[name='password']").focus();
+			}
+
+			window.close();
+		});
+	});
+
+	//==> 추가된부분 : "닫기"  Event  처리
+	$(function() {
+		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
+		//==> 1 과 3 방법 조합 : $("tagName.className:filter함수") 사용함.	
+		$("td.ct_btn01:contains('닫기')").on("click", function() {
+			//==>Debug
+			//alert($("td.ct_btn01:contains('닫기')").html())
+			window.close();
+		});
+	});
+	
+	$(function() {
+		$(".clickButton").on("mouseenter", function() {
+			$(this).css("cursor", "pointer");
+			$(this).css("color", "blue");
+		}).on("mouseleave", function() {
+			$(this).css("color", "black");
+		})
+	})
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
-
-<form name="detailForm"  method="post">
+<form>
 
 <!-- 타이틀 시작 -->
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
@@ -120,7 +191,8 @@ function fncUseId() {
 									<img src="/images/ct_btng01.gif" width="4" height="21">
 								</td>
 								<td align="center" background="/images/ct_btng02.gif" class="ct_btn" style="padding-top:3px;">
-									<a href="javascript:fncCheckDuplication();">중복확인</a>
+									<!-- <a href="javascript:fncCheckDuplication();">중복확인</a> -->
+									<span class="clickButton">중복확인</span>
 								</td>
 								<td width="4" height="21">
 									<img src="/images/ct_btng03.gif" width="4" height="21"/>
@@ -153,7 +225,8 @@ function fncUseId() {
 							<img src="/images/ct_btnbg01.gif" width="17" height="23"/> 
 						</td>
 						<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-							<a href="javascript:fncUseId();">사용</a>
+							<!-- <a href="javascript:fncUseId();">사용</a> -->
+							<span class="clickButton">사용</span>
 						</td>
 						<td width="14" height="23">
 							<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -164,7 +237,8 @@ function fncUseId() {
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top:3px;">
-						<a href="javascript:window.close();">닫기</a>
+						<!-- <a href="javascript:window.close();">닫기</a> -->
+						<span class="clickButton">닫기</span>
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
