@@ -3,6 +3,7 @@
     
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <html>
 <head>
 
@@ -10,6 +11,7 @@
 
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
+
 	$(function() {
 		$(".clickButton").on("mouseenter", function() {
 			$(this).css("cursor", "pointer");
@@ -90,14 +92,18 @@
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
 		<td width="15" height="37"><img src="/images/ct_ttl_img01.gif"	width="15" height="37"></td>
+		
 		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
+		
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="93%" class="ct_ttl01">상품상세조회</td>
 					<td width="20%" align="right">&nbsp;</td>
 				</tr>
 			</table>
+			
 		</td>
+		
 		<td width="12" height="37">
 			<img src="/images/ct_ttl_img03.gif"  width="12" height="37"/>
 		</td>
@@ -106,8 +112,9 @@
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 13px;">
 	<input type="hidden" name="prodNo" id="prodNo" value="${product.prodNo }"/>
-	<input type="hidden" name="cartNo"/>
 	<input type="hidden" name="maxQuantity" value="${product.quantity }"/>
+	<input type="hidden" name="cartNo"/>
+	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -124,6 +131,7 @@
 			</table>
 		</td>
 	</tr>
+	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -134,6 +142,7 @@
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">${product.prodName }</td>
 	</tr>
+	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -146,6 +155,7 @@
 			<img src = "/images/uploadFiles/${product.fileName }" width="300" height="300"/>
 		</td>
 	</tr>
+	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -156,6 +166,7 @@
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">${product.prodDetail }</td>
 	</tr>
+	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -164,6 +175,7 @@
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">${product.manuDate }</td>
 	</tr>
+	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -172,6 +184,7 @@
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01"><fmt:formatNumber value="${product.price}" pattern="#,##0원"/></td>
 	</tr>
+	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -188,6 +201,7 @@
 				</button>
 		</td>
 	</tr>
+	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -196,6 +210,7 @@
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">${product.regDate }</td>
 	</tr>
+	
 	<tr>
 		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
 	</tr>
@@ -215,7 +230,6 @@
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<%-- <a href="javascript:addCart(${product.prodNo });">장바구니</a> --%>
 						<span class="clickButton">장바구니</span>
 				</td>
 				<td width="14" height="23">
@@ -229,7 +243,6 @@
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<!-- <a href="javascript:submitForm();">구매</a> -->
 						<span class="clickButton">구매</span>
 				</td>
 				<td width="14" height="23">
@@ -242,7 +255,6 @@
 					<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 				</td>
 				<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-					<!-- <a href="javascript:history.go(-1)">이전</a> -->
 					<span class="clickButton">이전</span>
 				</td>
 				<td width="14" height="23">

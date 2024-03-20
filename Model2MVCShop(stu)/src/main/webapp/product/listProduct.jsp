@@ -10,51 +10,71 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-	// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
+	// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용
+	
+	$(function() {
+		$(".clickButton").on("mouseenter", function() {
+			$(this).css("cursor", "pointer");
+			$(this).css("color", "blue");
+		}).on("mouseleave", function() {
+			$(this).css("color", "black");
+		})
+	})
+	
 	function getList(currentPage) {
-		document.getElementById("currentPage").value = currentPage;
-		document.detailForm.submit();
+		$("#currentPage").val(currentPage);
+		$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
 	}
 
-	function getSorter(sorter) {
-		document.getElementById("currentPage").value = 1;
-		document.getElementById("sorter").value = sorter;
-		document.detailForm.submit();
-	}
-
-	function getCategory() {
-		document.getElementById("currentPage").value = 1;
-		console.log(document.getElementsByName("searchCondition")[0].value);
-		document.getElementsByName("searchCondition")[0].value = "";
-		document.getElementsByName("searchKeyword")[0].value = "";
-		document.detailForm.submit();
-	}
-
-	function changeInputType() {
-		var searchCondition = document.getElementById("searchCondition");
-		var searchKeyword = document.getElementById("searchKeyword");
-		var selectedValue = searchCondition.value;
-
-		if (selectedValue == '2') {
-			searchKeyword.value = 0;
-			searchKeyword.style.width = "90px";
-			var addInput = document.createElement('input');
-			addInput.style.width = "90px";
-			addInput.style.height = "19px";
-			addInput.setAttribute('name', 'searchKeyword2');
-			addInput.setAttribute('class', 'ct_input_g');
-			searchKeyword.insertAdjacentElement('afterend', addInput);
-		} else {
-			searchKeyword.value = '';
-			searchKeyword.setAttribute("type", "text");
-			searchKeyword.style.width = "200px";
-			var addedInput = document.querySelector('[name="searchKeyword2"]');
-			if (addedInput) {
-				addedInput.remove();
+	$(function () {
+		$("td.ct_list_b:contains('가격') > span").on("click", function () {
+			$("#currentPage").val(1);
+			
+			if($(this).text == '▲'){
+				$("input[name=sorter]").val('priceASC');
+			}else{
+				$("input[name=sorter]").val('priceDESC');
 			}
-		}
-	}
+			
+			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
+		})
+	})
+	
+	$(function () {
+		$("select[name=categoryNo]").on("change", function () {
+			$("#currentPage").val(1);
+			$('input[name="searchCondition"]').val("");
+			$('input[name="searchKeyword"]').val("");
+
+			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
+		})
+	})
+
+	$(function() {
+		$("select[name=searchCondition]").on("change", function() {
+			var searchCondition = $('select[name=searchCondition]');
+			var searchKeyword = $('input[name=searchKeyword]');
+			var selectedValue = searchCondition.val();
+
+			if (selectedValue == '2') {
+				searchKeyword.val(0);
+				searchKeyword.css("width", "90px");
+
+				searchKeyword.after('<input name="searchKeyword2"/>');
+				$('input[name=searchKeyword2]').css({
+					"width" : "90px",
+					"height" : "19px"
+				});
+			} else {
+				searchKeyword.val("");
+				searchKeyword.css("width", "200px");
+				$("input[name=searchKeyword2]").remove();
+			}
+		});
+	})
+	
 </script>
 </head>
 
@@ -62,46 +82,45 @@
 
 	<div style="width: 98%; margin-left: 10px;">
 
-		<form name="detailForm" action="/product/listProduct/${menu }"
-			method="post">
+		<form>
 
-			<table width="100%" height="37" border="0" cellpadding="0"
-				cellspacing="0">
+			<table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">
 				<tr>
-					<td width="15" height="37"><img src="/images/ct_ttl_img01.gif"
-						width="15" height="37" /></td>
-					<td background="/images/ct_ttl_img02.gif" width="100%"
-						style="padding-left: 10px;">
+					<td width="15" height="37">
+						<img src="/images/ct_ttl_img01.gif" width="15" height="37" />
+					</td>
+					
+					<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
 						<table width="100%" border="0" cellspacing="0" cellpadding="0">
 							<tr>
-								<td width="93%" class="ct_ttl01"><c:set var="menuOption"
-										value="${menu == 'manage' ? '관리' : '목록조회' }" /> 상품
-									${menuOption }</td>
+								<td width="93%" class="ct_ttl01">
+									<c:set var="menuOption" value="${menu == 'manage' ? '관리' : '목록조회' }" />
+									상품 ${menuOption }
+								</td>
 							</tr>
 						</table>
 					</td>
-					<td width="12" height="37"><img src="/images/ct_ttl_img03.gif"
-						width="12" height="37" /></td>
+					
+					<td width="12" height="37">
+						<img src="/images/ct_ttl_img03.gif" width="12" height="37" />
+					</td>
 				</tr>
 			</table>
 
-
-			<table width="100%" border="0" cellspacing="0" cellpadding="0"
-				style="margin-top: 10px;">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
 				<tr>
-					<td align="right"><select id="searchCondition"
-						name="searchCondition" class="ct_input_g"
-						onchange="changeInputType()" style="width: 80px">
+					<td align="right">
+ 						<!--<select id="searchCondition" name="searchCondition" class="ct_input_g" onchange="changeInputType()" style="width: 80px"> -->
+						<select id="searchCondition" name="searchCondition" class="ct_input_g" style="width: 80px">
 							<option value="" selected disabled hidden>선택</option>
 							<c:if test="${user.role == 'admin' && user!=null}">
-								<option value="0"
-									${search.searchCondition == '0' ? 'selected' : ''}>상품번호</option>
+								<option value="0" ${search.searchCondition == '0' ? 'selected' : ''}>상품번호</option>
 							</c:if>
-							<option value="1"
-								${search.searchCondition == '1' ? 'selected' : ''}>상품명</option>
-							<option value="2"
-								${search.searchCondition == '2' ? 'selected' : ''}>상품가격</option>
-					</select> <c:choose>
+							<option value="1" ${search.searchCondition == '1' ? 'selected' : ''}>상품명</option>
+							<option value="2" ${search.searchCondition == '2' ? 'selected' : ''}>상품가격</option>
+						</select>
+						
+						<c:choose>
 							<c:when test="${search.searchCondition == '2' }">
 								<input type="text" id="searchKeyword" name="searchKeyword"
 									class="ct_input_g" style="width: 90px; height: 19px"
@@ -115,37 +134,43 @@
 									class="ct_input_g" style="width: 200px; height: 19px"
 									value="${search.searchKeyword }" />
 							</c:otherwise>
-						</c:choose></td>
+						</c:choose>
+					</td>
+					
 					<td align="right" width="70">
 						<table border="0" cellspacing="0" cellpadding="0">
 							<tr>
-								<td width="17" height="23"><img
-									src="/images/ct_btnbg01.gif" width="17" height="23"></td>
-								<td background="/images/ct_btnbg02.gif" class="ct_btn01"
-									style="padding-top: 3px;"><a
-									href="javascript:getList(${resultPage.now });">검색</a></td>
-								<td width="14" height="23"><img
-									src="/images/ct_btnbg03.gif" width="14" height="23"></td>
+								<td width="17" height="23">
+									<img src="/images/ct_btnbg01.gif" width="17" height="23">
+								</td>
+								
+								<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
+									<a href="javascript:getList(${resultPage.now });">검색</a>
+								</td>
+								
+								<td width="14" height="23">
+									<img src="/images/ct_btnbg03.gif" width="14" height="23">
+								</td>
 							</tr>
 						</table>
 					</td>
 				</tr>
 			</table>
 
-
-			<table width="100%" border="0" cellspacing="0" cellpadding="0"
-				style="margin-top: 10px;">
+			<table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 10px;">
 				<c:choose>
 					<c:when test="${resultPage.total==0 }">
 						<tr>
 							<td class="ct_list_b">해당상품 없음</td>
-						<tr />
+						<tr/>
 					</c:when>
+					
 					<c:otherwise>
 						<tr>
 							<td colspan="11">전체 ${resultPage.total} 건수, 현재
 								${resultPage.now } 페이지</td>
 						</tr>
+						
 						<tr>
 							<td class="ct_list_b" width="100">No</td>
 							<td class="ct_line02"></td>
@@ -153,13 +178,15 @@
 							<td class="ct_line02"></td>
 							<td class="ct_list_b" width="350">상품명</td>
 							<td class="ct_line02"></td>
-							<td class="ct_list_b" width="150">가격 <a
-								href="javascript:getSorter('priceASC');" width="10">▲</a> <a
-								href="javascript:getSorter('priceDESC');" width="10">▼</a>
+							<td class="ct_list_b" width="150">가격
+								<!-- <a href="javascript:getSorter('priceASC');" width="10">▲</a> -->
+								<span class="clickButton">▲</span>
+								<!-- <a href="javascript:getSorter('priceDESC');" width="10">▼</a> -->
+								<span class="clickButton">▼</span>
 							</td>
 							<td class="ct_line02"></td>
-							<td class="ct_list_b">카테고리 <select name="categoryNo"
-								onchange="javascript:getCategory();">
+							<td class="ct_list_b">카테고리
+							<select name="categoryNo">
 									<option value="-1" style="font-weight: 700">전체</option>
 									<c:forEach var="category" items="${categoryList}">
 										<c:choose>
@@ -233,14 +260,14 @@
 			<table width="100%" border="0" cellspacing="0" cellpadding="0"
 				style="margin-top: 10px;">
 				<tr>
-					<td align="center"><input type="hidden" id="currentPage"
-						name="currentPage" value="${resultPage.now }" /> <input
-						type="hidden" id="sorter" name="sorter" value="${sorter }" /> <input
-						type="hidden" name="preSearchCondition"
-						value="${search.searchCondition }" /> <input type="hidden"
-						name="preSearchKeyword" value="${search.searchKeyword }" /> <c:import
-							var="paging" url="../common/pageNavigator.jsp" scope="request" />
-						${ paging }</td>
+					<td align="center">
+						<input type="hidden" id="currentPage" name="currentPage" value="${resultPage.now }" />
+						<input type="hidden" id="sorter" name="sorter" value="${sorter }" />
+						<input type="hidden" name="preSearchCondition" value="${search.searchCondition }" />
+						<input type="hidden" name="preSearchKeyword" value="${search.searchKeyword }" />
+						<c:import var="paging" url="../common/pageNavigator.jsp" scope="request" />
+						${ paging }
+					</td>
 				</tr>
 			</table>
 			<!--  페이지 Navigator 끝 -->

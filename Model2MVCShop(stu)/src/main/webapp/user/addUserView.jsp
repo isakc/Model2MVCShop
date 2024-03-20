@@ -19,10 +19,6 @@
 
 	function fncAddUser() {
 		// Form 유효성 검증
-		/* var id = document.detailForm.userId.value;
-		var pw = document.detailForm.password.value;
-		var pw_confirm = document.detailForm.password2.value;
-		var name = document.detailForm.userName.value; */
 
 		var id = $("input[name='userId']").val();
 		var pw = $("input[name='password']").val();
@@ -68,18 +64,11 @@
 
 	//==> 추가된부분 : "가입"  Event 연결
 	$(function() {
-
-		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-		//==> 1 과 3 방법 조합 : $("tagName.className:filter함수") 사용함.	
 		$("td.ct_btn01:contains('가입')").on("click", function() {
 			fncAddUser();
 		});
 	});
 
-	/*============= jQuery 변경 주석처리 =============
-	function resetData() {
-			document.detailForm.reset();
-	}========================================	*/
 	//==> 추가된부분 : "취소"  Event 처리 및  연결
 	$(function() {
 		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
@@ -91,15 +80,6 @@
 		});
 	});
 
-	/*============= jQuery 변경 주석처리 =============
-	function check_email(frm) {
-	var email=document.detailForm.email.value;
-	   if(email != "" && (email.indexOf('@') < 1 || email.indexOf('.') == -1)){
-	   	alert("이메일 형식이 아닙니다.");
-		return false;
-	   }
-	   return true;
-	}========================================	*/
 	//==> 추가된부분 : "이메일" 유효성Check  Event 처리 및 연결
 	$(function() {
 
@@ -154,29 +134,11 @@
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/*============= jQuery 변경 주석처리 =============
-	function fncCheckDuplication() {
-		popWin 
-			= window.open("/user/checkDuplication.jsp",
-										"popWin", 
-										"left=300,top=200,width=300,height=200,marginwidth=0,marginheight=0,"+
-										"scrollbars=no,scrolling=no,menubar=no,resizable=no");
-	}========================================	*/
-	//==> 추가된부분 : "ID중복확인" Event 처리 및 연결
 	$(function() {
-		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-		//==> 1 과 3 방법 조합 : $("tagName.className:filter함수") 사용함.	
-		$("td.ct_btn:contains('ID중복확인')")
-				.on(
-						"click",
+		$("td.ct_btn:contains('ID중복확인')").on("click",
 						function() {
-							//alert($("td.ct_btn:contains('ID중복확인')").html());
-							popWin = window
-									.open(
-											"/user/checkDuplication.jsp",
-											"popWin",
-											"left=300,top=200,width=300,height=200,marginwidth=0,marginheight=0,"
-													+ "scrollbars=no,scrolling=no,menubar=no,resizable=no");
+							popWin = window.open("/user/checkDuplication.jsp","popWin","left=300,top=200,width=300,height=200,marginwidth=0,marginheight=0,"
+									+ "scrollbars=no,scrolling=no,menubar=no,resizable=no");
 						});
 	});
 </script>
