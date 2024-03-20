@@ -8,7 +8,23 @@
 <title>구매상세조회</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+$(function () {
+	$("td.ct_btn01:contains('확인')").on("click", function () {
+		history.go(-1);
+	})
+})
 
+$(function() {
+		$(".clickButton").on("mouseenter", function() {
+			$(this).css("cursor", "pointer");
+			$(this).css("color", "blue");
+		}).on("mouseleave", function() {
+			$(this).css("color", "black");
+		})
+	})
+</script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
@@ -189,7 +205,8 @@
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-						<a href="javascript:history.go(-1);">확인</a>
+						<span class="clickButton">확인</span>
+						<!-- <a href="javascript:history.go(-1);">확인</a> -->
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif"width="14" height="23"/>
