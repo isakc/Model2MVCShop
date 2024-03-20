@@ -5,46 +5,81 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <html>
 <head>
-<title>상품등록</title>
+<title>장바구니 리스트</title>
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
-<script type="text/javascript" src="../javascript/calendar.js">
-	
-</script>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 
 <script type="text/javascript">
-	function submitForm() {
-		document.detailForm.submit();
-	}
-	
-	function updateQuantity(type, prodNo, cartNo, quantity, maxQuantity) {
-		
+
+	$(function() {
+		$(".clickButton").on("mouseenter", function() {
+			$(this).css("cursor", "pointer");
+			$(this).css("color", "blue");
+		}).on("mouseleave", function() {
+			$(this).css("color", "black");
+		})
+	})
+
+	function updateQuantity(type, elem) {
+		var prodNo = elem.data("prod-no");
+		var cartNo = elem.data("cart-no");
+		var quantity = elem.val();
+		var maxQuantity = elem.data("max-quantity");
+
 		let number = quantity;
-		
-		 if(type === 'plus') {
-			 if(maxQuantity > number){
-				   number = parseInt(number) + 1;
-			 }else{
-				 alert("최대수량 초과");
-			 }
-		 }else  {
-		   if(number > 1){
-			   number = parseInt(number) - 1;
-		   }else{
-			   alert("1보다 작아질 수는 없습니다");
-		   }
-		 }
+
+		if (type === 'plus') {
+			if (maxQuantity > number) {
+				number = parseInt(number) + 1;
+			} else {
+				alert("최대수량 초과");
+				return;
+			}
+		} else {
+			if (number > 1) {
+				number = parseInt(number) - 1;
+			} else {
+				alert("1보다 작아질 수는 없습니다");
+				return;
+			}
+		}
 
 		var url = "/cart/updateCart/" + prodNo + "/" + cartNo + "/" + number;
-	    window.location.href = url;
+		window.location.href = url;
 	}
+
+	$(function() {
+		$("td.ct_write01>button:even").on("click", function() {
+			updateQuantity('minus', $(this).next());
+		});
+
+		$("td.ct_write01>button:odd").on("click", function() {
+			updateQuantity('plus', $(this).prev());
+		});
+	})
+
+	$(function() {
+		$("td.ct_btn01:contains('구매')").on(
+				"click",
+				function() {
+					$("form").attr("method", "POST").attr("action",
+							"/purchase/addPurchaseView").submit();
+				})
+	})
+
+	$(function() {
+		$("td.ct_btn01:contains('이전')").on("click", function() {
+			history.go(-1);
+		})
+	})
 </script>
 </head>
 
 <body bgcolor="#ffffff" text="#000000">
 
-	<form name="detailForm" method="post" action="/purchase/addPurchaseView">
+	<form>
 		<table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">
 			<tr>
 				<td width="15" height="37"><img src="/images/ct_ttl_img01.gif"
@@ -111,13 +146,10 @@
 					<td bgcolor="D6D6D6" width="1"></td>
 
 					<td class="ct_write01">
-					<%-- <a href="/cart/updateCart/${cart.product.prodNo }/${cart.cartNo }/${cart.quantity -1}">▼</a> --%>
-					<a href="javascript:updateQuantity('minus', ${cart.product.prodNo }, ${cart.cartNo }, ${cart.quantity}, ${cart.product.quantity });">▼</a>
-						<input type="text" id="quantity" name="quantity"
-						class="ct_input_g" style="width: 30px; text-align: center;"
-						value="${cart.quantity }" />
-					<%-- <a href="/cart/updateCart/${cart.product.prodNo }/${cart.cartNo }/${cart.quantity +1}">▲</a> --%>
-					<a href="javascript:updateQuantity('plus', ${cart.product.prodNo }, ${cart.cartNo }, ${cart.quantity}, ${cart.product.quantity });">▲</a>
+						<button type="button" id="quantityPlus">▼</button>
+						<input type="text" id="quantity" name="quantity" class="ct_input_g" style="width: 30px; text-align: center;" value="${cart.quantity }" 
+									data-prod-no="${cart.product.prodNo }" data-cart-no="${cart.cartNo }" data-max-quantity="${cart.product.quantity }"/>
+						<button type="button" id="quantityPlus">▲</button>
 					</td>
 				</tr>
 				<tr>
@@ -136,21 +168,31 @@
 				<table border="0" cellspacing="0" cellpadding="0">
 					<tr>
 						<!-- 구매하기 -->
-						<td width="17" height="23"><img src="/images/ct_btnbg01.gif" width="17" height="23" /></td>
-						<td background="/images/ct_btnbg02.gif" class="ct_btn01"
-							style="padding-top: 3px;"><a href="javascript:submitForm();">구매</a>
+						<td width="17" height="23">
+							<img src="/images/ct_btnbg01.gif" width="17" height="23" />
 						</td>
-						<td width="14" height="23"><img src="/images/ct_btnbg03.gif"
-							width="14" height="23"></td>
+						
+						<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
+							<span class="clickButton">구매</span>
+						</td>
+						
+						<td width="14" height="23">
+							<img src="/images/ct_btnbg03.gif" width="14" height="23">
+						</td>
+						
 						<td width="30"></td>
 
 						<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23" /></td>
-						<td background="/images/ct_btnbg02.gif" class="ct_btn01"
-							style="padding-top: 3px;">
-							<a href="javascript:history.go(-1)">이전</a></td>
+							<img src="/images/ct_btnbg01.gif" width="17" height="23" />
+						</td>
+						
+						<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
+							<span class="clickButton">이전</span>
+						</td>
+							
 						<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"></td>
+							<img src="/images/ct_btnbg03.gif" width="14" height="23">
+						</td>
 					</tr>
 				</table>
 
