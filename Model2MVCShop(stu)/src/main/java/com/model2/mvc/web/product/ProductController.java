@@ -78,7 +78,8 @@ public class ProductController {
 
 		System.out.println("/product/addProduct : POST");
 		
-		String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
+		//String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
+		String root = "C:\\Users\\bitcamp\\git\\Model2MVCShop\\Model2MVCShop(stu)\\src\\main\\webapp\\images\\uploadFiles"+File.separator;
 		UUID uuid = UUID.randomUUID();
 		String fileName = uuid+"_"+upload.getOriginalFilename();
 		File destFile = new File(root + fileName);

@@ -22,7 +22,7 @@
 			fncGetUserList(1);
 		});
 		$(".ct_list_pop td:nth-child(3)").on("click", function() {
-			self.location = "/user/getUser/${user.userId}";
+			self.location = "/user/getUser/"+$(this).text().trim();
 		});
 
 		$(".ct_list_pop td:nth-child(3)").css("color", "red");
@@ -126,7 +126,7 @@
 		<tr class="ct_list_pop">
 			<td align="center">${ i }</td>
 			<td></td>
-			<td align="left" class="clickButton">
+			<td align="left" class="clickButton" data-user-id = "${user.userId }">
 				<span>${user.userId }</span>
 			</td>
 			<td></td>

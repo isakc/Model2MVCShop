@@ -27,16 +27,32 @@
 		$("#currentPage").val(currentPage);
 		$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
 	}
+	
+	$(function () {
+		$(".ct_list_pop td:nth-child(5)").on("click", function() {
+			var prodNo = $(this).data("prod-no");
+			
+			self.location = "/product/getProduct/"+prodNo+"/${menu}";
+		});
+		
+		$(".ct_list_pop td:nth-child(11)").on("click", function() {
+			var prodNo = $(this).data("prod-no");
+			
+			$(window.parent.frames["rightFrame"].document.location).attr("href", "/product/getOrderDetail/"+prodNo);
+		});
+	})
 
 	$(function () {
-		$("td.ct_list_b:contains('가격') > span").on("click", function () {
+		$("td.ct_list_b:contains('가격')>span:eq(0)").on("click", function () {
 			$("#currentPage").val(1);
+			$("input[name=sorter]").val('priceASC');
 			
-			if($(this).text == '▲'){
-				$("input[name=sorter]").val('priceASC');
-			}else{
-				$("input[name=sorter]").val('priceDESC');
-			}
+			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
+		})
+		
+		$("td.ct_list_b:contains('가격')>span:eq(1)").on("click", function () {
+			$("#currentPage").val(1);
+			$("input[name=sorter]").val('priceDESC');
 			
 			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
 		})
@@ -49,6 +65,12 @@
 			$('input[name="searchKeyword"]').val("");
 
 			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
+		})
+	})
+	
+	$(function () {
+		$("td.ct_btn01:contains('검색')").on("click", function () {
+			getList(${resultPage.now });
 		})
 	})
 
@@ -145,7 +167,7 @@
 								</td>
 								
 								<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-									<a href="javascript:getList(${resultPage.now });">검색</a>
+									<span class="clickButton">검색</span>
 								</td>
 								
 								<td width="14" height="23">
@@ -179,9 +201,7 @@
 							<td class="ct_list_b" width="350">상품명</td>
 							<td class="ct_line02"></td>
 							<td class="ct_list_b" width="150">가격
-								<!-- <a href="javascript:getSorter('priceASC');" width="10">▲</a> -->
 								<span class="clickButton">▲</span>
-								<!-- <a href="javascript:getSorter('priceDESC');" width="10">▼</a> -->
 								<span class="clickButton">▼</span>
 							</td>
 							<td class="ct_line02"></td>
@@ -224,23 +244,21 @@
 							<tr class="ct_list_pop">
 								<td align="center">${i }</td>
 								<td></td>
-								<td align="center"><img
-									src="/images/uploadFiles/${product.fileName }"
-									style="width: 100px; height: 100px;" /></td>
-								<td></td>
-								<td align="center"><a
-									href="/product/getProduct/${product.prodNo }/${menu}">${product.prodName }</a>
+								<td align="center">
+									<img src="/images/uploadFiles/${product.fileName }" style="width: 100px; height: 100px;" />
 								</td>
 								<td></td>
-								<td align="center"><fmt:formatNumber
-										value="${product.price}" pattern="#,##0원" /></td>
+								<td align="center" data-prod-no="${product.prodNo }">
+									<span class="clickButton">${product.prodName }</span>
+								</td>
+								<td></td>
+								<td align="center"><fmt:formatNumber value="${product.price}" pattern="#,##0원" /></td>
 								<td></td>
 								<td align="center">${product.category.categoryName }</td>
 								<td></td>
-								<td align="center"><c:choose>
+								<td align="center" data-prod-no="${product.prodNo }"><c:choose>
 										<c:when test="${menu == 'manage' }">
-											<a href="/product/getOrderDetail/${product.prodNo }"
-												onclick="window.open(this.href, '_blank', 'width=1200, height=600'); return false;">판매목록</a>
+											<span class="clickButton">판매목록</span>
 										</c:when>
 										<c:otherwise>
 				${product.quantity } 개

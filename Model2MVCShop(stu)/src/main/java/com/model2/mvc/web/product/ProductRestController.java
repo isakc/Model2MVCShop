@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -61,17 +62,20 @@ public class ProductRestController {
 	}
 	
 	@GetMapping("json/addProduct")
-	public String addProductView(Model model) throws Exception {
+	public Map addProductView(Model model) throws Exception {
 
 		System.out.println("/product/json/addProductView : GET");
 
-		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
-
-		return "forward:/product/addProductView.jsp";
+		//model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
+		Map map = new HashMap();
+		map.put("message", "ok");
+		map.put("categoryList", categoryService.getCategoryList().get("list"));
+		
+		return map;
 	}
 
 	@PostMapping("json/addProduct")
-	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, Model model, HttpServletRequest request) throws Exception {
+	public Map addProduct(@RequestBody Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, Model model, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/json/addProduct : POST");
 		
@@ -93,20 +97,25 @@ public class ProductRestController {
 		
 		Product resultProduct = productService.findProduct(product.getProdNo());
 		
-		model.addAttribute("result", resultProduct);
-
-		return "forward:/product/addProductView.jsp";
+		//model.addAttribute("result", resultProduct);
+		
+		Map map = new HashMap();
+		map.put("message", "ok");
+		map.put("result", resultProduct);
+		
+		return map;
+		//return "forward:/product/addProductView.jsp";
 	}
 
 	@GetMapping("json/getProduct/{prodNo}/{menu}")
-	public String getProduct(@PathVariable("prodNo") int prodNo, @PathVariable("menu") String menu, Model model,
+	public Map getProduct(@PathVariable("prodNo") int prodNo, @PathVariable("menu") String menu,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		System.out.println("/product/json/getProduct : GET");
 		
 		Product findProduct = productService.findProduct(prodNo);
 
-		model.addAttribute("product", findProduct);
+		//model.addAttribute("product", findProduct);
 
 		// 최근 본 상품 Cookie start
 		Cookie[] cookies = request.getCookies();
@@ -131,16 +140,16 @@ public class ProductRestController {
 		Cookie cookie = new Cookie("history", value);
 		cookie.setMaxAge(60 * 60);
 		response.addCookie(cookie);
-
-		if (menu.equals("manage")) {
-			return "forward:/product/updateProduct/"+prodNo;
-		} else {
-			return "forward:/product/getProduct.jsp";
-		}
+		
+		Map map = new HashMap();
+		map.put("message", "ok");
+		map.put("product", findProduct);
+		
+		return map;
 	}
 
 	@RequestMapping("json/listProduct/{menu}")
-	public String getListProduct(@ModelAttribute(value = "search") Search search, Model model,
+	public Map getListProduct(@ModelAttribute(value = "search") Search search,
 			@PathVariable("menu") String menu,
 			@RequestParam(value = "searchKeyword2", defaultValue = "") String searchKeyword2,
 			@RequestParam(value = "sorter", defaultValue = "") String sorter,
@@ -173,39 +182,58 @@ public class ProductRestController {
 		int total = ((Integer) resultMap.get("totalCount")).intValue();
 		Paginate resultPage = new Paginate(search.getCurrentPage(), total, pageUnit, pageSize);
 		
-		model.addAttribute("menu", menu);
-		model.addAttribute("resultPage", resultPage);
-		model.addAttribute("list", resultMap.get("list"));
-		model.addAttribute("search", search);
-		model.addAttribute("sorter", sorter);
-		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
-		model.addAttribute("selectedCategoryNo", categoryNo);
+		Map map = new HashMap();
+		map.put("message", "ok");
+		map.put("menu", menu);
+		map.put("resultPage", resultPage);
+		map.put("list", resultMap.get("list"));
+		map.put("search", search);
+		map.put("sorter", sorter);
+		map.put("categoryList", categoryService.getCategoryList().get("list"));
+		map.put("selectedCategoryNo", categoryNo);
+		
+//		model.addAttribute("menu", menu);
+//		model.addAttribute("resultPage", resultPage);
+//		model.addAttribute("list", resultMap.get("list"));
+//		model.addAttribute("search", search);
+//		model.addAttribute("sorter", sorter);
+//		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
+//		model.addAttribute("selectedCategoryNo", categoryNo);
 		
 		if (search.getSearchCondition() != null && search.getSearchCondition().equals("2")) {
-			model.addAttribute("searchPrice",
-					search.getSearchKeyword().substring(0, search.getSearchKeyword().indexOf("-")));
-			model.addAttribute("searchPrice2", searchKeyword2);
+//			model.addAttribute("searchPrice",
+//					search.getSearchKeyword().substring(0, search.getSearchKeyword().indexOf("-")));
+//			model.addAttribute("searchPrice2", searchKeyword2);
+			map.put("searchPrice", search.getSearchKeyword().substring(0, search.getSearchKeyword().indexOf("-")));
+			map.put("searchPrice2", searchKeyword2);
 		}
-
-		return "forward:/product/listProduct.jsp?menu=" + menu;
+		
+		return map;
+		//return "forward:/product/listProduct.jsp?menu=" + menu;
 	}
 
 	@GetMapping("json/updateProduct/{prodNo}")
-	public String updateProduct(@PathVariable("prodNo") int prodNo, Model model) throws Exception {
+	public Map updateProduct(@PathVariable("prodNo") int prodNo) throws Exception {
 
 		System.out.println("/product/json/updateProduct : GET");
 
 		Product findProduct = productService.findProduct(prodNo);
 
-		model.addAttribute("product", findProduct);
-		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
+		Map map = new HashMap();
+		map.put("message", "ok");
+		map.put("product", findProduct);
+		map.put("categoryList", categoryService.getCategoryList().get("list"));
+		
+//		model.addAttribute("product", findProduct);
+//		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
 
-		return "forward:/product/updateProduct.jsp";
+		return map;
+		//return "forward:/product/updateProduct.jsp";
 	}
 
 	@PostMapping("json/updateProduct")
-	public String updateProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, 
-			Model model, HttpServletRequest request) throws Exception {
+	public Map updateProduct(@RequestBody Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, 
+			HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/json/updateProduct : POST");
 		
@@ -221,19 +249,27 @@ public class ProductRestController {
 
 		productService.updateProduct(product);
 
-		return "redirect:/product/getProduct/+" + product.getProdNo() + "/search";
+		Map map = new HashMap();
+		map.put("message", "ok");
+		
+		return map;
+		//return "redirect:/product/getProduct/+" + product.getProdNo() + "/search";
 	}
 	
 	@GetMapping("json/getOrderDetail/{prodNo}")
-	public String getOrderDetail(@PathVariable("prodNo") int prodNo, Model model) throws Exception {
+	public Map getOrderDetail(@PathVariable("prodNo") int prodNo) throws Exception {
 
 		System.out.println("/product/json/getOrderDetail");
 		
-		Map<String, Object> map = orderDetailService.getOrderDetailListByProdNo(prodNo);
+		Map<String, Object> mapList = orderDetailService.getOrderDetailListByProdNo(prodNo);
 		
-		model.addAttribute("list", map.get("list"));
-		model.addAttribute("statusList", map.get("statusList"));
+		Map map = new HashMap();
 		
-		return "forward:/product/orderDetail.jsp";
+		map.put("message", "ok");
+		map.put("list", mapList.get("list"));
+		map.put("statusList", mapList.get("statusList"));
+		
+		return map;
+//		return "forward:/product/orderDetail.jsp";
 	}
 }

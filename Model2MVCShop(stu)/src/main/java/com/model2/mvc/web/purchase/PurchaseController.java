@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -204,7 +205,7 @@ public class PurchaseController {
 	}
 
 	@GetMapping("updateTranCode/{tranNo}/{tranCode}")
-	public ModelAndView updateTranCode(@PathVariable("tranNo") int tranNo, @PathVariable("tranCode") String tranCode) throws Exception {
+	public ModelAndView updateTranCode(@PathVariable("tranNo") int tranNo, HttpServletRequest request, @PathVariable("tranCode") String tranCode) throws Exception {
 
 		System.out.println("/purchase/updateTranCode : GET");
 		
@@ -215,7 +216,7 @@ public class PurchaseController {
 		purchaseService.updateTranCode(purchase);
 
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("forward:/purchase/listPurchase");
+		modelAndView.setViewName("redirect:" + request.getHeader("Referer"));
 
 		return modelAndView;
 	}

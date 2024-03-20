@@ -47,13 +47,16 @@ public class UserRestController {
 	public Map addUser(@RequestBody User user) throws Exception {
 
 		System.out.println("/user/json/addUser: POST");
-		System.out.println("받은 데이터: " + user);
-		
-		userService.addUser(user);
-		
 		Map map = new HashMap();
-		map.put("user", user);
-		map.put("message", "ok");
+		
+		try {
+			userService.addUser(user);
+			map.put("user", user);
+			map.put("message", "ok");
+		}catch(Exception e) {
+			map.put("message", "fail");
+		}
+		
 		
 		return map;
 	}
@@ -62,12 +65,17 @@ public class UserRestController {
 	public Map getUser(@PathVariable("userId") String userId) throws Exception {
 
 		System.out.println("/user/json/getUser: GET");
-		
-		User findUser = userService.getUser(userId);
-		
+
 		Map map = new HashMap();
-		map.put("user", findUser);
-		map.put("message", "ok");
+		
+		try {
+			User findUser = userService.getUser(userId);
+			
+			map.put("user", findUser);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
 		return map;
 	}
@@ -76,81 +84,90 @@ public class UserRestController {
 	public Map updateUser(@PathVariable("userId") String userId) throws Exception {
 		
 		System.out.println("/user/json/updateUser : GET");
-		
-		User findUser = userService.getUser(userId);
 
 		Map map = new HashMap();
-		map.put("user", findUser);
-		map.put("message", "ok");
+		
+		try {
+			User findUser = userService.getUser(userId);
+
+			map.put("user", findUser);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
 		return map;
 	}
 	
 	@RequestMapping(value="json/updateUser", method = RequestMethod.POST)
-	public Map updateUser(@RequestBody User user, Model model, HttpSession session) throws Exception {
+	public Map updateUser(@RequestBody User user, HttpSession session) throws Exception {
 
 		System.out.println("/user/json/updateUser : POST");
+
+		Map map = new HashMap();
 		
-		userService.updateUser(user);
+		try {
+			userService.updateUser(user);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
 		String sessionId=((User)session.getAttribute("user")).getUserId();
 		if(sessionId.equals(user.getUserId())){
 			session.setAttribute("user", user);
 		}
+		
+		return map;
+	}
+	
+	@RequestMapping(value= "json/login", method = RequestMethod.POST)
+	public Map login(@RequestBody User user) throws Exception {
 
+		System.out.println("/user/json/login: POST");
+
+		Map map = new HashMap();
+		
+		try {
+			User dbUser = userService.loginUser(user);
+			
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
+		
+		return map;
+	}
+	
+	@RequestMapping(value="json/logout", method = RequestMethod.GET)
+	public Map logout(HttpSession session) {
+		System.out.println("/user/json/logout");
+
+		session.removeAttribute("user");
+		
 		Map map = new HashMap();
 		map.put("message", "ok");
 		
 		return map;
-		//return "redirect:/user/getUser/"+user.getUserId();
-	}
-	
-	@RequestMapping(value="json/login", method = RequestMethod.GET)
-	public String login() throws Exception{
-		
-		System.out.println("/user/json/login");
-
-		return "redirect:/user/loginView.jsp";
-	}
-	
-	@RequestMapping(value= "json/login", method = RequestMethod.POST)
-	public String login(@ModelAttribute("user") User user, HttpSession session) throws Exception {
-
-		System.out.println("/user/json/login: POST");
-		
-		User dbUser = userService.loginUser(user);
-		
-		if( user.getPassword().equals(dbUser.getPassword())){
-			session.setAttribute("user", dbUser);
-		}
-
-		return "redirect:/index.jsp";
-	}
-	
-	@RequestMapping(value="json/logout", method = RequestMethod.GET)
-	public String logout(HttpSession session) {
-		System.out.println("/user/json/logout");
-
-		session.removeAttribute("user");
-
-		return "redirect:/index.jsp";
 	}
 	
 	@RequestMapping(value= "json/checkDuplication", method = RequestMethod.POST)
-	public String checkDuplication( @RequestParam("userId") String userId , Model model ) throws Exception{
+	public Map checkDuplication(@RequestBody String userId) throws Exception{
 
 		System.out.println("/user/json/checkDuplication : POST");
 		
 		boolean result=userService.checkDuplication(userId);
-		
-		model.addAttribute("result", new Boolean(result));
-		model.addAttribute("userId", userId);
 
-		return "forward:/user/checkDuplication.jsp";
+		Map map = new HashMap();
+		map.put("message", "ok");
+		map.put("result", new Boolean(result));
+		map.put("userId", userId);
+		
+		return map;
 	}
 	
 	@RequestMapping(value="json/listUser")
-	public String listUser(@ModelAttribute("serach") Search search, Model model) throws Exception {
+	public Map listUser(@ModelAttribute("serach") Search search) throws Exception {
 
 		System.out.println("/user/json/listUser : GET / POST");
 		
@@ -165,14 +182,16 @@ public class UserRestController {
 
 		search.setPageSize(pageSize);
 		
-		Map<String, Object> map = userService.getUserList(search);
+		Map<String, Object> mapList = userService.getUserList(search);
 
-		Paginate resultPage = new Paginate(currentPage, ((Integer) map.get("totalCount")).intValue(), pageUnit, pageSize);
+		Paginate resultPage = new Paginate(currentPage, ((Integer) mapList.get("totalCount")).intValue(), pageUnit, pageSize);
+
+		Map map = new HashMap();
+		map.put("message", "ok");
+		map.put("list", mapList.get("list"));
+		map.put("resultPage", resultPage);
+		map.put("search", search);
 		
-		model.addAttribute("list", map.get("list"));
-		model.addAttribute("resultPage", resultPage);
-		model.addAttribute("search", search);
-
-		return "forward:/user/listUser.jsp";
+		return map;
 	}
 }

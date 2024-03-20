@@ -52,8 +52,7 @@
 			return;
 		}
 
-		$("form").attr("method", "POST").attr("action", "/product/addProduct")
-				.attr("enctype", "multipart/form-data").submit();
+		$("form").attr("method", "POST").attr("action", "/product/addProduct").attr("enctype", "multipart/form-data").submit();
 	}
 	
 	$(function () {
@@ -69,11 +68,8 @@
 	});
 
 	$(function() {
-		$("td.ct_write01 > img").on(
-				"click",
-				function() {
-					show_calendar('document.detailForm.manuDate',
-							$('input[name=manuDate]').value);
+		$("td.ct_write01 > img").on("click",function() {
+					show_calendar('document.detailForm.manuDate',$('input[name=manuDate]').value);
 				});
 	});
 </script>
@@ -81,7 +77,6 @@
 
 <body bgcolor="#ffffff" text="#000000">
 
-<!-- <form name="detailForm" method="post" enctype="multipart/form-data"> -->
 <form name="detailForm">
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
