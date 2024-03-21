@@ -63,9 +63,8 @@ public class PurchaseRestController {
 	}
 
 	@PostMapping("json/addPurchaseView")
-	public Map<String, Object> addPurchaseView(@RequestBody List<Integer> prodNoList,
-			@RequestBody List<Integer> quantityList, @RequestBody List<Integer> cartNoList)
-			throws Exception {
+	public Map<String, Object> addPurchaseView(@RequestParam List<Integer> prodNoList,
+			@RequestParam List<Integer> quantityList, @RequestParam List<Integer> cartNoList) throws Exception {
 
 		System.out.println("/purchase/json/addPurchaseView : POST");
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -88,9 +87,8 @@ public class PurchaseRestController {
 	}
 
 	@PostMapping("json/addPurchase")
-	public Map<String, Object> addPurchase(@RequestBody Purchase purchase,
-			@RequestBody List<Integer> prodNoList, @RequestBody List<Integer> quantityList,
-			@RequestBody String userId,
+	public Map<String, Object> addPurchase(@ModelAttribute Purchase purchase, @RequestParam List<Integer> prodNoList,
+			@RequestParam List<Integer> quantityList, @RequestParam String userId,
 			@RequestParam(value = "cartNo", required = false) List<Integer> cartNoList) throws Exception {
 
 		System.out.println("/purchase/json/addPurchase POST");

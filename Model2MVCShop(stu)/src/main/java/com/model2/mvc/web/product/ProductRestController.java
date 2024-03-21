@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -78,7 +79,8 @@ public class ProductRestController {
 	}
 
 	@PostMapping("json/addProduct")
-	public Map<String, Object> addProduct(@RequestBody Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, HttpServletRequest request) throws Exception {
+	public Map<String, Object> addProduct(@RequestPart MultipartFile upload, @RequestPart Product product,
+			@RequestParam int categoryNo, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/json/addProduct : POST");
 
@@ -92,7 +94,9 @@ public class ProductRestController {
 			upload.transferTo(destFile);
 			product.setFileName(fileName);
 			
-			product.setManuDate(product.getManuDate().replace("-", ""));
+			if(product.getManuDate() != null) {
+				product.setManuDate(product.getManuDate().replace("-", ""));
+			}
 			
 			Category category = new Category();
 			category.setCategoryNo(categoryNo);
@@ -235,8 +239,8 @@ public class ProductRestController {
 	}
 
 	@PostMapping("json/updateProduct")
-	public Map<String, Object> updateProduct(@RequestBody Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, 
-			HttpServletRequest request) throws Exception {
+	public Map<String, Object> updateProduct(@RequestPart MultipartFile upload, @RequestPart Product product,
+											@RequestParam int categoryNo, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/json/updateProduct : POST");
 		
@@ -248,8 +252,10 @@ public class ProductRestController {
 			File destFile = new File(root + fileName);
 			upload.transferTo(destFile);
 			product.setFileName(fileName);
-
-			product.setManuDate(product.getManuDate().replace("-", ""));
+			
+			if(product.getManuDate() != null) {
+				product.setManuDate(product.getManuDate().replace("-", ""));
+			}
 			product.setCategory(categoryService.findCategory(categoryNo));
 			
 			productService.updateProduct(product);
