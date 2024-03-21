@@ -1,6 +1,7 @@
 package com.model2.mvc.web.purchase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,15 +10,14 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.model2.mvc.common.Paginate;
 import com.model2.mvc.common.Search;
@@ -46,7 +46,7 @@ public class PurchaseRestController {
 	@Autowired
 	@Qualifier("orderDetailServiceImpl")
 	private OrderDetailService orderDetailService;
-	
+
 	@Autowired
 	@Qualifier("cartServiceImpl")
 	private CartService cartService;
@@ -56,77 +56,87 @@ public class PurchaseRestController {
 
 	@Value("#{commonProperties['pageSize']}")
 	int pageSize;
-	
+
 	/// Constructor
 	public PurchaseRestController() {
 		System.out.println("==> PurchaseController default Constructor call");
 	}
 
 	@PostMapping("json/addPurchaseView")
-	public ModelAndView addPurchaseView(@RequestParam("prodNo") List<Integer> prodNoList,
-			@RequestParam("quantity") List<Integer> quantityList, @RequestParam("cartNo") List<Integer> cartNoList) throws Exception {
+	public Map<String, Object> addPurchaseView(@RequestBody List<Integer> prodNoList,
+			@RequestBody List<Integer> quantityList, @RequestBody List<Integer> cartNoList)
+			throws Exception {
 
 		System.out.println("/purchase/json/addPurchaseView : POST");
-		
+		Map<String, Object> map = new HashMap<String, Object>();
 		List<Product> productList = new ArrayList<Product>();
-		
-		for(int i=0; i<prodNoList.size(); i++) {
-			productList.add(productService.findProduct(prodNoList.get(i)));
-			productList.get(i).setQuantity(quantityList.get(i));
+
+		try {
+			for (int i = 0; i < prodNoList.size(); i++) {
+				productList.add(productService.findProduct(prodNoList.get(i)));
+				productList.get(i).setQuantity(quantityList.get(i));
+			}
+
+			map.put("message", "ok");
+			map.put("productList", productList);
+			map.put("cartNoList", cartNoList);
+		} catch (Exception e) {
+			map.put("message", "fail");
 		}
 
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("productList", productList);
-		modelAndView.addObject("cartNoList", cartNoList);
-		modelAndView.setViewName("forward:/purchase/addPurchaseView.jsp");
-
-		return modelAndView;
+		return map;
 	}
-	
+
 	@PostMapping("json/addPurchase")
-	public ModelAndView addPurchase(@ModelAttribute("purchase") Purchase purchase,
-			@RequestParam("prodNo") List<Integer> prodNoList, @RequestParam("quantity") List<Integer> quantityList,
-			@RequestParam("buyerId") String userId, @RequestParam(value="cartNo", required = false) List<Integer> cartNoList) throws Exception {
+	public Map<String, Object> addPurchase(@RequestBody Purchase purchase,
+			@RequestBody List<Integer> prodNoList, @RequestBody List<Integer> quantityList,
+			@RequestBody String userId,
+			@RequestParam(value = "cartNo", required = false) List<Integer> cartNoList) throws Exception {
 
 		System.out.println("/purchase/json/addPurchase POST");
-		
+		Map<String, Object> map = new HashMap<String, Object>();
+
 		User user = new User();
 		user.setUserId(userId);
-		
+
 		purchase.setBuyer(user);
 
-		purchaseService.addPurchase(purchase);
+		try {
+			purchaseService.addPurchase(purchase);
 
-		for (int i=0; i<prodNoList.size(); i++) {
-			OrderDetail orderDetail = new OrderDetail();
-			orderDetail.setTransaction(purchase);
-			orderDetail.setProduct( new Product(prodNoList.get(i)) );
-			orderDetail.setQuantity(quantityList.get(i));
-			
-			orderDetailService.insertOrderDetail(orderDetail);
-			productService.updateQuantity(prodNoList.get(i), quantityList.get(i));
-		}
-		
-		if(cartNoList != null) {
-			for(Integer cartNo : cartNoList) {
-				cartService.deleteCart(cartNo);
+			for (int i = 0; i < prodNoList.size(); i++) {
+				OrderDetail orderDetail = new OrderDetail();
+				orderDetail.setTransaction(purchase);
+				orderDetail.setProduct(new Product(prodNoList.get(i)));
+				orderDetail.setQuantity(quantityList.get(i));
+
+				orderDetailService.insertOrderDetail(orderDetail);
+				productService.updateQuantity(prodNoList.get(i), quantityList.get(i));
 			}
+
+			if (cartNoList != null) {
+				for (Integer cartNo : cartNoList) {
+					cartService.deleteCart(cartNo);
+				}
+			}
+
+			purchase = purchaseService.findPurchase(purchase.getTranNo());
+
+			map.put("message", "ok");
+			map.put("purchase", purchase);
+		} catch (Exception e) {
+			map.put("message", "fail");
 		}
 
-		purchase = purchaseService.findPurchase(purchase.getTranNo());
-
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("purchase", purchase);
-		modelAndView.setViewName("forward:/purchase/addPurchaseResult.jsp");
-
-		return modelAndView;
+		return map;
 	}
 
 	@RequestMapping("json/listPurchase")
-	public ModelAndView getListPurchase(@ModelAttribute(value = "search") Search search, HttpSession session)
+	public Map<String, Object> getListPurchase(@ModelAttribute(value = "search") Search search, HttpSession session)
 			throws Exception {
 
 		System.out.println("/purchase/json/listPurchase : GET");
+		Map<String, Object> map = new HashMap<String, Object>();
 
 		User user = (User) session.getAttribute("user");
 
@@ -141,97 +151,119 @@ public class PurchaseRestController {
 		search.setSearchKeyword(user.getUserId());
 		search.setPageSize(pageSize);
 
-		Map<String, Object> map = purchaseService.getPurchaseList(search);
-		int total = ((Integer) map.get("totalCount")).intValue();
-		Paginate resultPage = new Paginate(search.getCurrentPage(), total, pageUnit, pageSize);
+		try {
+			Map<String, Object> returnMap = purchaseService.getPurchaseList(search);
+			int total = ((Integer) returnMap.get("totalCount")).intValue();
+			Paginate resultPage = new Paginate(search.getCurrentPage(), total, pageUnit, pageSize);
+			
+			map.put("message", "ok");
+			map.put("list", returnMap.get("list"));
+			map.put("isDeliveredList", returnMap.get("isDeliveredList"));
+			map.put("resultPage", resultPage);
+			map.put("statusList", returnMap.get("statusList"));
+			map.put("search", search);
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("list", map.get("list"));
-		modelAndView.addObject("isDeliveredList", map.get("isDeliveredList"));
-		modelAndView.addObject("resultPage", resultPage);
-		modelAndView.addObject("statusList", map.get("statusList"));
-		modelAndView.addObject("search", search);
-
-		modelAndView.setViewName("forward:/purchase/listPurchase.jsp");
-
-		return modelAndView;
+		return map;
 	}
 
 	@GetMapping("json/getPurchase/{tranNo}")
-	public ModelAndView getPurchase(@PathVariable("tranNo") int tranNo) throws Exception {
+	public Map<String, Object> getPurchase(@PathVariable("tranNo") int tranNo) throws Exception {
 
 		System.out.println("/purchase/json/getPurchase/{tranNo} : GET");
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		try {
+			Purchase purchase = purchaseService.findPurchase(tranNo);
+			List<OrderDetail> list = orderDetailService.getOrderDetailList(tranNo);
+			
+			map.put("message", "ok");
+			map.put("purchase", purchase);
+			map.put("list", list);
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 
-		Purchase purchase = purchaseService.findPurchase(tranNo);
-		List<OrderDetail> list = orderDetailService.getOrderDetailList(tranNo);
-
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("purchase", purchase);
-		modelAndView.addObject("list", list);
-		modelAndView.setViewName("forward:/purchase/getPurchase.jsp");
-
-		return modelAndView;
+		return map;
 	}
 
-	@RequestMapping("json/updatePurchase/{tranNo}")
-	public ModelAndView updatePurchase(@PathVariable("tranNo") int tranNo) throws Exception {
+	@GetMapping("json/updatePurchase/{tranNo}")
+	public Map<String, Object> updatePurchase(@PathVariable("tranNo") int tranNo) throws Exception {
 
 		System.out.println("/purchase/json/updatePurchase/{tranNo} : GET");
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		try {
+			Purchase purchase = purchaseService.findPurchase(tranNo);
+			
+			map.put("message", "ok");
+			map.put("purchase", purchase);
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 
-		Purchase purchase = purchaseService.findPurchase(tranNo);
-
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.addObject("purchase", purchase);
-		modelAndView.setViewName("forward:/purchase/updatePurchase.jsp");
-
-		return modelAndView;
+		return map;
 	}
 
 	@PostMapping("json/updatePurchase")
-	public ModelAndView updatePurchase(@ModelAttribute("purchase") Purchase purchase, @RequestParam("userId") String userId) throws Exception {
+	public Map<String, Object> updatePurchase(@RequestBody Purchase purchase,
+			@RequestBody String userId) throws Exception {
 
 		System.out.println("/purchase/json/updatePurchase");
+
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		User user = new User();
 		user.setUserId(userId);
 		purchase.setBuyer(user);
-		
-		purchaseService.updatePurchase(purchase);
 
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("redirect:/purchase/getPurchase/" + purchase.getTranNo());
+		try {
+			purchaseService.updatePurchase(purchase);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 
-		return modelAndView;
+		return map;
 	}
 
 	@GetMapping("json/updateTranCode/{tranNo}/{tranCode}")
-	public ModelAndView updateTranCode(@PathVariable("tranNo") int tranNo, @PathVariable("tranCode") String tranCode) throws Exception {
+	public Map<String, Object> updateTranCode(@PathVariable("tranNo") int tranNo,
+			@PathVariable("tranCode") String tranCode) throws Exception {
 
 		System.out.println("/purchase/json/updateTranCode : GET");
-		
+		Map<String, Object> map = new HashMap<String, Object>();
+
 		Purchase purchase = new Purchase();
 		purchase.setTranNo(tranNo);
 		purchase.setTranCode(tranCode);
+		
+		try {
+			purchaseService.updateTranCode(purchase);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 
-		purchaseService.updateTranCode(purchase);
-
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("forward:/purchase/listPurchase");
-
-		return modelAndView;
+		return map;
 	}
 
 	@PostMapping("json/purchase/updateTranCodeByProd")
-	public ModelAndView updateTranCodeByProd(@ModelAttribute("purchase") Purchase purchase,
-			@RequestParam("prodNo") int prodNo) throws Exception {
+	public Map<String, Object> updateTranCodeByProd(@RequestBody Purchase purchase,
+			@RequestBody int prodNo) throws Exception {
 
 		System.out.println("/purchase/json/updateTranCodeByProd");
+		Map<String, Object> map = new HashMap<String, Object>();
 
-		purchaseService.updateTranCodeByProd(purchase);
+		try {
+			purchaseService.updateTranCodeByProd(purchase);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 
-		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("forward:/product/listProduct/manage");
-
-		return modelAndView;
+		return map;
 	}
 }

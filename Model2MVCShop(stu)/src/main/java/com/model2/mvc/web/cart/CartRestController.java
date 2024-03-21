@@ -1,6 +1,8 @@
 package com.model2.mvc.web.cart;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -44,9 +46,10 @@ public class CartRestController {
 	}
 
 	@GetMapping("json/addCart/{prodNo}/{quantity}")
-	public String addCart(@PathVariable("prodNo") int prodNo, @PathVariable("quantity") int quantity, HttpSession session) throws Exception {
+	public Map<String, Object> addCart(@PathVariable("prodNo") int prodNo, @PathVariable("quantity") int quantity, HttpSession session) throws Exception {
 
 		System.out.println("/cart/json/addCart/{prodNo}/{quantity} : GET");
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		User user = (User) session.getAttribute("user");
 		
@@ -55,26 +58,38 @@ public class CartRestController {
 		cart.setProduct(new Product(prodNo));
 		cart.setQuantity(quantity);
 		
-		cartService.addCart(cart);
+		try {
+			cartService.addCart(cart);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 
-		return "redirect:/cart/listCart";
+		return map;
 	}
 
 	@RequestMapping("json/listCart")
-	public String listCart(HttpSession session , Model model) throws Exception {
+	public Map<String, Object> listCart(HttpSession session) throws Exception {
 
 		System.out.println("/cart/json/listCart");
+		Map<String, Object> map = new HashMap<String, Object>();
 		User user = (User)session.getAttribute("user");
 		List<Cart> listCart = cartService.getCartList(user.getUserId());
 		
-		model.addAttribute("listCart", listCart);
-		return "forward:/cart/listCart.jsp";
+		try {
+			map.put("listCart", listCart);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
+		return map;
 	}
 	
 	@RequestMapping("json/updateCart/{prodNo}/{cartNo}/{quantity}")
-	public String updateCart(@PathVariable("prodNo") int prodNo, @PathVariable("cartNo") int cartNo, @PathVariable("quantity") int quantity, HttpSession session) throws Exception {
+	public Map<String, Object> updateCart(@PathVariable("prodNo") int prodNo, @PathVariable("cartNo") int cartNo, @PathVariable("quantity") int quantity, HttpSession session) throws Exception {
 
 		System.out.println("/update/json/updateCart");
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		User user = (User)session.getAttribute("user");
 		
@@ -83,17 +98,28 @@ public class CartRestController {
 		cart.setProduct(new Product(prodNo));
 		cart.setQuantity(quantity);
 		
-		cartService.updateCart(cart);
+		try {
+			cartService.updateCart(cart);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
-		return "redirect:/cart/listCart";
+		return map;
 	}
 	
 	@GetMapping("json/deleteCart/{cartNo}")
-	public String deleteCart(@PathVariable("cartNo") int cartNo) throws Exception{
+	public Map<String, Object> deleteCart(@PathVariable("cartNo") int cartNo) throws Exception{
 		System.out.println("/cart/json/deleteCart/{cartNo}");
+		Map<String, Object> map = new HashMap<String, Object>();
 		
-		cartService.deleteCart(cartNo);
+		try {
+			cartService.deleteCart(cartNo);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
-		return "redirect:/cart/listCart";
+		return map;
 	}
 }

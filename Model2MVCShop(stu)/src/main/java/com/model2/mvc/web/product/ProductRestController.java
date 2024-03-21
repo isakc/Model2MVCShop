@@ -1,11 +1,11 @@
 package com.model2.mvc.web.product;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.Servlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -62,60 +60,74 @@ public class ProductRestController {
 	}
 	
 	@GetMapping("json/addProduct")
-	public Map addProductView(Model model) throws Exception {
+	public Map<String, Object> addProductView() throws Exception {
 
-		System.out.println("/product/json/addProductView : GET");
+		System.out.println("/product/json/addProduct : GET");
 
-		//model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
-		Map map = new HashMap();
-		map.put("message", "ok");
-		map.put("categoryList", categoryService.getCategoryList().get("list"));
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		try {
+			ArrayList<Category> list = (ArrayList<Category>) categoryService.getCategoryList().get("list");
+			map.put("message", "ok");
+			map.put("list", list);
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
 		return map;
 	}
 
 	@PostMapping("json/addProduct")
-	public Map addProduct(@RequestBody Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, Model model, HttpServletRequest request) throws Exception {
+	public Map<String, Object> addProduct(@RequestBody Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/json/addProduct : POST");
-		
-		String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
-		UUID uuid = UUID.randomUUID();
-		String fileName = uuid+"_"+upload.getOriginalFilename();
-		File destFile = new File(root + fileName);
-		upload.transferTo(destFile);
-		product.setFileName(fileName);
-		
-		product.setManuDate(product.getManuDate().replace("-", ""));
-		
-		Category category = new Category();
-		category.setCategoryNo(categoryNo);
-		
-		product.setCategory(category);
 
-		productService.insertProduct(product);
+		Map<String, Object> map = new HashMap<String, Object>();
 		
-		Product resultProduct = productService.findProduct(product.getProdNo());
-		
-		//model.addAttribute("result", resultProduct);
-		
-		Map map = new HashMap();
-		map.put("message", "ok");
-		map.put("result", resultProduct);
+		try {
+			String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
+			UUID uuid = UUID.randomUUID();
+			String fileName = uuid+"_"+upload.getOriginalFilename();
+			File destFile = new File(root + fileName);
+			upload.transferTo(destFile);
+			product.setFileName(fileName);
+			
+			product.setManuDate(product.getManuDate().replace("-", ""));
+			
+			Category category = new Category();
+			category.setCategoryNo(categoryNo);
+			
+			product.setCategory(category);
+
+			productService.insertProduct(product);
+			
+			Product resultProduct = productService.findProduct(product.getProdNo());
+			
+			map.put("message", "ok");
+			map.put("result", resultProduct);
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
 		return map;
-		//return "forward:/product/addProductView.jsp";
 	}
 
 	@GetMapping("json/getProduct/{prodNo}/{menu}")
-	public Map getProduct(@PathVariable("prodNo") int prodNo, @PathVariable("menu") String menu,
+	public Map<String, Object> getProduct(@PathVariable("prodNo") int prodNo, @PathVariable("menu") String menu,
 			HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		System.out.println("/product/json/getProduct : GET");
-		
-		Product findProduct = productService.findProduct(prodNo);
 
-		//model.addAttribute("product", findProduct);
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		try {
+			Product findProduct = productService.findProduct(prodNo);
+			map.put("message", "ok");
+			map.put("product", findProduct);
+			
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 
 		// 최근 본 상품 Cookie start
 		Cookie[] cookies = request.getCookies();
@@ -141,15 +153,11 @@ public class ProductRestController {
 		cookie.setMaxAge(60 * 60);
 		response.addCookie(cookie);
 		
-		Map map = new HashMap();
-		map.put("message", "ok");
-		map.put("product", findProduct);
-		
 		return map;
 	}
 
 	@RequestMapping("json/listProduct/{menu}")
-	public Map getListProduct(@ModelAttribute(value = "search") Search search,
+	public Map<String, Object> getListProduct(@ModelAttribute(value = "search") Search search,
 			@PathVariable("menu") String menu,
 			@RequestParam(value = "searchKeyword2", defaultValue = "") String searchKeyword2,
 			@RequestParam(value = "sorter", defaultValue = "") String sorter,
@@ -177,99 +185,100 @@ public class ProductRestController {
 
 		search.setPageSize(pageSize);
 
-		Category category = categoryService.findCategory(categoryNo);
-		HashMap<String, Object> resultMap = (HashMap) productService.getProductList(search, sorter, category);
-		int total = ((Integer) resultMap.get("totalCount")).intValue();
-		Paginate resultPage = new Paginate(search.getCurrentPage(), total, pageUnit, pageSize);
+		Map<String, Object> map = new HashMap<String, Object>();
 		
-		Map map = new HashMap();
-		map.put("message", "ok");
-		map.put("menu", menu);
-		map.put("resultPage", resultPage);
-		map.put("list", resultMap.get("list"));
-		map.put("search", search);
-		map.put("sorter", sorter);
-		map.put("categoryList", categoryService.getCategoryList().get("list"));
-		map.put("selectedCategoryNo", categoryNo);
-		
-//		model.addAttribute("menu", menu);
-//		model.addAttribute("resultPage", resultPage);
-//		model.addAttribute("list", resultMap.get("list"));
-//		model.addAttribute("search", search);
-//		model.addAttribute("sorter", sorter);
-//		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
-//		model.addAttribute("selectedCategoryNo", categoryNo);
-		
-		if (search.getSearchCondition() != null && search.getSearchCondition().equals("2")) {
-//			model.addAttribute("searchPrice",
-//					search.getSearchKeyword().substring(0, search.getSearchKeyword().indexOf("-")));
-//			model.addAttribute("searchPrice2", searchKeyword2);
-			map.put("searchPrice", search.getSearchKeyword().substring(0, search.getSearchKeyword().indexOf("-")));
-			map.put("searchPrice2", searchKeyword2);
+		try {
+			Category category = categoryService.findCategory(categoryNo);
+			HashMap<String, Object> resultMap = (HashMap<String, Object>) productService.getProductList(search, sorter, category);
+			int total = ((Integer) resultMap.get("totalCount")).intValue();
+			Paginate resultPage = new Paginate(search.getCurrentPage(), total, pageUnit, pageSize);
+			
+			map.put("message", "ok");
+			map.put("menu", menu);
+			map.put("resultPage", resultPage);
+			map.put("list", resultMap.get("list"));
+			map.put("search", search);
+			map.put("sorter", sorter);
+			map.put("categoryList", categoryService.getCategoryList().get("list"));
+			map.put("selectedCategoryNo", categoryNo);
+			
+			if (search.getSearchCondition() != null && search.getSearchCondition().equals("2")) {
+				map.put("searchPrice", search.getSearchKeyword().substring(0, search.getSearchKeyword().indexOf("-")));
+				map.put("searchPrice2", searchKeyword2);
+			}
+			
+		}catch (Exception e) {
+			map.put("message", "fail");
 		}
-		
+
 		return map;
-		//return "forward:/product/listProduct.jsp?menu=" + menu;
 	}
 
 	@GetMapping("json/updateProduct/{prodNo}")
-	public Map updateProduct(@PathVariable("prodNo") int prodNo) throws Exception {
+	public Map<String, Object> updateProduct(@PathVariable("prodNo") int prodNo) throws Exception {
 
 		System.out.println("/product/json/updateProduct : GET");
 
-		Product findProduct = productService.findProduct(prodNo);
-
-		Map map = new HashMap();
-		map.put("message", "ok");
-		map.put("product", findProduct);
-		map.put("categoryList", categoryService.getCategoryList().get("list"));
+		Map<String, Object> map = new HashMap<String, Object>();
 		
-//		model.addAttribute("product", findProduct);
-//		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
+		try {
+			Product findProduct = productService.findProduct(prodNo);
+			
+			map.put("message", "ok");
+			map.put("product", findProduct);
+			map.put("categoryList", categoryService.getCategoryList().get("list"));
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 
 		return map;
-		//return "forward:/product/updateProduct.jsp";
 	}
 
 	@PostMapping("json/updateProduct")
-	public Map updateProduct(@RequestBody Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, 
+	public Map<String, Object> updateProduct(@RequestBody Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, 
 			HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/json/updateProduct : POST");
 		
-		String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
-		UUID uuid = UUID.randomUUID();
-		String fileName = uuid+"_"+upload.getOriginalFilename();
-		File destFile = new File(root + fileName);
-		upload.transferTo(destFile);
-		product.setFileName(fileName);
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
+			UUID uuid = UUID.randomUUID();
+			String fileName = uuid+"_"+upload.getOriginalFilename();
+			File destFile = new File(root + fileName);
+			upload.transferTo(destFile);
+			product.setFileName(fileName);
 
-		product.setManuDate(product.getManuDate().replace("-", ""));
-		product.setCategory(categoryService.findCategory(categoryNo));
-
-		productService.updateProduct(product);
-
-		Map map = new HashMap();
-		map.put("message", "ok");
+			product.setManuDate(product.getManuDate().replace("-", ""));
+			product.setCategory(categoryService.findCategory(categoryNo));
+			
+			productService.updateProduct(product);
+			
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
 		return map;
-		//return "redirect:/product/getProduct/+" + product.getProdNo() + "/search";
 	}
 	
 	@GetMapping("json/getOrderDetail/{prodNo}")
-	public Map getOrderDetail(@PathVariable("prodNo") int prodNo) throws Exception {
+	public Map<String, Object> getOrderDetail(@PathVariable("prodNo") int prodNo) throws Exception {
 
 		System.out.println("/product/json/getOrderDetail");
 		
-		Map<String, Object> mapList = orderDetailService.getOrderDetailListByProdNo(prodNo);
+		Map<String, Object> map = new HashMap<String, Object>();
 		
-		Map map = new HashMap();
-		
-		map.put("message", "ok");
-		map.put("list", mapList.get("list"));
-		map.put("statusList", mapList.get("statusList"));
+		try {
+			Map<String, Object> mapList = orderDetailService.getOrderDetailListByProdNo(prodNo);
+			
+			map.put("message", "ok");
+			map.put("list", mapList.get("list"));
+			map.put("statusList", mapList.get("statusList"));
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
 		return map;
-//		return "forward:/product/orderDetail.jsp";
 	}
 }

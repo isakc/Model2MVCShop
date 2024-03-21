@@ -1,13 +1,17 @@
 package com.model2.mvc.web.category;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,22 +44,35 @@ public class CategoryRestController {
 	}
 	
 	@GetMapping("json/addCategory")
-	public String addCategory(Model model) throws Exception {
+	public Map<String, Object> addCategory(Model model) throws Exception {
 
 		System.out.println("category/json/addCategory");
+		Map<String, Object> map = new HashMap<String, Object>();
 
-		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
+		try {
+			List<Category> list = (List<Category>) categoryService.getCategoryList().get("list");
+			map.put("categoryList", list);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 
-		return "forward:/category/addCategoryView.jsp";
+		return map;
 	}
 
 	@PostMapping("json/addCategory")
-	public String addCategory(@ModelAttribute("category") Category category) throws Exception {
+	public Map<String, Object> addCategory(@RequestBody Category category) throws Exception {
 
 		System.out.println("/category/json/addCategory");
+		Map<String, Object> map = new HashMap<String, Object>();
 
-		categoryService.insertCategory(category);
+		try {
+			categoryService.insertCategory(category);
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 
-		return "redirect:/category/addCategory";
+		return map;
 	}
 }

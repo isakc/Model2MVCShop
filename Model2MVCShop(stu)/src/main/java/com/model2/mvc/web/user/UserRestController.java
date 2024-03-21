@@ -8,14 +8,11 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.model2.mvc.common.Paginate;
@@ -44,10 +41,10 @@ public class UserRestController {
 	}
 
 	@RequestMapping(value="json/addUser", method = RequestMethod.POST)
-	public Map addUser(@RequestBody User user) throws Exception {
+	public Map<String, Object> addUser(@RequestBody User user) throws Exception {
 
 		System.out.println("/user/json/addUser: POST");
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try {
 			userService.addUser(user);
@@ -62,11 +59,11 @@ public class UserRestController {
 	}
 
 	@RequestMapping(value="json/getUser/{userId}", method = RequestMethod.GET)
-	public Map getUser(@PathVariable("userId") String userId) throws Exception {
+	public Map<String, Object> getUser(@PathVariable("userId") String userId) throws Exception {
 
 		System.out.println("/user/json/getUser: GET");
 
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try {
 			User findUser = userService.getUser(userId);
@@ -81,11 +78,11 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value="json/updateUser/{userId}" , method = RequestMethod.GET)
-	public Map updateUser(@PathVariable("userId") String userId) throws Exception {
+	public Map<String, Object> updateUser(@PathVariable("userId") String userId) throws Exception {
 		
 		System.out.println("/user/json/updateUser : GET");
 
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try {
 			User findUser = userService.getUser(userId);
@@ -100,11 +97,11 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value="json/updateUser", method = RequestMethod.POST)
-	public Map updateUser(@RequestBody User user, HttpSession session) throws Exception {
+	public Map<String, Object> updateUser(@RequestBody User user, HttpSession session) throws Exception {
 
 		System.out.println("/user/json/updateUser : POST");
 
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try {
 			userService.updateUser(user);
@@ -122,15 +119,17 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value= "json/login", method = RequestMethod.POST)
-	public Map login(@RequestBody User user) throws Exception {
+	public Map<String, Object> login(@RequestBody User user, HttpSession session) throws Exception {
 
 		System.out.println("/user/json/login: POST");
 
-		Map map = new HashMap();
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try {
 			User dbUser = userService.loginUser(user);
+			session.setAttribute("user", dbUser);
 			
+			map.put("user", dbUser);
 			map.put("message", "ok");
 		}catch (Exception e) {
 			map.put("message", "fail");
@@ -140,36 +139,45 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value="json/logout", method = RequestMethod.GET)
-	public Map logout(HttpSession session) {
+	public Map<String, Object> logout(HttpSession session) {
 		System.out.println("/user/json/logout");
 
-		session.removeAttribute("user");
-		
-		Map map = new HashMap();
-		map.put("message", "ok");
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			session.removeAttribute("user");
+			map.put("message", "ok");
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
 		return map;
 	}
 	
 	@RequestMapping(value= "json/checkDuplication", method = RequestMethod.POST)
-	public Map checkDuplication(@RequestBody String userId) throws Exception{
+	public Map<String, Object> checkDuplication(@RequestBody String userId) throws Exception{
 
 		System.out.println("/user/json/checkDuplication : POST");
-		
-		boolean result=userService.checkDuplication(userId);
 
-		Map map = new HashMap();
-		map.put("message", "ok");
-		map.put("result", new Boolean(result));
-		map.put("userId", userId);
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			boolean result=userService.checkDuplication(userId);
+
+			map.put("message", "ok");
+			map.put("result", new Boolean(result));
+			map.put("userId", userId);
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
 		return map;
 	}
 	
 	@RequestMapping(value="json/listUser")
-	public Map listUser(@ModelAttribute("serach") Search search) throws Exception {
+	public Map<String, Object> listUser(@ModelAttribute("serach") Search search) throws Exception {
 
 		System.out.println("/user/json/listUser : GET / POST");
+
+		Map<String, Object> map = new HashMap<String, Object>();
 		
 		int currentPage = 1;
 		if (search.getCurrentPage() != 0 && search.getSearchKeyword().equals("")) {
@@ -182,15 +190,19 @@ public class UserRestController {
 
 		search.setPageSize(pageSize);
 		
-		Map<String, Object> mapList = userService.getUserList(search);
+		try {
 
-		Paginate resultPage = new Paginate(currentPage, ((Integer) mapList.get("totalCount")).intValue(), pageUnit, pageSize);
+			Map<String, Object> mapList = userService.getUserList(search);
 
-		Map map = new HashMap();
-		map.put("message", "ok");
-		map.put("list", mapList.get("list"));
-		map.put("resultPage", resultPage);
-		map.put("search", search);
+			Paginate resultPage = new Paginate(currentPage, ((Integer) mapList.get("totalCount")).intValue(), pageUnit, pageSize);
+
+			map.put("message", "ok");
+			map.put("list", mapList.get("list"));
+			map.put("resultPage", resultPage);
+			map.put("search", search);
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
 		
 		return map;
 	}

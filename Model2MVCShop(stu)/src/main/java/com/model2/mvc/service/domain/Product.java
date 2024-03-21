@@ -11,11 +11,11 @@ public class Product {
 	private String prodDetail;
 	private String prodName;
 	private int prodNo;
-	private Category category;
-	private int quantity;
 	private Date regDate;
 	////////------------Ãß°¡------------///////
 	private String transStatusCode;
+	private Category category;
+	private int quantity;
 
 	public Product(){
 	}
