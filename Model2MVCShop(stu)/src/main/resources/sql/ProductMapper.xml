@@ -74,7 +74,8 @@
 										 				prod_name = #{search.searchKeyword}
 													</if>
 													<if test="search.searchCondition == 2 and search.searchKeyword !='' ">
-										 				price BETWEEN SUBSTR(#{search.searchKeyword}, 1, INSTR(#{search.searchKeyword}, '-') - 1) AND SUBSTR(#{search.searchKeyword}, INSTR(#{search.searchKeyword}, '-') + 1)
+										 				<!-- price BETWEEN SUBSTR(#{search.searchKeyword}, 1, INSTR(#{search.searchKeyword}, '-') - 1) AND SUBSTR(#{search.searchKeyword}, INSTR(#{search.searchKeyword}, '-') + 1) -->
+										 				price BETWEEN #{search.searchKeyword} AND #{search.searchKeyword2}
 													</if>
 											</if>
 											

@@ -161,7 +161,7 @@ public class ProductRestController {
 	}
 
 	@RequestMapping("json/listProduct/{menu}")
-	public Map<String, Object> getListProduct(@ModelAttribute(value = "search") Search search,
+	public Map<String, Object> getListProduct(@RequestBody Search search,
 			@PathVariable("menu") String menu,
 			@RequestParam(value = "searchKeyword2", defaultValue = "") String searchKeyword2,
 			@RequestParam(value = "sorter", defaultValue = "") String sorter,

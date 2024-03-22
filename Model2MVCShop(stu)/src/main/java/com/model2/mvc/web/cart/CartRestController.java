@@ -12,8 +12,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.model2.mvc.service.cart.CartService;
 import com.model2.mvc.service.domain.Cart;
@@ -45,18 +48,13 @@ public class CartRestController {
 		System.out.println("==> Category default Constructor call");
 	}
 
-	@GetMapping("json/addCart/{prodNo}/{quantity}")
-	public Map<String, Object> addCart(@PathVariable("prodNo") int prodNo, @PathVariable("quantity") int quantity, HttpSession session) throws Exception {
+	@PostMapping("json/addCart")
+	public Map<String, Object> addCart(@RequestBody Cart cart, @SessionAttribute("user") User user) throws Exception {
 
 		System.out.println("/cart/json/addCart/{prodNo}/{quantity} : GET");
 		Map<String, Object> map = new HashMap<String, Object>();
-		
-		User user = (User) session.getAttribute("user");
-		
-		Cart cart = new Cart();
+
 		cart.setUser(user);
-		cart.setProduct(new Product(prodNo));
-		cart.setQuantity(quantity);
 		
 		try {
 			cartService.addCart(cart);
@@ -69,11 +67,10 @@ public class CartRestController {
 	}
 
 	@RequestMapping("json/listCart")
-	public Map<String, Object> listCart(HttpSession session) throws Exception {
+	public Map<String, Object> listCart(@SessionAttribute User user) throws Exception {
 
 		System.out.println("/cart/json/listCart");
 		Map<String, Object> map = new HashMap<String, Object>();
-		User user = (User)session.getAttribute("user");
 		List<Cart> listCart = cartService.getCartList(user.getUserId());
 		
 		try {
@@ -86,12 +83,11 @@ public class CartRestController {
 	}
 	
 	@RequestMapping("json/updateCart/{prodNo}/{cartNo}/{quantity}")
-	public Map<String, Object> updateCart(@PathVariable("prodNo") int prodNo, @PathVariable("cartNo") int cartNo, @PathVariable("quantity") int quantity, HttpSession session) throws Exception {
+	public Map<String, Object> updateCart(@PathVariable("prodNo") int prodNo, @PathVariable("cartNo") int cartNo, @PathVariable("quantity") int quantity,
+			@SessionAttribute User user) throws Exception {
 
 		System.out.println("/update/json/updateCart");
 		Map<String, Object> map = new HashMap<String, Object>();
-		
-		User user = (User)session.getAttribute("user");
 		
 		Cart cart = new Cart();
 		cart.setUser(user);

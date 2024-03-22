@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import com.model2.mvc.common.Paginate;
 import com.model2.mvc.common.Search;
@@ -87,7 +88,7 @@ public class PurchaseRestController {
 	}
 
 	@PostMapping("json/addPurchase")
-	public Map<String, Object> addPurchase(@ModelAttribute Purchase purchase, @RequestParam List<Integer> prodNoList,
+	public Map<String, Object> addPurchase(@RequestBody Purchase purchase, @RequestParam List<Integer> prodNoList,
 			@RequestParam List<Integer> quantityList, @RequestParam String userId,
 			@RequestParam(value = "cartNo", required = false) List<Integer> cartNoList) throws Exception {
 
@@ -130,13 +131,13 @@ public class PurchaseRestController {
 	}
 
 	@RequestMapping("json/listPurchase")
-	public Map<String, Object> getListPurchase(@ModelAttribute(value = "search") Search search, HttpSession session)
+	public Map<String, Object> getListPurchase(@RequestBody Search search, @SessionAttribute("user") User user)
 			throws Exception {
 
 		System.out.println("/purchase/json/listPurchase : GET");
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		User user = (User) session.getAttribute("user");
+		//User user = (User) session.getAttribute("user");
 
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
@@ -207,7 +208,7 @@ public class PurchaseRestController {
 
 	@PostMapping("json/updatePurchase")
 	public Map<String, Object> updatePurchase(@RequestBody Purchase purchase,
-			@RequestBody String userId) throws Exception {
+			@RequestParam String userId) throws Exception {
 
 		System.out.println("/purchase/json/updatePurchase");
 
@@ -250,7 +251,7 @@ public class PurchaseRestController {
 
 	@PostMapping("json/purchase/updateTranCodeByProd")
 	public Map<String, Object> updateTranCodeByProd(@RequestBody Purchase purchase,
-			@RequestBody int prodNo) throws Exception {
+			@RequestParam int prodNo) throws Exception {
 
 		System.out.println("/purchase/json/updateTranCodeByProd");
 		Map<String, Object> map = new HashMap<String, Object>();
