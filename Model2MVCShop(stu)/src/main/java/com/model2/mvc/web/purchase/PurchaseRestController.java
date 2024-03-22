@@ -137,8 +137,6 @@ public class PurchaseRestController {
 		System.out.println("/purchase/json/listPurchase : GET");
 		Map<String, Object> map = new HashMap<String, Object>();
 
-		//User user = (User) session.getAttribute("user");
-
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
 		}

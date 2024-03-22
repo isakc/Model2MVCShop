@@ -71,32 +71,34 @@
 
 	//==> 추가된부분 : "취소"  Event 처리 및  연결
 	$(function() {
-		//==> DOM Object GET 3가지 방법 ==> 1. $(tagName) : 2.(#id) : 3.$(.className)
-		//==> 1 과 3 방법 조합 : $("tagName.className:filter함수") 사용함.	
 		$("td.ct_btn01:contains('취소')").on("click", function() {
-			//Debug..
-			//alert(  $( "td.ct_btn01:contains('취소')" ).html() );
 			$("form")[0].reset();
 		});
 	});
 
 	//==> 추가된부분 : "이메일" 유효성Check  Event 처리 및 연결
 	$(function() {
-
-		$("input[name='email']")
-				.on(
-						"change",
-						function() {
-
-							var email = $("input[name='email']").val();
-
-							if (email != ""
-									&& (email.indexOf('@') < 1 || email
-											.indexOf('.') == -1)) {
-								alert("이메일 형식이 아닙니다.");
-							}
-						});
-
+		$("input[name='email']").on("change", function() {
+			var email = $("input[name='email']").val();
+			
+			if (email != "" && (email.indexOf('@') < 1 || email.indexOf('.') == -1)) {
+				$("input[name='email']").next().css("color", "red").text("유효한 이메일이 아닙니다");
+			}else{
+				$("input[name='email']").next().text("");
+			}
+		});
+	});
+	
+	$(function() {
+		$("input[name='userId']").on("change", function () {
+			checkUserId();
+		})
+	});
+	
+	$(function () {
+		$("input[name = 'ssn']").on("change", function () {
+				checkSsn();
+		});
 	});
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,8 +111,11 @@
 		ssn = document.detailForm.ssn.value;
 		// 유효한 주민번호 형식인 경우만 나이 계산 진행, PortalJuminCheck 함수는 CommonScript.js 의 공통 주민번호 체크 함수임 
 		if (!PortalJuminCheck(ssn)) {
-			alert("잘못된 주민번호입니다.");
+			$("input[name=ssn]").next().css("color", "red").text("잘못된 주민번호입니다.");
 			return false;
+		}else{
+			$("input[name=ssn]").next().text("");
+			return true;
 		}
 	}
 
@@ -133,14 +138,32 @@
 		return ((11 - mod) % 10 == last) ? true : false;
 	}
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	$(function() {
-		$("td.ct_btn:contains('ID중복확인')").on("click",
-						function() {
-							popWin = window.open("/user/checkDuplication.jsp","popWin","left=300,top=200,width=300,height=200,marginwidth=0,marginheight=0,"
-									+ "scrollbars=no,scrolling=no,menubar=no,resizable=no");
-						});
-	});
+	
+	function checkUserId(){
+		var userId = $("input[name='userId']").val();
+		console.log(userId);
+		
+			$.ajax(
+					{
+						url : "/user/json/checkDuplication",
+						method : "POST",
+						data: userId,
+						headers : {
+							"Accept" : "application/json",
+							"Content-Type" : "application/json"
+						},
+						dataType : "json",
+						success : function(JSONData , status) {
+							var flag = JSONData.result;
+							if(flag){
+								$("td.ct_btn>span").css("color", "blue").text("아이디를 사용할 수 있습니다");
+							}else{
+								$("td.ct_btn>span").css("color","red").text("중복된 아이디 입니다.");
+							}
+							console.log(JSONData.result);
+						}
+				});
+	}
 </script>
 </head>
 
@@ -187,15 +210,13 @@
 						<table border="0" cellspacing="0" cellpadding="0">
 							<tr>
 								<td width="4" height="21">
-									<img src="/images/ct_btng01.gif" width="4" height="21"/>
+									<!-- <img src="/images/ct_btng01.gif" width="4" height="21"/> -->
 								</td>
-								<td 	align="center" background="/images/ct_btng02.gif" class="ct_btn" 
-										style="padding-top:3px;">
-									<!-- <a href="javascript:fncCheckDuplication();" id="btnCmfID">ID중복확인</a> -->
-									<span class="clickButton">ID중복확인</span>
+								<td align="center" class="ct_btn" style="padding-top:3px;">
+									<span>아이디를 입력해주세요</span>
 								</td>
 								<td width="4" height="21">
-									<img src="/images/ct_btng03.gif" width="4" height="21">
+									<!-- <img src="/images/ct_btng03.gif" width="4" height="21"> -->
 								</td>
 							</tr>
 						</table>
@@ -258,9 +279,8 @@
 		<td width="104" class="ct_write">주민번호</td>
 		<td bgcolor="D6D6D6" width="1"></td>
 		<td class="ct_write01">
-			<input 	type="text" name="ssn" class="ct_input_g" 
-							style="width:100px; height:19px" onChange="javascript:checkSsn();"  maxLength="13" >
-			-제외, 13자리 입력
+			<input 	type="text" name="ssn" class="ct_input_g" style="width:100px; height:19px" maxLength="13" >
+			<span>-제외, 13자리 입력</span>
 		</td>
 	</tr>
 
@@ -313,8 +333,8 @@
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td height="26">
-						<input 	type="text" name="email" class="ct_input_g" 
-										style="width:100px; height:19px">
+						<input 	type="text" name="email" class="ct_input_g" style="width:100px; height:19px">
+						<span>이메일을 입력해주세요</span>
 					</td>
 				</tr>
 			</table>

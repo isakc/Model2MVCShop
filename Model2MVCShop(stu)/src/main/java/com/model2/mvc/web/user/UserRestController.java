@@ -54,7 +54,6 @@ public class UserRestController {
 			map.put("message", "fail");
 		}
 		
-		
 		return map;
 	}
 

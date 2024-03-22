@@ -21,21 +21,37 @@
 		$("td.ct_btn01:contains('검색')").on("click", function() {
 			fncGetUserList(1);
 		});
-		$(".ct_list_pop td:nth-child(3)").on("click", function() {
+		
+/* 		$(".ct_list_pop td:nth-child(3)").on("click", function() {
 			self.location = "/user/getUser/"+$(this).text().trim();
+		}); */
+		
+		$(".ct_list_pop td:nth-child(3)").on("click", function() {
+			$.ajax(
+					{
+						url : "json/getUser/" + $(this).text().trim(),
+						method : "GET",
+						headers : {
+							"Accept" : "application/json",
+							"Content-Type" : "application/json"
+						},
+						dataType : "json",
+						success : function(JSONData , status) {
+							var flag = JSONData.result;
+							if(flag){
+								$("td.ct_btn>span").css("color", "blue").text("아이디를 사용할 수 있습니다");
+							}else{
+								$("td.ct_btn>span").css("color","red").text("중복된 아이디 입니다.");
+							}
+							console.log(JSONData.result);
+						}
+				});
 		});
 
 		$(".ct_list_pop td:nth-child(3)").css("color", "red");
 		$("h7").css("color", "red");
 
 		$(".ct_list_pop:nth-child(4n+6)").css("background-color", "whitesmoke");
-		//console.log ( $(".ct_list_pop:nth-child(1)" ).html() );
-		//console.log ( $(".ct_list_pop:nth-child(2)" ).html() );
-		//console.log ( $(".ct_list_pop:nth-child(3)" ).html() );
-		//console.log ( $(".ct_list_pop:nth-child(4)" ).html() ); //==> ok
-		//console.log ( $(".ct_list_pop:nth-child(5)" ).html() ); 
-		//console.log ( $(".ct_list_pop:nth-child(6)" ).html() ); //==> ok
-		//console.log ( $(".ct_list_pop:nth-child(7)" ).html() ); 
 	});
 	
 	$(function() {
@@ -126,7 +142,7 @@
 		<tr class="ct_list_pop">
 			<td align="center">${ i }</td>
 			<td></td>
-			<td align="left" class="clickButton" data-user-id = "${user.userId }">
+			<td align="left" class="clickButton">
 				<span>${user.userId }</span>
 			</td>
 			<td></td>
