@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -51,8 +50,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Map<String, Object> getProductList(Optional<Search> search) throws Exception {
-		if(search.isPresent() && search.get().getSorter().contains("DESC")) {
+	public Map<String, Object> getProductList(Search search, String sorter, Category category) throws Exception {
+		if(sorter.contains("DESC")) {
 			sorter = sorter.substring(0, sorter.indexOf("DESC"))+ " DESC";
 		}else if(sorter.contains("ASC")) {
 			sorter = sorter.substring(0, sorter.indexOf("ASC")) + " ASC";
