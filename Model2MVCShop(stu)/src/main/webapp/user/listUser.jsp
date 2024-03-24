@@ -8,7 +8,11 @@
 
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script type="text/javascript">
 	// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
 	function getList(currentPage) {
@@ -27,6 +31,10 @@
 		}); */
 		
 		$(".ct_list_pop td:nth-child(3)").on("click", function() {
+			$("td[height='1'][bgcolor='D6D7D6'] p").remove();
+			
+			var index = $(this).parent().next().children("td");
+			
 			$.ajax(
 					{
 						url : "json/getUser/" + $(this).text().trim(),
@@ -37,13 +45,8 @@
 						},
 						dataType : "json",
 						success : function(JSONData , status) {
-							var flag = JSONData.result;
-							if(flag){
-								$("td.ct_btn>span").css("color", "blue").text("아이디를 사용할 수 있습니다");
-							}else{
-								$("td.ct_btn>span").css("color","red").text("중복된 아이디 입니다.");
-							}
-							console.log(JSONData.result);
+							
+							index.html("<p>아이디: " + JSONData.user.userId + "<p>이름: " + JSONData.user.userName + "<p>이메일: " + JSONData.user.email);
 						}
 				});
 		});
@@ -61,6 +64,28 @@
 		}).on("mouseleave", function() {
 			$(this).css("color", "red");
 		})
+		
+		var availableTags = [];
+		
+		$( "input[name='searchKeyword']" ).autocomplete({
+			
+		      source: function () {
+		  		$.ajax(
+						{
+							url : "json/listUser",
+							method : "GET",
+							success : function(data) {
+								for(var i=0; i<data.list.length; i++){
+									console.log(data.list[i].userName);
+									availableTags.push(data.list[i].userName);
+								}
+								
+							
+						}
+				});
+			}
+		});
+		
 	})
 </script>
 </head>
