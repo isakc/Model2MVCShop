@@ -10,13 +10,22 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-$(function () {
-	$("td.ct_btn01:contains('확인')").on("click", function () {
-		history.go(-1);
-	})
-})
 
-$(function() {
+	$(function() {
+		$("td.ct_btn01:contains('확인')").on("click", function() {
+			history.go(-1);
+		})
+		
+		$("td.ct_btn01:contains('수정') span").on("click", function () {
+			self.location = "/purchase/updatePurchase/" + $(this).data("tran-no");
+		})
+		
+		$("tr:contains('물품명') span").on("click", function () {
+			self.location ="/product/getProduct/" +$(this).data("prod-no") +"/search";
+		})
+	})
+
+	$(function() {
 		$(".clickButton").on("mouseenter", function() {
 			$(this).css("cursor", "pointer");
 			$(this).css("color", "blue");
@@ -63,7 +72,7 @@ $(function() {
 			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
 					<td width="105">
-						<a href="/product/getProduct/${orderDetail.product.prodNo }/search" style="text-decoration:underline;">${orderDetail.product.prodName }</a><td/>
+						<span data-prod-no=${orderDetail.product.prodNo } class="clickButton">${orderDetail.product.prodName }</span>
 					<td></td>
 				</tr>
 			</table>
@@ -194,7 +203,7 @@ $(function() {
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-						<a href="/purchase/updatePurchase/${purchase.tranNo }">수정</a>
+						<span class="clickButton" data-tran-no=${purchase.tranNo }>수정</span>
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
@@ -206,7 +215,6 @@ $(function() {
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
 						<span class="clickButton">확인</span>
-						<!-- <a href="javascript:history.go(-1);">확인</a> -->
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif"width="14" height="23"/>

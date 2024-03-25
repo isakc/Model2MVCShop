@@ -52,4 +52,9 @@ public class UserDaoImpl implements UserDao {
 		return sqlSession.selectOne("UserMapper.getTotalCount", search);
 	}
 
+	@Override
+	public List<User> getAllUserList() throws Exception {
+		return sqlSession.selectList("UserMapper.getAllUserList");
+	}
+
 }

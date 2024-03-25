@@ -1,6 +1,7 @@
 package com.model2.mvc.service.user.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +61,21 @@ public class UserServiceImpl implements UserService {
 			result=false;
 		}
 		return result;
+	}
+
+	@Override
+	public String[] getAllUserList(int searchCondition) throws Exception {
+		List<User> list = userDAO.getAllUserList();
+		String[] array = new String[list.size()];
+		
+		for(int i=0; i<list.size(); i++) {
+			if(searchCondition == 0) {
+				array[i] = list.get(i).getUserId();
+			}else {
+				array[i] = list.get(i).getUserName();
+			}
+		}
+		
+		return array;
 	}
 }

@@ -145,21 +145,16 @@ public class UserController {
 	public String listUser(@ModelAttribute("serach") Search search, Model model) throws Exception {
 
 		System.out.println("/user/listUser : GET / POST");
-		
-		int currentPage = 1;
-		if (search.getCurrentPage() != 0 && search.getSearchKeyword().equals("")) {
-			currentPage = search.getCurrentPage();
-		}
 
-		search.setCurrentPage(currentPage);
-		search.setSearchCondition(search.getSearchCondition());
-		search.setSearchKeyword(search.getSearchKeyword());
+		if (search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
+		}
 
 		search.setPageSize(pageSize);
 		
 		Map<String, Object> map = userService.getUserList(search);
 
-		Paginate resultPage = new Paginate(currentPage, ((Integer) map.get("totalCount")).intValue(), pageUnit, pageSize);
+		Paginate resultPage = new Paginate(search.getCurrentPage(), ((Integer) map.get("totalCount")).intValue(), pageUnit, pageSize);
 		
 		model.addAttribute("list", map.get("list"));
 		model.addAttribute("resultPage", resultPage);

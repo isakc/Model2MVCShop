@@ -9,10 +9,36 @@
 <link rel="stylesheet" href="/css/admin.css" type="text/css">
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
+
+	$(function() {
+		$(".clickButton").on("mouseenter", function() {
+			$(this).css("cursor", "pointer");
+			$(this).css("color", "blue");
+		}).on("mouseleave", function() {
+			$(this).css("color", "black");
+		})
+	})
+	
 	function getList(currentPage) {
 		$("#currentPage").val(currentPage);
-		$("form").attr("method", "POST").attr("action", "/purchase/listPurchase").submit();
+		$("form").attr("method", "POST").attr("action",
+				"/purchase/listPurchase").submit();
 	}
+
+	$(function() {
+		$(".ct_list_pop td:nth-child(1) span").on("click", function() {
+			self.location = "/purchase/getPurchase/" + $(this).data("tran-no");
+		})
+		
+		$(".ct_list_pop td:nth-child(3) span").on("click", function() {
+			self.location = "/user/getUser/" + $(this).text();
+		})
+		
+		$(".ct_list_pop td:nth-child(11) span").on("click", function() {
+			self.location = "/purchase/updateTranCode/"+$(this).data("tran-no")+"/3";
+		})
+		
+	})
 </script>
 </head>
 
@@ -70,11 +96,12 @@
 					<c:set var="index" value="${index+1 }" />
 
 					<tr class="ct_list_pop">
-						<td align="center"><a
-							href="/purchase/getPurchase/${purchase.tranNo }">${no }</a></td>
+						<td align="center">
+							<span class="clickButton" data-tran-no="${purchase.tranNo }">${no }</span>
+						</td>
 						<td></td>
-						<td align="left"><a
-							href="/user/getUser/${purchase.buyer.userId }">${purchase.buyer.userId }</a>
+						<td align="left">
+						<span class="clickButton">${purchase.buyer.userId }</span>
 						</td>
 						<td></td>
 						<td align="left">${purchase.buyer.userName }</td>
@@ -83,9 +110,10 @@
 						<td></td>
 						<td align="left">현재 ${statusList[index] } 상태 입니다.</td>
 						<td></td>
-						<td align="left"><c:if test="${isDeliveredList[index]}">
-								<a href="/purchase/updateTranCode/${purchase.tranNo }/3">물건도착</a>
-							</c:if>
+						<td align="left">
+						<c:if test="${isDeliveredList[index]}">
+							<span data-tran-no="${purchase.tranNo }" class="clickButton">물건도착</span>
+						</c:if>
 						<td></td>
 					</tr>
 					<tr>

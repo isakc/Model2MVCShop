@@ -20,4 +20,6 @@ public interface UserDao {
 	
 	//ÃÑ °¹¼ö
 	public int getTotalCount(Search search) throws Exception ;
+
+	public List<User> getAllUserList() throws Exception ;
 }

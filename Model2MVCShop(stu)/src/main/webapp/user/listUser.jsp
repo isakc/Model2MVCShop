@@ -18,12 +18,12 @@
 	function getList(currentPage) {
 		$("#currentPage").val(currentPage)
 		$("form").attr("method", "POST").attr("action", "/user/listUser").submit();
-	}
+	} 
 
 	$(function() {
 
 		$("td.ct_btn01:contains('검색')").on("click", function() {
-			fncGetUserList(1);
+			getList(1);
 		});
 		
 /* 		$(".ct_list_pop td:nth-child(3)").on("click", function() {
@@ -67,25 +67,40 @@
 		
 		var availableTags = [];
 		
-		$( "input[name='searchKeyword']" ).autocomplete({
-			
-		      source: function () {
-		  		$.ajax(
-						{
+	$("input[name='searchKeyword']").autocomplete(
+				{
+					source : function(request, response) {
+						$.ajax({
 							url : "json/listUser",
-							method : "GET",
+							method : "POST",
+							headers : {
+								"Accept" : "application/json",
+								"Content-Type" : "application/json"
+							},
+							data : JSON.stringify({
+								searchCondition : $("select[name=searchCondition]").val(),
+								searchKeyword : $("input[name=searchKeyword]").val(),
+								pageSize : 5
+							}),
 							success : function(data) {
-								for(var i=0; i<data.list.length; i++){
-									console.log(data.list[i].userName);
-									availableTags.push(data.list[i].userName);
-								}
-								
-							
-						}
+								response(data.list.map(function(item) {
+									if($("select[name=searchCondition]").val() == 0){
+										return {
+											label : item.userId,
+											value : item.userId
+										};
+									}else{
+										return {
+											label : item.userName,
+											value : item.userName
+										};
+									}
+								}));
+							}
+						});
+					},
+					minLength : 2, // 최소 입력 길이
 				});
-			}
-		});
-		
 	})
 </script>
 </head>

@@ -55,16 +55,21 @@
 											<if test="searchCondition != null">
 												<where>
 													<if test="searchCondition == 0 and searchKeyword !='' ">
-										 				user_id = #{searchKeyword}
+										 				LOWER(user_id) LIKE '%'||#{searchKeyword}||'%'
 													</if>
 													<if test="searchCondition == 1 and searchKeyword !='' ">
-										 				user_name = #{searchKeyword}
+										 				LOWER(user_name) LIKE '%'||#{searchKeyword}||'%'
 													</if>
 												</where>
 											</if>
 											ORDER BY user_id ) inner_table
 						WHERE ROWNUM &lt;= #{currentPage} * #{pageSize} )
 		WHERE row_seq BETWEEN + ((#{currentPage} - 1) * #{pageSize} + 1)  AND #{currentPage} * #{pageSize}
+	 </select>
+	 
+	 <select id="getAllUserList" resultMap="userSelectMap">
+	 	SELECT user_id, user_name, password, role, ssn, cell_phone, addr, email, reg_date
+	 	FROM users
 	 </select>
 	
 	<!-- SQL : SELECT ROW Count -->	 
@@ -75,10 +80,10 @@
 						<if test="searchCondition != null">
 							<where>
 								<if test="searchCondition == 0 and searchKeyword !='' ">
-						 			user_id = #{searchKeyword}
+						 			LOWER(user_id) LIKE '%'||#{searchKeyword}||'%'
 								</if>
 								<if test="searchCondition == 1 and searchKeyword !='' ">
-						 		user_name = #{searchKeyword}
+						 			LOWER(user_name) LIKE '%'||#{searchKeyword}||'%'
 								</if>
 							</where>
 						</if> ) countTable						

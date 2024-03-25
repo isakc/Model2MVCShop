@@ -1,6 +1,7 @@
 package com.model2.mvc.web.user;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -10,9 +11,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.model2.mvc.common.Paginate;
@@ -172,28 +175,27 @@ public class UserRestController {
 	}
 	
 	@RequestMapping(value="json/listUser")
-	public Map<String, Object> listUser(@ModelAttribute("serach") Search search) throws Exception {
+	public Map<String, Object> listUser(@RequestBody Search search) throws Exception {
 
 		System.out.println("/user/json/listUser : GET / POST");
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		
-		int currentPage = 1;
-		if (search.getCurrentPage() != 0 && search.getSearchKeyword().equals("")) {
-			currentPage = search.getCurrentPage();
+		if (search.getCurrentPage() == 0) {
+			search.setCurrentPage(1);
 		}
 
-		search.setCurrentPage(currentPage);
-		search.setSearchCondition(search.getSearchCondition());
-		search.setSearchKeyword(search.getSearchKeyword());
-
 		search.setPageSize(pageSize);
+
+		if(search.getPageSize() == 0) {
+			search.setPageSize(pageSize);
+		}
 		
 		try {
 
 			Map<String, Object> mapList = userService.getUserList(search);
 
-			Paginate resultPage = new Paginate(currentPage, ((Integer) mapList.get("totalCount")).intValue(), pageUnit, pageSize);
+			Paginate resultPage = new Paginate(search.getCurrentPage(), ((Integer) mapList.get("totalCount")).intValue(), pageUnit, pageSize);
 
 			map.put("message", "ok");
 			map.put("list", mapList.get("list"));

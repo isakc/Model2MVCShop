@@ -36,12 +36,18 @@
 		})
 	})
 	
+	$(function () {
+		$("td.ct_write01 > img").on("click", function () {
+			show_calendar('document.addPurchase.divyDate', document.addPurchase.divyDate.value);
+		})
+	})
+	
 </script>
 </head>
 
 <body>
 
-<form>
+<form name="addPurchase">
 
 <table width="100%" height="37" border="0" cellpadding="0"	cellspacing="0">
 	<tr>
@@ -194,8 +200,7 @@
 		<td width="200" class="ct_write01">
 			<input 	type="text" readonly="readonly" name="divyDate" class="ct_input_g" 
 							style="width: 100px; height: 19px" maxLength="20"/>
-			<img 	src="../images/ct_icon_date.gif" width="15" height="15"	
-						onclick="show_calendar('document.addPurchase.divyDate', document.addPurchase.divyDate.value)"/>
+			<img 	src="../images/ct_icon_date.gif" width="15" height="15"	/>
 		</td>
 	</tr>
 	<tr>
@@ -213,7 +218,6 @@
 						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
-						<!-- <a href="javascript:fncAddPurchase();">备概</a> -->
 						<span class="clickButton">备概</span>
 					</td>
 					<td width="14" height="23">
@@ -225,7 +229,6 @@
 					</td>
 					<td background="/images/ct_btnbg02.gif" class="ct_btn01" style="padding-top: 3px;">
 						<span class="clickButton">秒家</span>
-						<!-- <a href="javascript:history.go(-1)">秒家</a> -->
 					</td>
 					<td width="14" height="23">
 						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
