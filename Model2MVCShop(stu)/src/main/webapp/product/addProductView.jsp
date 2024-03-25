@@ -25,10 +25,6 @@
 
 	function fncAddProduct() {
 		//Form 유효성 검증
-		/*  	var name = document.detailForm.prodName.value;
-		 var detail = document.detailForm.prodDetail.value;
-		 var manuDate = document.detailForm.manuDate.value;
-		 var price = document.detailForm.price.value; */
 
 		var name = $("input[name='prodName']").val();
 		var detail = $("input[name='prodDetail']").val();
@@ -200,7 +196,7 @@
 				<c:when test="${result == null }">
 					<td class="ct_write01">
 					<input	type="file" name="upload" class="ct_input_g" 
-							style="width: 200px; height: 19px" maxLength="13"/>
+							style="width: 200px; height: 19px" maxLength="13" multiple="multiple"/>
 					</td>
 				</c:when>
 						

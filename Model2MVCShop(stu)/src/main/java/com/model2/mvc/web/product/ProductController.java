@@ -2,7 +2,9 @@ package com.model2.mvc.web.product;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -74,18 +76,23 @@ public class ProductController {
 	}
 
 	@PostMapping("addProduct")
-	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, Model model, HttpServletRequest request) throws Exception {
+	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, List<MultipartFile> uploads,
+			Model model, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/addProduct : POST");
 		
 		//String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
 		String root = "C:\\Users\\bitcamp\\git\\Model2MVCShop\\Model2MVCShop(stu)\\src\\main\\webapp\\images\\uploadFiles"+File.separator;
-		UUID uuid = UUID.randomUUID();
-		String fileName = uuid+"_"+upload.getOriginalFilename();
-		File destFile = new File(root + fileName);
-		upload.transferTo(destFile);
+		List<String> fileNames = new ArrayList<String>();
 		
-		product.setFileName(fileName);
+		 for (MultipartFile upload : uploads) {
+			 UUID uuid = UUID.randomUUID();
+		        
+			 String fileName = uuid+"_"+upload.getOriginalFilename();
+			 fileNames.add(fileName);
+		     File destFile = new File(root + fileName);
+		     upload.transferTo(destFile);
+		 }
 		
 		product.setManuDate(product.getManuDate().replace("-", ""));
 		
@@ -209,18 +216,25 @@ public class ProductController {
 	}
 
 	@PostMapping("updateProduct")
-	public String updateProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, MultipartFile upload, 
+	public String updateProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, List<MultipartFile> uploads, 
 			Model model, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/updateProduct : POST");
 		
 		String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
-		UUID uuid = UUID.randomUUID();
-		String fileName = uuid+"_"+upload.getOriginalFilename();
-		File destFile = new File(root + fileName);
-		upload.transferTo(destFile);
-		product.setFileName(fileName);
-
+		List<String> fileNames = new ArrayList<String>();
+		
+		for (MultipartFile upload : uploads) {
+			 UUID uuid = UUID.randomUUID();
+		        
+			 String fileName = uuid+"_"+upload.getOriginalFilename();
+			 fileNames.add(fileName);
+		     File destFile = new File(root + fileName);
+		     upload.transferTo(destFile);
+		     
+		     //product.setFileName(fileNames);
+		 }
+		
 		product.setManuDate(product.getManuDate().replace("-", ""));
 		product.setCategory(categoryService.findCategory(categoryNo));
 

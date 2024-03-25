@@ -21,6 +21,7 @@
 		<typeAlias alias="purchase" type="com.model2.mvc.service.domain.Purchase" />
 		<typeAlias alias="orderDetail" type="com.model2.mvc.service.domain.OrderDetail" />
 		<typeAlias alias="search" type="com.model2.mvc.common.Search" />
+		<typeAlias alias="ProductImage" type="com.model2.mvc.service.domain.ProductImage" />
 	</typeAliases>
 	
 	 <!-- SQL Definition :: file include -->
@@ -31,6 +32,7 @@
 		<mapper resource="sql/CategoryMapper.xml"/>
 		<mapper resource="sql/CartMapper.xml"/>
 		<mapper resource="sql/OrderDetailMapper.xml"/>
+		<mapper resource="sql/ProductImageMapper.xml"/>
 	</mappers>
 
 </configuration>

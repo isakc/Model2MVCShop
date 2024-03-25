@@ -1,11 +1,11 @@
 package com.model2.mvc.service.domain;
 
 import java.sql.Date;
+import java.util.List;
 
 
 public class Product {
 	
-	private String fileName;
 	private String manuDate;
 	private int price;
 	private String prodDetail;
@@ -23,13 +23,7 @@ public class Product {
 	public Product(int prodNo) {
 		this.prodNo = prodNo;
 	}
-	
-	public String getFileName() {
-		return fileName;
-	}
-	public void setFileName(String fileName) {
-		this.fileName = fileName;
-	}
+
 	public String getManuDate() {
 		return manuDate;
 	}
@@ -92,7 +86,7 @@ public class Product {
 
 	// Override
 	public String toString() {
-		return "ProductVO : [fileName]" + fileName
+		return "ProductVO :"
 				+ "[manuDate]" + manuDate+ "[price]" + price + "[prodDetail]" + prodDetail
 				+ "[prodName]" + prodName + "[prodNo]" + prodNo + "[quantity]" + quantity;
 	}	

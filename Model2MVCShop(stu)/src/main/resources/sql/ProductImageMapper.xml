@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+		PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+		"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ProductImagesMapper">
+
+	<resultMap id="ProductImagesSelectMap" type="productImage">
+		<id property="imgNo" column="img_no" jdbcType="NUMERIC"/>
+		<result property="fileName" column="file_name" jdbcType="VARCHAR"/>
+		<result property="product.prodNo" column="prod_no" jdbcType="NUMERIC"/>
+	</resultMap>
+	
+	<insert id="insertProductImages" parameterType="productImage">
+	 	INSERT
+		INTO orderdetails(order_no, tran_no, prod_no, quantity, reg_date)
+		VALUES(seq_orderdetails_order_no.NEXTVAL, #{transaction.tranNo}, #{product.prodNo}, #{quantity}, SYSDATE)
+	 </insert>
+</mapper>

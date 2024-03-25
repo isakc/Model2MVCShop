@@ -55,10 +55,10 @@
 											<if test="searchCondition != null">
 												<where>
 													<if test="searchCondition == 0 and searchKeyword !='' ">
-										 				LOWER(user_id) LIKE '%'||#{searchKeyword}||'%'
+										 				LOWER(user_id) LIKE '%'||LOWER(#{searchKeyword})||'%'
 													</if>
 													<if test="searchCondition == 1 and searchKeyword !='' ">
-										 				LOWER(user_name) LIKE '%'||#{searchKeyword}||'%'
+										 				LOWER(user_name) LIKE '%'||LOWER(#{searchKeyword})||'%'
 													</if>
 												</where>
 											</if>
@@ -80,10 +80,10 @@
 						<if test="searchCondition != null">
 							<where>
 								<if test="searchCondition == 0 and searchKeyword !='' ">
-						 			LOWER(user_id) LIKE '%'||#{searchKeyword}||'%'
+						 			LOWER(user_id) LIKE '%'||LOWER(#{searchKeyword})||'%'
 								</if>
 								<if test="searchCondition == 1 and searchKeyword !='' ">
-						 			LOWER(user_name) LIKE '%'||#{searchKeyword}||'%'
+						 			LOWER(user_name) LIKE '%'||LOWER(#{searchKeyword})||'%'
 								</if>
 							</where>
 						</if> ) countTable						

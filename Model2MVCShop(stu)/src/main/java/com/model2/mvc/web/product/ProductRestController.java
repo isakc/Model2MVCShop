@@ -92,7 +92,7 @@ public class ProductRestController {
 			String fileName = uuid+"_"+upload.getOriginalFilename();
 			File destFile = new File(root + fileName);
 			upload.transferTo(destFile);
-			product.setFileName(fileName);
+			//product.setFileName(fileName);
 			
 			if(product.getManuDate() != null) {
 				product.setManuDate(product.getManuDate().replace("-", ""));
@@ -251,7 +251,7 @@ public class ProductRestController {
 			String fileName = uuid+"_"+upload.getOriginalFilename();
 			File destFile = new File(root + fileName);
 			upload.transferTo(destFile);
-			product.setFileName(fileName);
+			//product.setFileName(fileName);
 			
 			if(product.getManuDate() != null) {
 				product.setManuDate(product.getManuDate().replace("-", ""));

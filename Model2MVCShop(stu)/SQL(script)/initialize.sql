@@ -1,3 +1,4 @@
+DROP TABLE productImages CASCADE CONSTRAINTS;
 DROP TABLE orderDetails CASCADE CONSTRAINTS;
 DROP TABLE transaction CASCADE CONSTRAINTS;
 DROP TABLE product CASCADE CONSTRAINTS;
@@ -9,12 +10,14 @@ DROP SEQUENCE seq_product_prod_no;
 DROP SEQUENCE seq_transaction_tran_no;
 DROP SEQUENCE seq_categories_category_no;
 DROP SEQUENCE seq_orderdetails_order_no;
+DROP SEQUENCE seq_productImages_img_no;
 
 CREATE SEQUENCE seq_product_prod_no	 	 INCREMENT BY 1 START WITH 10000;
 CREATE SEQUENCE seq_transaction_tran_no	 INCREMENT BY 1 START WITH 10000;
 CREATE SEQUENCE seq_categories_category_no INCREMENT BY 1 START WITH 3000;
 CREATE SEQUENCE seq_orderdetails_order_no INCREMENT BY 1 START WITH 3000;
 CREATE SEQUENCE seq_cart_cart_no INCREMENT BY 1 START WITH 3000;
+CREATE SEQUENCE seq_productImages_img_no INCREMENT BY 1 START WITH 10000;
 
 CREATE TABLE users ( 
 	user_id 			VARCHAR2(20)		NOT NULL,
@@ -44,7 +47,6 @@ CREATE TABLE product (
 	prod_detail 				VARCHAR2(200),
 	manufacture_day	 VARCHAR2(8),
 	price 							NUMBER(10),
-	image_file 					VARCHAR2(100),
 	category_no NUMBER REFERENCES categories(category_no),
 	quantity NUMBER,
 	reg_date 					DATE,
@@ -80,6 +82,13 @@ CREATE TABLE orderDetails(
 	quantity NUMBER,
 	reg_date DATE,
 	PRIMARY KEY(order_no)
+);
+
+CREATE TABLE productImages(
+	img_no NUMBER NOT NULL,
+	file_name VARCHAR2(200),
+	prod_no NUMBER NOT NULL REFERENCES product(prod_no),
+	PRIMARY KEY(img_no)
 );
 
 
@@ -170,14 +179,14 @@ INSERT INTO categories VALUES(seq_categories_category_no.NEXTVAL, 3001, '스키/겨
 INSERT INTO categories VALUES(seq_categories_category_no.NEXTVAL, 3001, '인라인 스케이트', SYSDATE);
 INSERT INTO categories VALUES(seq_categories_category_no.NEXTVAL, 3002, '원예/가드닝', SYSDATE);
 
-INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'vaio vgn FS70B','소니 바이오 노트북 신동품','20120514',2000000, 'AHlbAAAAtBqyWAAA.jpg', '3003', 5, TO_DATE('2012/12/14 11:27:27', 'YYYY/MM/DD HH24:MI:SS'));
-INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'자전거','자전거 좋아요~','20120514',10000, 'AHlbAAAAvetFNwAA.jpg', '3005',5, TO_DATE('2012/11/14 10:48:43', 'YYYY/MM/DD HH24:MI:SS'));
-INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'보르도','최고 디자인 신품','20120201',1170000, 'AHlbAAAAvewfegAB.jpg', '3004',5, TO_DATE('2012/10/14 10:49:39', 'YYYY/MM/DD HH24:MI:SS'));
-INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'보드세트','한시즌 밖에 안썼습니다. 눈물을 머금고 내놓음 ㅠ.ㅠ','20120217', 200000, 'AHlbAAAAve1WwgAC.jpg', '3006',5, TO_DATE('2012/11/14 10:50:58', 'YYYY/MM/DD HH24:MI:SS'));
-INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'인라인','좋아욥','20120819', 20000, 'AHlbAAAAve37LwAD.jpg', '3007',5, TO_DATE('2012/11/14 10:51:40', 'YYYY/MM/DD HH24:MI:SS'));
-INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'삼성센스 2G','sens 메모리 2Giga','20121121',800000, 'AHlbAAAAtBqyWAAA.jpg', '3003',5, TO_DATE('2012/11/14 18:46:58', 'YYYY/MM/DD HH24:MI:SS'));
-INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'연꽃','정원을 가꿔보세요','20121022',232300, 'AHlbAAAAtDPSiQAA.jpg', '3008',5, TO_DATE('2012/11/15 17:39:01', 'YYYY/MM/DD HH24:MI:SS'));
-INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'삼성센스','노트북','20120212',600000, 'AHlbAAAAug1vsgAA.jpg', '3003',5, TO_DATE('2012/11/12 13:04:31', 'YYYY/MM/DD HH24:MI:SS'));
+INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'vaio vgn FS70B','소니 바이오 노트북 신동품','20120514',2000000, '3003', 5, TO_DATE('2012/12/14 11:27:27', 'YYYY/MM/DD HH24:MI:SS'));
+INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'자전거','자전거 좋아요~','20120514',10000, '3005',5, TO_DATE('2012/11/14 10:48:43', 'YYYY/MM/DD HH24:MI:SS'));
+INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'보르도','최고 디자인 신품','20120201',1170000, '3004',5, TO_DATE('2012/10/14 10:49:39', 'YYYY/MM/DD HH24:MI:SS'));
+INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'보드세트','한시즌 밖에 안썼습니다. 눈물을 머금고 내놓음 ㅠ.ㅠ','20120217', 200000, '3006',5, TO_DATE('2012/11/14 10:50:58', 'YYYY/MM/DD HH24:MI:SS'));
+INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'인라인','좋아욥','20120819', 20000, '3007',5, TO_DATE('2012/11/14 10:51:40', 'YYYY/MM/DD HH24:MI:SS'));
+INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'삼성센스 2G','sens 메모리 2Giga','20121121',800000, '3003',5, TO_DATE('2012/11/14 18:46:58', 'YYYY/MM/DD HH24:MI:SS'));
+INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'연꽃','정원을 가꿔보세요','20121022',232300, '3008',5, TO_DATE('2012/11/15 17:39:01', 'YYYY/MM/DD HH24:MI:SS'));
+INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'삼성센스','노트북','20120212',600000, '3003',5, TO_DATE('2012/11/12 13:04:31', 'YYYY/MM/DD HH24:MI:SS'));
 
 
 commit;
