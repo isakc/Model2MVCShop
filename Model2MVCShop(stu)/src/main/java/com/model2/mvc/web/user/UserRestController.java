@@ -185,8 +185,6 @@ public class UserRestController {
 			search.setCurrentPage(1);
 		}
 
-		search.setPageSize(pageSize);
-
 		if(search.getPageSize() == 0) {
 			search.setPageSize(pageSize);
 		}

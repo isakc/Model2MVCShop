@@ -67,7 +67,7 @@ public class CartRestController {
 	}
 
 	@RequestMapping("json/listCart")
-	public Map<String, Object> listCart(@SessionAttribute User user) throws Exception {
+	public Map<String, Object> listCart(@SessionAttribute("user") User user) throws Exception {
 
 		System.out.println("/cart/json/listCart");
 		Map<String, Object> map = new HashMap<String, Object>();

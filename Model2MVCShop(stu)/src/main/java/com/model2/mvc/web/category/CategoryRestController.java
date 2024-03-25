@@ -44,7 +44,7 @@ public class CategoryRestController {
 	}
 	
 	@GetMapping("json/addCategory")
-	public Map<String, Object> addCategory(Model model) throws Exception {
+	public Map<String, Object> addCategory() throws Exception {
 
 		System.out.println("category/json/addCategory");
 		Map<String, Object> map = new HashMap<String, Object>();

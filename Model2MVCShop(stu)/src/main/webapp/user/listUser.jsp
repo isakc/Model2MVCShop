@@ -14,21 +14,59 @@
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script type="text/javascript">
+
 	// 검색 / page 두가지 경우 모두 Form 전송을 위해 JavaScrpt 이용  
 	function getList(currentPage) {
 		$("#currentPage").val(currentPage)
 		$("form").attr("method", "POST").attr("action", "/user/listUser").submit();
-	} 
-
+	}
+	
 	$(function() {
-
+		$(".clickButton").on("mouseenter", function() {
+			$(this).css("cursor", "pointer");
+			$(this).css("color", "blue");
+		}).on("mouseleave", function() {
+			$(this).css("color", "red");
+		})
+		
+	$("input[name='searchKeyword']").autocomplete({
+					source : function(request, response) {
+						$.ajax({
+							url : "json/listUser",
+							method : "POST",
+							headers : {
+								"Accept" : "application/json",
+								"Content-Type" : "application/json"
+							},
+							data : JSON.stringify({
+								searchCondition : $("select[name=searchCondition]").val(),
+								searchKeyword : $("input[name=searchKeyword]").val(),
+								pageSize : 10
+							}),
+							success : function(data) {
+								
+								response(data.list.map(function(item) {
+									if($("select[name=searchCondition]").val() == 0){
+										return {
+											label : item.userId,
+											value : item.userId
+										};
+									}else{
+										return {
+											label : item.userName,
+											value : item.userName
+										};
+									}
+								}));
+							}
+						});
+					},
+					minLength : 2, // 최소 입력 길이
+				});
+		
 		$("td.ct_btn01:contains('검색')").on("click", function() {
 			getList(1);
 		});
-		
-/* 		$(".ct_list_pop td:nth-child(3)").on("click", function() {
-			self.location = "/user/getUser/"+$(this).text().trim();
-		}); */
 		
 		$(".ct_list_pop td:nth-child(3)").on("click", function() {
 			$("td[height='1'][bgcolor='D6D7D6'] p").remove();
@@ -55,52 +93,6 @@
 		$("h7").css("color", "red");
 
 		$(".ct_list_pop:nth-child(4n+6)").css("background-color", "whitesmoke");
-	});
-	
-	$(function() {
-		$(".clickButton").on("mouseenter", function() {
-			$(this).css("cursor", "pointer");
-			$(this).css("color", "blue");
-		}).on("mouseleave", function() {
-			$(this).css("color", "red");
-		})
-		
-		var availableTags = [];
-		
-	$("input[name='searchKeyword']").autocomplete(
-				{
-					source : function(request, response) {
-						$.ajax({
-							url : "json/listUser",
-							method : "POST",
-							headers : {
-								"Accept" : "application/json",
-								"Content-Type" : "application/json"
-							},
-							data : JSON.stringify({
-								searchCondition : $("select[name=searchCondition]").val(),
-								searchKeyword : $("input[name=searchKeyword]").val(),
-								pageSize : 5
-							}),
-							success : function(data) {
-								response(data.list.map(function(item) {
-									if($("select[name=searchCondition]").val() == 0){
-										return {
-											label : item.userId,
-											value : item.userId
-										};
-									}else{
-										return {
-											label : item.userName,
-											value : item.userName
-										};
-									}
-								}));
-							}
-						});
-					},
-					minLength : 2, // 최소 입력 길이
-				});
 	})
 </script>
 </head>

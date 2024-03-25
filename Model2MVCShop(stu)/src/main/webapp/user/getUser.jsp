@@ -10,14 +10,6 @@
 
 <script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script type="text/javascript">
-	$(function() {
-		$(".clickButton").on("mouseenter", function() {
-			$(this).css("cursor", "pointer");
-			$(this).css("color", "blue");
-		}).on("mouseleave", function() {
-			$(this).css("color", "black");
-		})
-	})
 	//==> 추가된부분 : "수정" "확인"  Event 연결 및 처리
 	$(function() {
 		$("td.ct_btn01:contains('확인')").on("click", function() {
@@ -27,6 +19,13 @@
 		$("td.ct_btn01:contains('수정')").on("click", function() {
 			self.location = "/user/updateUser/${user.userId }"
 		});
+		
+		$(".clickButton").on("mouseenter", function() {
+			$(this).css("cursor", "pointer");
+			$(this).css("color", "blue");
+		}).on("mouseleave", function() {
+			$(this).css("color", "black");
+		})
 	});
 </script>
 
