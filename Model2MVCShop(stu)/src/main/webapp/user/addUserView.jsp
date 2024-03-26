@@ -267,7 +267,7 @@
 			
 			<div class="container">
 				<button type="button" class="btn btn-default">가입</button>
-				<button type="button" class="btn btn-primary">취소</button>			
+				<button type="button" class="btn btn-primary">취소</button>
 			</div>
 		</form>
 	</div>

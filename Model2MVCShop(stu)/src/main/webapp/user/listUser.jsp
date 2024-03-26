@@ -223,7 +223,7 @@
 		
 		<div class="row text-center">
 			<input type="hidden" id="currentPage" name="currentPage" value="${resultPage.now }"/>
-			<jsp:include page="../common/pageNavigator.jsp"/>	
+			<jsp:include page="../common/pageNavigator.jsp"/>
 		</div>
 		</form>
 	</div>
