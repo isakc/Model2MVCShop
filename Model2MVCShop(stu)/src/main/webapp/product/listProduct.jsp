@@ -245,7 +245,7 @@
 								<td align="center">${i }</td>
 								<td></td>
 								<td align="center">
-									<img src="/images/uploadFiles/${product.fileName }" style="width: 100px; height: 100px;" />
+									<%-- <img src="/images/uploadFiles/${product.fileName }" style="width: 100px; height: 100px;" /> --%>
 								</td>
 								<td></td>
 								<td align="center" data-prod-no="${product.prodNo }">

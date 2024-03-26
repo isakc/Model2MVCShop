@@ -90,8 +90,9 @@ public class UserController {
 		userService.updateUser(user);
 		
 		String sessionId=((User)session.getAttribute("user")).getUserId();
+		
 		if(sessionId.equals(user.getUserId())){
-			session.setAttribute("user", user);
+			session.setAttribute("user", userService.getUser(sessionId));
 		}
 
 		return "redirect:/user/getUser/"+user.getUserId();

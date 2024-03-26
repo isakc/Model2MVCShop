@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Product {
 	
+	private List<String> fileNames;
 	private String manuDate;
 	private int price;
 	private String prodDetail;
@@ -19,7 +20,7 @@ public class Product {
 
 	public Product(){
 	}
-	
+
 	public Product(int prodNo) {
 		this.prodNo = prodNo;
 	}
@@ -82,6 +83,14 @@ public class Product {
 
 	public void setTransStatusCode(String transStatusCode) {
 		this.transStatusCode = transStatusCode;
+	}
+	
+	public List<String> getFileNames() {
+		return fileNames;
+	}
+
+	public void setFileNames(List<String> fileNames) {
+		this.fileNames = fileNames;
 	}
 
 	// Override
