@@ -49,7 +49,7 @@
 	               <c:if test="${sessionScope.user.role == 'admin'}">
 		              <li class="dropdown">
 		                     <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-		                         <span >판매상품관리</span>
+		                         <span >판매상품</span>
 		                         <span class="caret"></span>
 		                     </a>
 		                     <ul class="dropdown-menu">
@@ -65,6 +65,7 @@
 	                         <span >상품구매</span>
 	                         <span class="caret"></span>
 	                     </a>
+	                     
 	                     <ul class="dropdown-menu">
 	                         <li><a href="#">상 품 검 색</a></li>
 	                         
@@ -75,6 +76,30 @@
 	                         <li><a href="#">최근본상품</a></li>
 	                     </ul>
 	                 </li>
+	                 
+	                 <c:if test="${sessionScope.user.role == 'user'}">
+		              <li class="dropdown">
+		                     <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+		                         <span >장바구니</span>
+		                         <span class="caret"></span>
+		                     </a>
+		                     <ul class="dropdown-menu">
+		                         <li><a href="#">장바구니 목록</a></li>
+		                     </ul>
+		                </li>
+	                 </c:if>
+	                 
+	                 <c:if test="${sessionScope.user.role == 'admin'}">
+		              <li class="dropdown">
+		                     <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+		                         <span >카테고리</span>
+		                         <span class="caret"></span>
+		                     </a>
+		                     <ul class="dropdown-menu">
+		                         <li><a href="#">카테고리등록</a></li>
+		                     </ul>
+		                </li>
+	                 </c:if>
 	                 
 	             </ul>
 	             
@@ -90,8 +115,6 @@
 </div>
 		<!-- ToolBar End /////////////////////////////////////-->
  	
-   	
-   	
    	<script type="text/javascript">
 	
 		//============= logout Event  처리 =============	
@@ -113,4 +136,30 @@
 			$(self.location).attr("href","/user/getUser/${user.userId}");
 		});
 		
+	 	$( "a:contains('판매상품등록')" ).on("click" , function() {
+			$(self.location).attr("href","/product/addProduct");
+		});
+	 	
+	 	$( "a:contains('판매상품관리')" ).on("click" , function() {
+			$(self.location).attr("href","/product/listProduct/manage");
+		});
+	 	
+	 	<!-- 시작 -->
+	 	
+	 	$( "a:contains('상 품 검 색')" ).on("click" , function() {
+			$(self.location).attr("href","/product/listProduct/manage");
+		});
+	 	
+	 	$( "a:contains('구매이력조회')" ).on("click" , function() {
+			$(self.location).attr("href","/product/listProduct/manage");
+		});
+	 	
+	 	$( "a:contains('최근 본 상품')" ).on("click" , function() {
+			$(self.location).attr("href","/product/listProduct/manage");
+		});
+	 	
+	 	$( "a:contains('카테고리등록')" ).on("click" , function() {
+			$(self.location).attr("href","/category/addCategory");
+		});
+	 	
 	</script>  
