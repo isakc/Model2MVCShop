@@ -22,7 +22,7 @@
 	 		SELECT seq_product_prod_no.NEXTVAL
 	 		FROM dual
 	 	</selectKey>
-	 	INSERT INTO product VALUES (#{prodNo}, #{prodName:VARCHAR}, #{prodDetail:VARCHAR}, #{manuDate:VARCHAR}, #{price:NUMERIC}, #{fileName:VARCHAR}, #{category.categoryNo:NUMERIC}, #{quantity:NUMERIC}, SYSDATE)
+	 	INSERT INTO product VALUES (#{prodNo}, #{prodName:VARCHAR}, #{prodDetail:VARCHAR}, #{manuDate:VARCHAR}, #{price:NUMERIC}, #{category.categoryNo:NUMERIC}, #{quantity:NUMERIC}, SYSDATE)
 	 </insert>
 	 
 	 <select id="findProduct" parameterType="int" resultMap="productSelectMap">

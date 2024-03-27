@@ -134,9 +134,7 @@
 			
 				<c:choose>
 					<c:when test="${resultPage.total==0 }">
-						<tr>
-							<td>해당상품 없음</td>
-						<tr/>
+						<span>해당상품 없음</span>
 					</c:when>
 
 					<c:otherwise>
@@ -223,10 +221,8 @@
 				<input type="hidden" name="preSearchCondition" value="${search.searchCondition }" />
 				<input type="hidden" name="preSearchKeyword" value="${search.searchKeyword }" />
 				<jsp:include page="../common/pageNavigator.jsp"/>
-						
 			</div>
 			<!--  페이지 Navigator 끝 -->
-
 		</form>
 
 	</div>

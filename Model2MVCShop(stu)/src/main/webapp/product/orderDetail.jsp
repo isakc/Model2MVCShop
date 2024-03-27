@@ -2,85 +2,69 @@
 	pageEncoding="EUC-KR"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<html>
+<html lang="ko">
+
 <head>
-<title>구매 목록조회</title>
+	<title>회원정보조회</title>
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-
-<script type="text/javascript">
+	<meta charset="EUC-KR">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
-</script>
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<link href="/css/animate.min.css" rel="stylesheet">
+  	<link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+  	
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+  	<script src="/javascript/bootstrap-dropdownhover.min.js"></script>
+	
+	<!--  CSS 추가 : 툴바에 화면 가리는 현상 해결 :  주석처리 전, 후 확인-->
+	<style>
+        body {
+            padding-top : 70px;
+        }
+   	</style>
+
+	<script type="text/javascript">
+		
+	</script>
 </head>
 
-<body bgcolor="#ffffff" text="#000000">
-
-	<div style="width: 98%; margin-left: 10px;">
-
-		<table width="100%" height="37" border="0" cellpadding="0"
-			cellspacing="0">
+<body>
+	<!-- ToolBar Start /////////////////////////////////////-->
+	<jsp:include page="/layout/toolbar.jsp" />
+   	<!-- ToolBar End /////////////////////////////////////-->
+   	
+	<div class="container">
+		<table class="table table-striped table-bordered list">
 			<tr>
-				<td width="15" height="37"><img src="/images/ct_ttl_img01.gif"
-					width="15" height="37"></td>
-				<td background="/images/ct_ttl_img02.gif" width="100%"
-					style="padding-left: 10px;">
-					<table width="100%" border="0" cellspacing="0" cellpadding="0">
-						<tr>
-							<td width="93%" class="ct_ttl01">구매 목록조회</td>
-						</tr>
-					</table>
-				</td>
-				<td width="12" height="37"><img src="/images/ct_ttl_img03.gif"
-					width="12" height="37"></td>
-			</tr>
-		</table>
-
-		<table width="100%" border="0" cellspacing="0" cellpadding="0"
-			style="margin-top: 10px;">
-			<tr>
-				<td class="ct_list_b" width="150">회원ID</td>
-				<td class="ct_line02"></td>
-				<td class="ct_list_b" width="150">회원명</td>
-				<td class="ct_line02"></td>
-				<td class="ct_list_b">전화번호</td>
-				<td class="ct_line02"></td>
-				<td class="ct_list_b">배송현황</td>
-				<td class="ct_line02"></td>
-				<td class="ct_list_b">주소</td>
-				<td class="ct_line02"></td>
-				<td class="ct_list_b">수량</td>
-			</tr>
-			<tr>
-				<td colspan="11" bgcolor="808285" height="1"></td>
+				<td>회원ID</td>
+				<td>회원명</td>
+				<td>전화번호</td>
+				<td>배송현황</td>
+				<td>주소</td>
+				<td>수량</td>
 			</tr>
 
 			<c:set var="index" value="-1" />
 			<c:forEach var="orderDetail" items="${list }">
 				<c:set var="index" value="${index+1 }" />
 
-				<tr class="ct_list_pop">
-					<td align="center"><a
-						href="/user/getUser/${orderDetail.transaction.buyer.userId }">${orderDetail.transaction.buyer.userId }</a>
-					</td>
-					<td></td>
-					<td align="center">${orderDetail.transaction.receiverName }</td>
-					<td></td>
-					<td align="center">${orderDetail.transaction.receiverPhone }</td>
-					<td></td>
-					<td align="center">${statusList[index] } <c:if
-							test="${orderDetail.transaction.tranCode < 2 }">
-							<a
-								href="/purchase/updateTranCode/${orderDetail.transaction.tranNo }/2">배송하기</a>
-						</c:if>
-					<td></td>
-
-					<td align="center">${orderDetail.transaction.divyAddr }</td>
-					<td></td>
-					<td align="center">${orderDetail.quantity }</td>
-					<td></td>
-				</tr>
 				<tr>
-					<td colspan="11" bgcolor="D6D7D6" height="1"></td>
+					<td>
+						<a href="/user/getUser/${orderDetail.transaction.buyer.userId }">${orderDetail.transaction.buyer.userId }</a>
+					</td>
+					<td>${orderDetail.transaction.receiverName }</td>
+					<td>${orderDetail.transaction.receiverPhone }</td>
+					<td>${statusList[index] }
+						<c:if test="${orderDetail.transaction.tranCode < 2 }">
+							<a href="/purchase/updateTranCode/${orderDetail.transaction.tranNo }/2">배송하기</a>
+						</c:if>
+					<td>${orderDetail.transaction.divyAddr }</td>
+					<td>${orderDetail.quantity }</td>
 				</tr>
 			</c:forEach>
 		</table>

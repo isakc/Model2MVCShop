@@ -1,229 +1,138 @@
 <%@ page language="java" contentType="text/html; charset=EUC-KR"
     pageEncoding="EUC-KR"%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<html>
-<head>
-<title>구매상세조회</title>
+<html lang="ko">
 
-<link rel="stylesheet" href="/css/admin.css" type="text/css">
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script type="text/javascript">
+<head>
+	<title>상품구매완료 페이지</title>
+
+	<meta charset="EUC-KR">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	
+	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
+	<link href="/css/animate.min.css" rel="stylesheet">
+  	<link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+  	
+	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+  	<script src="/javascript/bootstrap-dropdownhover.min.js"></script>
+	
+	<!--  CSS 추가 : 툴바에 화면 가리는 현상 해결 :  주석처리 전, 후 확인-->
+	<style>
+        body {
+            padding-top : 70px;
+        }
+   	</style>
+
+	<script type="text/javascript">
 
 	$(function() {
-		$("td.ct_btn01:contains('확인')").on("click", function() {
-			history.go(-1);
-		})
-		
-		$("td.ct_btn01:contains('수정') span").on("click", function () {
+		$("button[type='button']:contains('수정')").on("click", function () {
 			self.location = "/purchase/updatePurchase/" + $(this).data("tran-no");
 		})
 		
-		$("tr:contains('물품명') span").on("click", function () {
-			self.location ="/product/getProduct/" +$(this).data("prod-no") +"/search";
+		$("button[type='button']:contains('확인')").on("click", function() {
+			history.go(-1);
+		})
+		
+		$("td:contains('물품명')").next().find("a").on("click", function () {
+			$(this).attr("href", "/product/getProduct/" +$(this).data("prod-no") +"/search");
 		})
 	})
-
-	$(function() {
-		$(".clickButton").on("mouseenter", function() {
-			$(this).css("cursor", "pointer");
-			$(this).css("color", "blue");
-		}).on("mouseleave", function() {
-			$(this).css("color", "black");
-		})
-	})
-</script>
+	</script>
 </head>
 
-<body bgcolor="#ffffff" text="#000000">
+<body>
+	<!-- ToolBar Start /////////////////////////////////////-->
+	<jsp:include page="/layout/toolbar.jsp" />
+   	<!-- ToolBar End /////////////////////////////////////-->
+	
+	<div class="container">
+		<div class="row">
+			<table class="table table-striped table-bordered">
+			
+				<c:forEach var="orderDetail" items="${list }">
 
-<table width="100%" height="37" border="0" cellpadding="0" cellspacing="0">
-	<tr>
-		<td width="15" height="37">
-			<img src="/images/ct_ttl_img01.gif"	width="15" height="37"/>
-		</td>
-		<td background="/images/ct_ttl_img02.gif" width="100%" style="padding-left: 10px;">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
+					<tr>
+						<td>물품명</td>
+						<td>
+							<a href="" data-prod-no=${orderDetail.product.prodNo }>${orderDetail.product.prodName }</a> 
+						</td>
+					</tr>
+
+					<tr>
+						<td>수량</td>
+						<td>${orderDetail.quantity } 개</td>
+					</tr>
+
+					<tr>
+						<td style="border-bottom: 2px dotted #424242" colspan="3"></td>
+					</tr>
+
+				</c:forEach>
+				
 				<tr>
-					<td width="93%" class="ct_ttl01">구매상세조회</td>
-					<td width="20%" align="right">&nbsp;</td>
+					<td>구매자아이디</td>
+					<td>${purchase.buyer.userId }</td>
 				</tr>
-			</table>
-		</td>
-		<td width="12" height="37">
-			<img src="/images/ct_ttl_img03.gif"	width="12" height="37"/>
-		</td>
-	</tr>
-</table>
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 13px;">
-	<c:forEach var="orderDetail" items="${list }">
-	
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			물품명
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
 				<tr>
-					<td width="105">
-						<span data-prod-no=${orderDetail.product.prodNo } class="clickButton">${orderDetail.product.prodName }</span>
-					<td></td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			수량
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-			<table width="100%" border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<td width="105">
-					${orderDetail.quantity } 개
-					<td></td>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	
-	<tr>
-		<td style="border-bottom:2px dotted #424242" colspan="3"></td>
-	</tr>
-	
-	</c:forEach>
-	
-	
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">
-			구매자아이디
-		</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${purchase.buyer.userId }</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-
-	<tr>
-		<td width="104" class="ct_write">구매방법</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">
-		<c:choose>
-			 <c:when test="${purchase.paymentOption == 1 }">
-			 	현금구매
-			 </c:when>
-			 
-			 <c:otherwise>
-			 	신용구매
-			 </c:otherwise>
-		</c:choose>
-		
-		</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">구매자이름</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${purchase.receiverName }</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">구매자연락처</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${purchase.receiverPhone }</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">구매자주소</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${purchase.divyAddr }</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">구매요청사항</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${purchase.divyRequest }</td>
-	</tr>
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	<tr>
-		<td width="104" class="ct_write">배송희망일</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${purchase.divyDate }</td>
-	</tr>
-
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-
-	<tr>
-		<td width="104" class="ct_write">주문일</td>
-		<td bgcolor="D6D6D6" width="1"></td>
-		<td class="ct_write01">${purchase.orderDate }</td>
-	</tr>
-
-	<tr>
-		<td height="1" colspan="3" bgcolor="D6D6D6"></td>
-	</tr>
-	
-</table>
-
-<table width="100%" border="0" cellspacing="0" cellpadding="0"	style="margin-top: 10px;">
-	<tr>
-		<td width="53%"></td>
-		<td align="right">
-			<table border="0" cellspacing="0" cellpadding="0">
-				<tr>
-					<c:if test="${purchase.tranCode != '3' }">
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-						<span class="clickButton" data-tran-no=${purchase.tranNo }>수정</span>
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif" width="14" height="23"/>
-					</td>
-					</c:if>
-					<td width="30"></td>
-					<td width="17" height="23">
-						<img src="/images/ct_btnbg01.gif" width="17" height="23"/>
-					</td>
-					<td background="/images/ct_btnbg02.gif" class="ct_btn01"	style="padding-top: 3px;">
-						<span class="clickButton">확인</span>
-					</td>
-					<td width="14" height="23">
-						<img src="/images/ct_btnbg03.gif"width="14" height="23"/>
+					<td>구매방법</td>
+					<td>
+					<c:choose>
+						<c:when test="${purchase.paymentOption == 1 }">
+			 				현금구매
+						 </c:when>
+						 
+						 <c:otherwise>
+						 	신용구매
+						 </c:otherwise>
+					</c:choose>
 					</td>
 				</tr>
+				
+				<tr>
+					<td>구매자이름</td>
+					<td>${purchase.receiverName }</td>
+				</tr>
+				
+				<tr>
+					<td>구매자연락처</td>
+					<td>${purchase.receiverPhone }</td>
+				</tr>
+				
+				<tr>
+					<td>구매자주소</td>
+					<td>${purchase.divyAddr }</td>
+				</tr>
+				
+				<tr>
+					<td>구매요청사항</td>
+					<td>${purchase.divyRequest }</td>
+				</tr>
+				
+				<tr>
+					<td>배송희망일</td>
+					<td>${purchase.divyDate }</td>
+				</tr>
+
+				<tr>
+					<td>주문일</td>
+					<td>${purchase.orderDate }</td>
+				</tr>
+
 			</table>
-		</td>
-	</tr>
-</table>
+		</div><!-- row 1 end -->
+	
+		<div class="row">
+			<button type="button" class="btn btn-default" data-tran-no="${purchase.tranNo}">수정</button>
+			<button type="button" class="btn btn-primary">확인</button>
+		</div><!-- row 2 end -->
+	</div><!-- Container -->
 
 </body>
 </html>

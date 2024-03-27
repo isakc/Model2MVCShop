@@ -162,4 +162,7 @@
 			$(self.location).attr("href","/category/addCategory");
 		});
 	 	
+	 	$( "a:contains('장바구니 목록')" ).on("click" , function() {
+			$(self.location).attr("href","/cart/listCart");
+		});
 	</script>  

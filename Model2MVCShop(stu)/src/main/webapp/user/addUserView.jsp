@@ -69,26 +69,19 @@
 
 		$("input:hidden[name='phone']").val(value);
 
-		$("form").attr("method", "POST").attr("action", "/user/addUser")
-				.submit();
+		$("form").attr("method", "POST").attr("action", "/user/addUser").submit();
 	}
-
-	//==> 추가된부분 : "가입"  Event 연결
-	$(function() {
-		$("button[type='button']:contains('가입')").on("click", function() {
-			fncAddUser();
-		});
-	});
 
 	//==> 추가된부분 : "취소"  Event 처리 및  연결
 	$(function() {
+		$("button[type='button']:contains('수정')").on("click", function() {
+			fncAddUser();
+		});
+		
 		$("button[type='button']:contains('취소')").on("click", function() {
 			$("form")[0].reset();
 		});
-	});
-
-	//==> 추가된부분 : "이메일" 유효성Check  Event 처리 및 연결
-	$(function() {
+		
 		$("input[name='email']").on("change", function() {
 			var email = $("input[name='email']").val();
 			
@@ -98,9 +91,7 @@
 				$("input[name='email']").next().text("");
 			}
 		});
-	});
-	
-	$(function() {
+		
 		$("input[name='userId']").on("change", function () {
 			if ($("input[name='userId']").val() != null && $("input[name='userId']").val().length > 0) {
 				checkUserId();
@@ -108,9 +99,7 @@
 				$("input[name='userId']").next().css("color", "black").text("아이디를 입력해주세요");
 			}
 		})
-	});
-	
-	$(function () {
+		
 		$("input[name = 'ssn']").on("change", function () {
 			if ($("input[name='ssn']").val() != null && $("input[name='ssn']").val().length > 0) {
 				checkSsn();
@@ -265,8 +254,8 @@
 				</tr>
 			</table>
 			
-			<div class="container">
-				<button type="button" class="btn btn-default">가입</button>
+			<div class="row">
+				<button type="button" class="btn btn-default">수정</button>
 				<button type="button" class="btn btn-primary">취소</button>
 			</div>
 		</form>
