@@ -157,12 +157,16 @@
 					<c:choose>
 						<c:when test="${result == null }">
 							<td>
-								<input type="file" name="upload" maxLength="13" multiple="multiple" />
+								<input type="file" name="uploads" multiple="multiple" />
 							</td>
 						</c:when>
 
 						<c:otherwise>
-							<td><%-- <img src="/images/uploadFiles/${product.fileName }"/> --%></td>
+							<td>
+								<c:forEach var="fileName" items="${result.fileNames }">
+									<img src="/images/uploadFiles/${fileName}"/>
+								</c:forEach>
+							</td>
 						</c:otherwise>
 					</c:choose>
 				</tr>

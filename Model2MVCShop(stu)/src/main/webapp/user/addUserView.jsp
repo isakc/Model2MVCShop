@@ -183,7 +183,6 @@
 
 	<div class="container">
     <h1 class="text-center">회원정보를 입력해주세요</h1>
-    <div class="jumbotron">
         <form class="form-horizontal">
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
@@ -247,7 +246,6 @@
                 </div>
             </div>
         </form>
-    </div>
 </div>
 
 </body>

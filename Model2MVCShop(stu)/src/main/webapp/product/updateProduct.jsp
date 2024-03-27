@@ -114,9 +114,10 @@
 				<tr>
 					<td>상품이미지</td>
 					<td>
-						<%-- <input	type="file" name="upload" class="ct_input_g" 
-						style="width: 200px; height: 19px" maxLength="13" value="${product.fileName }"/> --%>
-						사아아진
+						<c:forEach var="fileName" items="${product.fileNames }">
+							<img src = "/images/uploadFiles/${fileName }" width="300" height="300"/>
+							<input type="file" name="uploads" multiple="multiple" value="${fileName }"/>
+						</c:forEach>
 					</td>
 				</tr>
 
@@ -143,8 +144,8 @@
 				</tr>
 			</table>
 			
-			<div class="row">
-				<button type="button" class="btn btn-default">등록</button>
+			<div class="container">
+				<button type="button" class="btn btn-default">수정</button>
 				<button type="button" class="btn btn-primary">취소</button>
 			</div>
 		</form>

@@ -2,7 +2,9 @@ package com.model2.mvc.service.cart.impl;
 
 import com.model2.mvc.service.domain.Cart;
 import com.model2.mvc.service.product.ProductDao;
+import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.user.UserDao;
+import com.model2.mvc.service.user.UserService;
 
 import java.util.List;
 
@@ -21,12 +23,12 @@ public class CartServiceImpl implements CartService {
 	private CartDao cartDao;
 	
 	@Autowired
-	@Qualifier("userDaoImpl")
-	private UserDao userDao;
+	@Qualifier("userServiceImpl")
+	private UserService userService;
 	
 	@Autowired
-	@Qualifier("productDaoImpl")
-	private ProductDao productDao;
+	@Qualifier("productServiceImpl")
+	private ProductService productService;
 	
 	public CartServiceImpl() {
 	}
@@ -45,8 +47,8 @@ public class CartServiceImpl implements CartService {
 		List<Cart> cartList = cartDao.getCartList(userId);
 		
 		for(int i=0; i<cartList.size(); i++) {
-			cartList.get(i).setProduct(productDao.findProduct(cartList.get(i).getProduct().getProdNo()));
-			cartList.get(i).setUser(userDao.findUser(userId));
+			cartList.get(i).setProduct(productService.findProduct(cartList.get(i).getProduct().getProdNo()));
+			cartList.get(i).setUser(userService.getUser(userId));
 		}
 		
 		return cartList;

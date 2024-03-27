@@ -111,7 +111,9 @@
 				<tr>
 					<td>상품이미지</td>
 					<td>
-						<%-- <img src = "/images/uploadFiles/${product.fileName }" width="300" height="300"/> --%>
+						<c:forEach var="fileName" items="${product.fileNames }">
+							<img src = "/images/uploadFiles/${fileName }" width="300" height="300"/>
+						</c:forEach>
 					</td>
 				</tr>
 

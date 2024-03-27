@@ -10,12 +10,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.model2.mvc.common.Search;
-import com.model2.mvc.common.TransactionStatus;
+import com.model2.mvc.service.category.CategoryDao;
 import com.model2.mvc.service.domain.Category;
-import com.model2.mvc.service.domain.OrderDetail;
 import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.ProductImage;
 import com.model2.mvc.service.orderDetail.OrderDetailDao;
-import com.model2.mvc.service.orderDetail.OrderDetailService;
 import com.model2.mvc.service.product.ProductDao;
 import com.model2.mvc.service.product.ProductService;
 
@@ -28,6 +27,10 @@ public class ProductServiceImpl implements ProductService {
 	private ProductDao productDao;
 	
 	@Autowired
+	@Qualifier("categoryDaoImpl")
+	private CategoryDao categoryDao;
+	
+	@Autowired
 	@Qualifier("orderDetailDaoImpl")
 	private OrderDetailDao orderDetailDao;
 
@@ -35,18 +38,52 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void insertProduct(Product product) throws Exception {
+	public void insertProduct(Product product, List<String> fileNames) throws Exception {
 		productDao.insertProduct(product);
+		
+		for(int i=0; i<fileNames.size(); i++) {
+			ProductImage image = new ProductImage();
+			image.setFileName(fileNames.get(i));
+			image.setProdNo(product.getProdNo());
+			productDao.insertProudctImage(image);
+		}
 	}
 
 	@Override
 	public Product findProduct(int prodNo) throws Exception {
-		return productDao.findProduct(prodNo);
+		Product product = productDao.findProduct(prodNo);
+		
+		Category category = categoryDao.findCategory(product.getCategory().getCategoryNo());
+		product.setCategory(category);
+		
+		List<ProductImage> images = productDao.findProductImage(prodNo);
+		List<String> fileNames = new ArrayList<String>();
+				
+		for(int i=0; i<images.size(); i++) {
+			fileNames.add(images.get(i).getFileName());
+		}
+		
+		product.setFileNames(fileNames);
+		
+		return product;
 	}
 
 	@Override
 	public Product findProductByProdName(String prodName) throws Exception {
-		return productDao.findProductByProdName(prodName);
+		Product product = productDao.findProductByProdName(prodName);
+		Category category = categoryDao.findCategory(product.getCategory().getCategoryNo());
+		product.setCategory(category);
+		
+		List<ProductImage> images = productDao.findProductImage(product.getProdNo());
+		List<String> fileNames = new ArrayList<String>();
+				
+		for(int i=0; i<images.size(); i++) {
+			fileNames.add(images.get(i).getFileName());
+		}
+		
+		product.setFileNames(fileNames);
+		
+		return product;
 	}
 
 	@Override
@@ -59,6 +96,20 @@ public class ProductServiceImpl implements ProductService {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		List<Product> productList = productDao.getProductList(search, sorter, category);
+		
+		for(Product product : productList) {
+			Category productCategory = categoryDao.findCategory(product.getCategory().getCategoryNo());
+			product.setCategory(productCategory);
+			
+			List<ProductImage> images = productDao.findProductImage(product.getProdNo());
+			List<String> fileNames = new ArrayList<String>();
+					
+			for(int i=0; i<images.size(); i++) {
+				fileNames.add(images.get(i).getFileName());
+			}
+			
+			product.setFileNames(fileNames);
+		}//product category ³Ö±â
 		
 		map.put("list", productList);
 		map.put("totalCount", productDao.getTotalCount(search, sorter, category));

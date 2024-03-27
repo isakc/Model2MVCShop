@@ -1,5 +1,6 @@
 package com.model2.mvc.service.product;
 
+import java.util.List;
 import java.util.Map;
 
 import com.model2.mvc.common.Search;
@@ -9,7 +10,7 @@ import com.model2.mvc.service.domain.Product;
 
 public interface ProductService {
 	
-	public void insertProduct(Product product) throws Exception;
+	public void insertProduct(Product product, List<String> fileNames) throws Exception;
 	
 	public Product findProduct(int prodNo) throws Exception;
 	

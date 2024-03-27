@@ -40,7 +40,7 @@ public class ProductServiceTest {
 		cateogry.setParentCategoryNo(3001);
 		product.setCategory(cateogry);
 		
-		productService.insertProduct(product);
+		//productService.insertProduct(product);
 		
 		//==> console »Æ¿Œ
 		//System.out.println(user);

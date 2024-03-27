@@ -103,7 +103,7 @@ public class ProductRestController {
 			
 			product.setCategory(category);
 
-			productService.insertProduct(product);
+			//productService.insertProduct(product);
 			
 			Product resultProduct = productService.findProduct(product.getProdNo());
 			

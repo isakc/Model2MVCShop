@@ -124,7 +124,15 @@
 								<tr>
 									<td>상품이미지</td>
 									<td>
-										<%-- <img src="/images/uploadFiles/${cart.product.fileName }" width="100" height="100" /> --%>
+										<c:choose>
+											<c:when test="${not empty cart.product.fileNames}">
+												<img src="/images/uploadFiles/${cart.product.fileNames[0] }" style="width: 100px; height: 100px;" />
+											</c:when>
+												
+											<c:otherwise>
+												사진이 없음
+											</c:otherwise>
+										</c:choose>
 										<a href="" data-cart-no="${cart.cartNo }">삭제</a>
 								</tr>
 

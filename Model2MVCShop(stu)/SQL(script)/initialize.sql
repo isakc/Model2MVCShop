@@ -188,5 +188,14 @@ INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'»ï¼º¼¾½º 2G','sens ¸Þ¸ð
 INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'¿¬²É','Á¤¿øÀ» °¡²ãº¸¼¼¿ä','20121022',232300, '3008',5, TO_DATE('2012/11/15 17:39:01', 'YYYY/MM/DD HH24:MI:SS'));
 INSERT INTO product VALUES (seq_product_prod_no.NEXTVAL,'»ï¼º¼¾½º','³ëÆ®ºÏ','20120212',600000, '3003',5, TO_DATE('2012/11/12 13:04:31', 'YYYY/MM/DD HH24:MI:SS'));
 
+INSERT INTO productImages VALUES (seq_productImages_img_no.NEXTVAL, 'AHlbAAAAtBqyWAAA.jpg', 10000);
+INSERT INTO productImages VALUES (seq_productImages_img_no.NEXTVAL, 'AHlbAAAAvetFNwAA.jpg', 10001);
+INSERT INTO productImages VALUES (seq_productImages_img_no.NEXTVAL, 'AHlbAAAAvewfegAB.jpg', 10002);
+INSERT INTO productImages VALUES (seq_productImages_img_no.NEXTVAL, 'AHlbAAAAve1WwgAC.jpg', 10003);
+INSERT INTO productImages VALUES (seq_productImages_img_no.NEXTVAL, 'AHlbAAAAve37LwAD.jpg', 10004);
+INSERT INTO productImages VALUES (seq_productImages_img_no.NEXTVAL, 'AHlbAAAAtBqyWAAA.jpg', 10005);
+INSERT INTO productImages VALUES (seq_productImages_img_no.NEXTVAL, 'AHlbAAAAtDPSiQAA.jpg', 10006);
+INSERT INTO productImages VALUES (seq_productImages_img_no.NEXTVAL, 'AHlbAAAAug1vsgAA.jpg', 10007);
+
 
 commit;

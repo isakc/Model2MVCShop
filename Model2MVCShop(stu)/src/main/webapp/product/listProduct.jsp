@@ -27,6 +27,11 @@
         body {
             padding-top : 70px;
         }
+        
+        .card:hover {
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        transform: translateY(-5px);
+   	 	}
    	</style>
 
 	<script type="text/javascript">
@@ -37,9 +42,9 @@
 	}
 	
 	$(function () {
-		$("tbody td:nth-child(3)").on("click", function() {
+		$(".card a").on("click", function() {
 			var prodNo = $(this).data("prod-no");
-			$(this).find("a").attr("href", "/product/getProduct/"+prodNo+"/${menu}");
+			$(this).attr("href", "/product/getProduct/"+prodNo+"/${menu}");
 		});
 		
 		$("tbody td:nth-child(6):contains('판매목록')").on("click", function() {
@@ -102,45 +107,57 @@
 	<jsp:include page="/layout/toolbar.jsp" />
    	<!-- ToolBar End /////////////////////////////////////-->
    	
-	<div class="container">
-		<form>
-			<div class="row">
-				<div class="col text-right">
-					<select id="searchCondition" name="searchCondition">
-							<option value="" selected disabled hidden>선택</option>
-							<c:if test="${user.role == 'admin' && user!=null}">
-								<option value="0" ${search.searchCondition == '0' ? 'selected' : ''}>상품번호</option>
-							</c:if>
-							<option value="1" ${search.searchCondition == '1' ? 'selected' : ''}>상품명</option>
-							<option value="2" ${search.searchCondition == '2' ? 'selected' : ''}>상품가격</option>
-						</select>
-					
-					<c:choose>
-						<c:when test="${search.searchCondition == '2' }">
-							<input type="text" id="searchKeyword" name="searchKeyword" value="${searchPrice }" />
-							<input type="text" name="searchKeyword2" value="${searchPrice2 }" />
-						</c:when>
-						
-						<c:otherwise>
-							<input type="text" id="searchKeyword" name="searchKeyword" value="${search.searchKeyword }" />
-						</c:otherwise>
-					</c:choose>
-						
-					<button type="submit" class="btn btn-success">검색</button>
-				</div>
-			</div><!-- row 1 end-->
+	<form>
+		<div class="container">
+			<div class="col text-right">
+				<select id="searchCondition" name="searchCondition">
+					<option value="" selected disabled hidden>선택</option>
+					<c:if test="${user.role == 'admin' && user!=null}">
+						<option value="0" ${search.searchCondition == '0' ? 'selected' : ''}>상품번호</option>
+					</c:if>
+					<option value="1" ${search.searchCondition == '1' ? 'selected' : ''}>상품명</option>
+					<option value="2" ${search.searchCondition == '2' ? 'selected' : ''}>상품가격</option>
+				</select>
 
-			<div class="row">
-			
 				<c:choose>
-					<c:when test="${resultPage.total==0 }">
-						<span>해당상품 없음</span>
+					<c:when test="${search.searchCondition == '2' }">
+						<input type="text" id="searchKeyword" name="searchKeyword" value="${searchPrice }" />
+						<input type="text" name="searchKeyword2" value="${searchPrice2 }" />
 					</c:when>
 
 					<c:otherwise>
-						<span>전체 ${resultPage.total }건수, 현재 ${resultPage.now } 페이지</span>
+						<input type="text" id="searchKeyword" name="searchKeyword" value="${search.searchKeyword }" />
+					</c:otherwise>
+				</c:choose>
 
-						<table class="table table-striped table-bordered list">
+				<button type="submit" class="btn btn-success">검색</button>
+			</div>
+		</div>
+		
+		<div class="container">
+		
+		</div>
+		
+		<div class="container">
+    		<div class="row">
+       		 <c:forEach var="product" items="${list}">
+            		<div class="col-md-4 mb-4">
+                		<div class="card text-center">
+                		<a href="" data-prod-no="${product.prodNo }">
+                   		 <img src="/images/uploadFiles/${product.fileNames[0]}" class="card-img-top" style="width: 200px; height: 200px;">
+                    		<div class="card-body">
+                        		<h5 class="card-title">${product.prodName}</h5>
+                        		<p class="card-text"><fmt:formatNumber value="${product.price}" pattern="#,##0원" /></p>
+                        		<p class="card-text">${product.quantity} 개 남음</p>
+                    		</div>
+                    	</a>
+                		</div>
+            		</div>
+       		 	</c:forEach>
+    		</div>
+		</div>
+					<%-- 
+					<table class="table table-striped table-bordered list">
 							<thead>
 								<tr>
 									<td>No</td>
@@ -187,8 +204,16 @@
 									<tr>
 										<td>${i }</td>
 										<td>
-											사아아진
-											<%-- <img src="/images/uploadFiles/${product.fileName }" style="width: 100px; height: 100px;" /> --%>
+											<c:choose>
+												<c:when test="${not empty product.fileNames}">
+													<img src="/images/uploadFiles/${product.fileNames[0] }" style="width: 100px; height: 100px;" />
+												</c:when>
+												
+												<c:otherwise>
+													사진이 없음
+												</c:otherwise>
+											</c:choose>
+											
 										</td>
 										<td data-prod-no="${product.prodNo }"><a href="">${product.prodName }</a></td>
 										<td><fmt:formatNumber value="${product.price}" pattern="#,##0원" /></td>
@@ -211,20 +236,21 @@
 							</tbody>
 						</table>
 					</c:otherwise>
-				</c:choose>
-			</div>
+				</c:choose> --%>
 
 			<!-- 페이지 Navigator -->
-			<div class="row text-center">
+			
+		<div class="container">
+			<div class="text-center">
 				<input type="hidden" id="currentPage" name="currentPage" value="${resultPage.now }" />
 				<input type="hidden" id="sorter" name="sorter" value="${sorter }" />
 				<input type="hidden" name="preSearchCondition" value="${search.searchCondition }" />
 				<input type="hidden" name="preSearchKeyword" value="${search.searchKeyword }" />
 				<jsp:include page="../common/pageNavigator.jsp"/>
 			</div>
-			<!--  페이지 Navigator 끝 -->
-		</form>
-
-	</div>
+			
+		</div>
+		<!--  페이지 Navigator 끝 -->
+	</form>
 </body>
 </html>

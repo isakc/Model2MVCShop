@@ -81,8 +81,8 @@ public class ProductController {
 
 		System.out.println("/product/addProduct : POST");
 		
-		//String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
-		String root = "C:\\Users\\bitcamp\\git\\Model2MVCShop\\Model2MVCShop(stu)\\src\\main\\webapp\\images\\uploadFiles"+File.separator;
+		String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
+		//String root = "C:\\Users\\bitcamp\\git\\Model2MVCShop\\Model2MVCShop(stu)\\src\\main\\webapp\\images\\uploadFiles"+File.separator;
 		List<String> fileNames = new ArrayList<String>();
 		
 		 for (MultipartFile upload : uploads) {
@@ -98,13 +98,10 @@ public class ProductController {
 		
 		Category category = new Category();
 		category.setCategoryNo(categoryNo);
-		
 		product.setCategory(category);
 
-		productService.insertProduct(product);
-		
+		productService.insertProduct(product, fileNames);
 		Product resultProduct = productService.findProduct(product.getProdNo());
-		
 		model.addAttribute("result", resultProduct);
 
 		return "forward:/product/addProductView.jsp";

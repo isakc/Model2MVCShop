@@ -12,6 +12,7 @@ import com.model2.mvc.common.Search;
 import com.model2.mvc.service.category.CategoryDao;
 import com.model2.mvc.service.domain.Category;
 import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.ProductImage;
 import com.model2.mvc.service.product.ProductDao;
 
 @Repository("productDaoImpl")
@@ -41,24 +42,25 @@ public class ProductDaoImpl implements ProductDao {
 	public void insertProduct(Product product) throws Exception {
 		sqlSession.insert("ProductMapper.insertProduct", product);
 	}
+	
+	@Override
+	public void insertProudctImage(ProductImage productImage) throws Exception {
+		sqlSession.insert("ProductImageMapper.insertProductImage", productImage);
+	}
 
 	@Override
 	public Product findProduct(int prodNo) throws Exception {
-		Product product = sqlSession.selectOne("ProductMapper.findProduct", prodNo);
-		Category category = categoryDao.findCategory(product.getCategory().getCategoryNo());
-		product.setCategory(category);
-		
-		return product;
+		return sqlSession.selectOne("ProductMapper.findProduct", prodNo);
 	}
 
 	@Override
 	public Product findProductByProdName(String prodName) throws Exception {
-		Product product = sqlSession.selectOne("ProductMapper.findProductByName", prodName);
-		
-		Category category = categoryDao.findCategory(product.getCategory().getCategoryNo());
-		product.setCategory(category);
-		
-		return product;
+		return sqlSession.selectOne("ProductMapper.findProductByName", prodName);
+	}
+	
+	@Override
+	public List<ProductImage> findProductImage(int prodNo) throws Exception {
+		return sqlSession.selectList("ProductImageMapper.findProductImage", prodNo);
 	}
 
 	@Override
@@ -68,11 +70,6 @@ public class ProductDaoImpl implements ProductDao {
 			put("sorter", sorter);
 			put("category", category);
 		}});
-		
-		for(Product product : list) {
-			Category cate = categoryDao.findCategory(product.getCategory().getCategoryNo());
-			product.setCategory(cate);
-		}
 		
 		return list;
 	}
