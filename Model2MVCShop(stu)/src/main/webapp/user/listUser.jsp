@@ -13,7 +13,6 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-	<!-- <link rel="stylesheet" href="/resources/demos/style.css"> -->
 	
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
@@ -138,13 +137,13 @@
 			$(this).attr("href", "/user/getUser/" + $(this).text().trim()); 
 		})
 		
-		$(".list td:contains('간략히')").on("click", function() {
-			$(".addRow").remove();
-			var index = $(this).parent();
+		$(".list td:nth-child(5)").on("click", function() {
+			var select = $(this);
+			var userId = select.text().trim();
 			
 			$.ajax(
 					{
-						url : "json/getUser/" + $(this).parent().find('td:nth-child(2)').text().trim(),
+						url : "json/getUser/" + userId,
 						method : "GET",
 						headers : {
 							"Accept" : "application/json",
@@ -152,9 +151,15 @@
 						},
 						dataType : "json",
 						success : function(JSONData , status) {
-							 var info = $('<tr class="addRow"><td colspan="5" class="text-right">'+
-									 '<p>아이디: ' + JSONData.user.userId + '<br>이름: ' + JSONData.user.userName + '<br>이메일: ' + JSONData.user.email + '</p></td></tr>');
-					         index.after(info);
+							var displayValue = "<td colspan='5'><h3>"
+								+"아이디 : "+JSONData.user.userId+"<br/>"
+								+"이  름 : "+JSONData.user.userName+"<br/>"
+								+"이메일 : "+JSONData.user.email+"<br/>"
+								+"ROLE : "+JSONData.user.role+"<br/>"
+								+"</h3>";
+							
+							$("h3").parent().remove();
+							select.parent().next().html(displayValue);
 						}
 				}); 
 		});
@@ -167,65 +172,58 @@
 	<jsp:include page="/layout/toolbar.jsp" />
    	<!-- ToolBar End /////////////////////////////////////-->
    	
+   	<form>
+		
 	<div class="container">
-		<form>
-		<div class="row">
-			<div class="col text-right">
-				<select name="searchCondition" class="float-right">
-					<option value="0" ${ ! empty search.searchCondition && search.searchCondition==0 ? 'selected' : '' }>회원ID</option>
-					<option value="1" ${ ! empty search.searchCondition && search.searchCondition==1 ? 'selected' : '' }>회원명</option>
-				</select> 
+		<div class="col text-right">
+			<select name="searchCondition" class="float-right">
+				<option value="0" ${ ! empty search.searchCondition && search.searchCondition==0 ? 'selected' : '' }>회원ID</option>
+				<option value="1" ${ ! empty search.searchCondition && search.searchCondition==1 ? 'selected' : '' }>회원명</option>
+			</select> 
 				
-				<input type="text" name="searchKeyword" value="${! empty search.searchKeyword ? search.searchKeyword : ''}" />
-				<button type="submit" class="btn btn-success">검색</button>
-			</div>
+			<input type="text" name="searchKeyword" value="${! empty search.searchKeyword ? search.searchKeyword : ''}" />
+			<button type="submit" class="btn btn-success">검색</button>
 		</div>
-		
-		<div class="row">
-			<span>전체 ${resultPage.total }건수, 현재 ${resultPage.now } 페이지</span>
-			
-			<table class="table table-striped table-bordered">
-					<thead>
-						<tr class="bg-primary text-center">
-							<td>No</td>
-							<td>회원 ID</td>
-							<td>회원명</td>
-							<td>이메일</td>
-							<td>기타</td>
-						</tr>
-					</thead>
-					
-					<tbody>
-					<c:set var="i" value="0" />
-					<c:forEach var="user" items="${list}">
-						<c:set var="i" value="${ i+1 }" />
-						<tr class="text-center list">
-							<td>
-								${ i }
-							</td>
-							<td>
-								<a href="#">${user.userId }</a>
-							</td>
-							<td>
-								${user.userName}
-							</td>
-							<td>
-								${user.email}
-							</td>
-							<td>
-								간략히
-							</td>
-						</tr>
-					</c:forEach>
-					</tbody>
-				</table>
-		</div>
-		
-		<div class="row text-center">
-			<input type="hidden" id="currentPage" name="currentPage" value="${resultPage.now }"/>
-			<jsp:include page="../common/pageNavigator.jsp"/>
-		</div>
-		</form>
 	</div>
+	
+	<div class="container">
+		<span>전체 ${resultPage.total }건수, 현재 ${resultPage.now } 페이지</span>
+		
+		<table class="table table-striped table-bordered">
+			<thead>
+				<tr class="bg-primary text-center">
+					<td>No</td>
+					<td>회원 ID</td>
+					<td>회원명</td>
+					<td>이메일</td>
+					<td>간단히</td>
+				</tr>
+			</thead>
+				
+			<tbody>
+				<c:set var="i" value="0" />
+				<c:forEach var="user" items="${list}">
+				<c:set var="i" value="${ i+1 }" />
+					
+				<tr class="text-center list">
+					<td>${ i }</td>
+					<td><a href="#">${user.userId }</a></td>
+					<td>${user.userName}</td>
+					<td>${user.email}</td>
+					<td>${user.userId }</td>
+				</tr>
+					
+				<tr></tr>
+				</c:forEach>
+			</tbody>
+		</table>
+	</div><!-- Container end -->
+	
+	<div class="container text-center">
+		<input type="hidden" id="currentPage" name="currentPage" value="${resultPage.now }"/>
+		<jsp:include page="../common/pageNavigator.jsp"/>
+	</div><!-- Container end -->
+	
+	</form>
 </body>
 </html>

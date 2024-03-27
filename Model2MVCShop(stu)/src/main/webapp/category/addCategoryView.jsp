@@ -32,6 +32,7 @@
 	
 	$(function() {
 		$("button[type='button']:contains('등록')").on("click",function() {
+			
 			$("form").attr("method", "POST").attr("action","/category/addCategory").submit();
 		})
 	})
@@ -51,7 +52,7 @@
    	<!-- ToolBar End /////////////////////////////////////-->
    	
 	<div class="container">
-		<form name="detailForm">
+		<form>
 			<table class="table table-striped table-bordered">
 				<tr>
 					<td>카테고리명</td>

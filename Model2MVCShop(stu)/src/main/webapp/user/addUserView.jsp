@@ -9,14 +9,14 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
 	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
-	<link href="/css/animate.min.css" rel="stylesheet">
-  	<link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"/>
+	<link href="/css/animate.min.css" rel="stylesheet"/>
+  	<link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
   	
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" ></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   	<script src="/javascript/bootstrap-dropdownhover.min.js"></script>
 	
 	<!--  CSS 추가 : 툴바에 화면 가리는 현상 해결 :  주석처리 전, 후 확인-->
@@ -74,7 +74,7 @@
 
 	//==> 추가된부분 : "취소"  Event 처리 및  연결
 	$(function() {
-		$("button[type='button']:contains('수정')").on("click", function() {
+		$("button[type='button']:contains('추가')").on("click", function() {
 			fncAddUser();
 		});
 		
@@ -116,7 +116,7 @@
 		var nByear, nTyear;
 		var today;
 
-		ssn = document.detailForm.ssn.value;
+		ssn = $("input[name='ssn']").val();
 		// 유효한 주민번호 형식인 경우만 나이 계산 진행, PortalJuminCheck 함수는 CommonScript.js 의 공통 주민번호 체크 함수임 
 		if (!PortalJuminCheck(ssn)) {
 			$("input[name='ssn']").next().css("color", "red").text("잘못된 주민번호입니다.");
@@ -182,83 +182,73 @@
    	<!-- ToolBar End /////////////////////////////////////-->
 
 	<div class="container">
-		<form name="detailForm">
-			<table class="table table-striped table-bordered">
-				<tr>
-					<td>아이디</td>
-					<td>
-						<input type="text" name="userId" maxLength="20" />
-						<span>아이디를 입력해주세요</span>
-					</td>
-				</tr>
+    <h1 class="text-center">회원정보를 입력해주세요</h1>
+    <div class="jumbotron">
+        <form class="form-horizontal">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                
+                    <div class="form-group">
+                        <input type="text" name="userId" maxLength="20" placeholder="아이디" class="form-control" />
+                        <span>아이디를 입력해주세요</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="password" name="password" maxLength="10" placeholder="비밀번호" class="form-control" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="password" name="password2" maxLength="10" placeholder="비밀번호 확인" class="form-control" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" name="userName" maxLength="50" placeholder="이름" class="form-control" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" name="ssn" maxLength="13" placeholder="주민번호" class="form-control" />
+                        <span>-제외, 13자리 입력</span>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" name="addr" id="addr" maxLength="100" placeholder="주소" class="form-control" />
+                    </div>
+                    
+                    <div class="form-group row">
+                    	<div class="col-sm-4">
+                    		<select name="phone1" class="form-control">
+                            	<option value="010">010</option>
+                            	<option value="011">011</option>
+                            	<option value="016">016</option>
+                            	<option value="018">018</option>
+                            	<option value="019">019</option>
+                        	</select>
+                    	</div>
+                        
+                        <div class="col-sm-4">
+                        	<input type="text" name="phone2" maxLength="4" placeholder="전화번호" class="form-control" />
+                        </div>
+                        
+                        <div class="col-sm-4">
+                        	<input type="text" name="phone3" maxLength="4" placeholder="전화번호" class="form-control" />
+                        </div>
+                        
+                        <input type="hidden" name="phone">
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="text" name="email" maxLength="50" placeholder="이메일" class="form-control" />
+                    </div>
+                    
+                    <div class="form-group text-center">
+                        <button type="button" class="btn btn-default">추가</button>
+                        <button type="button" class="btn btn-primary">취소</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 
-				<tr>
-					<td>비밀번호</td>
-					<td>
-						<input type="password" name="password" maxLength="10"/>
-					</td>
-				</tr>
-				
-				<tr>
-					<td>비밀번호 확인</td>
-					<td>
-						<input type="password" name="password2" maxLength="10"/>
-					</td>
-				</tr>
-				
-				<tr>
-					<td>이름</td>
-					<td>
-						<input type="text" name="userName"  maxLength="50"/>
-					</td>
-				</tr>
-				
-				<tr>
-					<td>주민번호</td>
-					<td>
-						<input type="text" name="ssn" maxLength="13"/>
-						<span>-제외, 13자리 입력</span>
-					</td>
-				</tr>
-
-				<tr>
-					<td>주소</td>
-					<td>
-						<input type="text" name="addr" maxLength="100"/>
-					</td>
-				</tr>
-
-				<tr>
-					<td>휴대전화번호</td>
-					<td>
-					<select name="phone1">
-						<option value="010" >010</option>
-						<option value="011" >011</option>
-						<option value="016" >016</option>
-						<option value="018" >018</option>
-						<option value="019" >019</option>
-					</select>
-					
-					<input type="text" name="phone2" maxLength="9"> - 
-					<input type="text" name="phone3" maxLength="9">
-					<input type="hidden" name="phone">
-					</td>
-				</tr>
-
-				<tr>
-					<td>이메일</td>
-					<td>
-						<input type="text" name="email"/>
-						<span></span>
-					</td>
-				</tr>
-			</table>
-			
-			<div class="row">
-				<button type="button" class="btn btn-default">수정</button>
-				<button type="button" class="btn btn-primary">취소</button>
-			</div>
-		</form>
-	</div>
 </body>
 </html>
