@@ -27,13 +27,14 @@
 			$("a[href='#' ]:contains('회원가입')").on("click" , function() {
 				self.location = "/user/addUser"
 			});
-		});
-	
-		//============= 로그인 화면이동 =============
-		$( function() {
+			
 			//==> 추가된부분 : "addUser"  Event 연결
 			$("a[href='#' ]:contains('로 그 인')").on("click" , function() {
 				self.location = "/user/login"
+			});
+			
+			$("a[href='#' ]:contains('상품검색')").on("click" , function() {
+				self.location = "/product/listProduct/search"
 			});
 		});
 		

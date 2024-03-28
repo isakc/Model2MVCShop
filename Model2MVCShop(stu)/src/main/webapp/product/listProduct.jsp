@@ -33,10 +33,17 @@
         transform: translateY(-5px);
    	 	}
    	 	
-   	 	img{
-   	 		width: 70%;
-   	 		height: auto;
-   	 	}
+   	 	.card {
+    		height: 350px;
+    		margin-top: 25px;
+    		border-bottom: 3px solid #424242;
+  		}
+  		
+ 		 .card img {
+    		object-fit: cover;
+    		max-width: 70%;
+    		height: 70%;
+  		}
    	</style>
 
 	<script type="text/javascript">
@@ -150,7 +157,7 @@
        		 			<c:forEach var="product" items="${list}">
             				<div class="col-md-4">
                 				<a href="" data-prod-no="${product.prodNo }" class="product-link">
-                				<div class="card text-center">
+                				<div class="card text-center fixed-height">
                    		 			<img src="/images/uploadFiles/${product.fileNames[0]}" class="card-img-top"/>
                     					<div class="card-body">
                         					<h5 class="card-title">${product.prodName}</h5>

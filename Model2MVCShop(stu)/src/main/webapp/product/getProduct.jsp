@@ -143,30 +143,31 @@
       					<p class="text-muted mb-4">${product.prodDetail }</p>
       					<p class="lead font-weight-bold"><fmt:formatNumber value="${product.price}" type="currency" pattern="#,##0원" /></p>
       					
-      					<div class="row">
-      						<div class="col-md-3">
+      					<c:if test="${user != null }">
+      						<div class="row">
+      							<div class="col-md-3">
       							
-      							<div class="row">
-      								<div class="col-md-7" style="padding:0;">
-	        							<input type="text" name="quantity" class="form-control text-center" min="1" value="1">
-      								</div>
+      								<div class="row">
+      									<div class="col-md-7" style="padding:0;">
+	        								<input type="text" name="quantity" class="form-control text-center" min="1" value="1">
+      									</div>
       								
-      								<div class="col-md-5" style="padding:0">
-      									<button type="button" class="btn btn-sm"><span class="glyphicon glyphicon-chevron-up"></span></button>
-        								<button type="button" class="btn btn-sm"><span class="glyphicon glyphicon-chevron-down"></span></button>
+      									<div class="col-md-5" style="padding:0">
+      										<button type="button" class="btn btn-sm"><span class="glyphicon glyphicon-chevron-up"></span></button>
+        									<button type="button" class="btn btn-sm"><span class="glyphicon glyphicon-chevron-down"></span></button>
+      									</div>
       								</div>
       							</div>
-        						
-      						</div>
       						
-      						<div class="col-md-3">
-      							<button type="button" class="btn btn-default">장바구니 담기</button>
-      						</div>
+      							<div class="col-md-3">
+      								<button type="button" class="btn btn-default">장바구니 담기</button>
+      							</div>
       						
-      						<div class="col-md-2">
-      							<button type="button" class="btn btn-primary">바로구매<span class="glyphicon glyphicon-chevron-right"></span></button>
-      						</div>
-      					</div><!-- 중첩 그리드 -->
+      							<div class="col-md-2">
+      								<button type="button" class="btn btn-primary">바로구매<span class="glyphicon glyphicon-chevron-right"></span></button>
+      							</div>
+      						</div><!-- 중첩 그리드 -->
+      					</c:if>
       					
     				</div><!-- 설명 div -->
   				</div><!-- 그리드 row -->
