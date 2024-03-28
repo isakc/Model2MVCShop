@@ -31,6 +31,28 @@
         .sm-input{
         	width: 50px;
         }
+        
+        input[name='quantity']{
+        	height:47px;
+        	font-weight: bold;
+        	font-size: 20px
+        }
+        
+        img{
+        	max-width: 100%;
+        	height: auto;
+        }
+        
+        .product-image {
+      		transition: transform 0.3s ease;
+    	}
+    	
+    	.product-image:hover {
+      		transform: scale(1.2);
+      		border:1px solid blue;
+			box-shadow: 0 12px 15px 0 rgba(0, 0, 0, 0.24),
+			0 17px 50px 0 rgba(0, 0, 0, 0.19);
+    	}
    	</style>
 
 	<script type="text/javascript">
@@ -66,21 +88,21 @@
 			changeQuantity('plus');
 		});
 		
-		$("button[type='button']:contains('이전')").on("click", function() {
-			history.go(-1);
-		});
-		
-		$("button[type='button']:contains('구매')").on("click", function() {
+		$("button[type='button']:contains('바로구매')").on("click", function() {
 			$("form").attr("method", "POST").attr("action", "/purchase/addPurchaseView").submit();
 		});
 		
-		$("button[type='button']:contains('장바구니')").on("click", function() {
+		$("button[type='button']:contains('장바구니 담기')").on("click", function() {
 			var quantity = $("input[name='quantity']").val();
 			var prodNo = $("input[name='prodNo']").val();
 			var url = "/cart/addCart/" + prodNo + "/" + quantity;
 
 			window.location.href = url;
 		});
+		
+		$(".product-image").on("mouseover", function () {
+			$("#mainImage").attr("src", $(this).attr("src"));
+		})
 	})
 </script>
 </head>
@@ -97,12 +119,60 @@
 			<input type="hidden" name="maxQuantity" value="${product.quantity }" />
 			<input type="hidden" name="cartNo" />
 			
-			<table class="table table-striped table-bordered">
-				<tr>
-					<td>상품번호</td>
-					<td>${product.prodNo }</td>
-				</tr>
-
+			<div class="container mt-5">
+  				<div class="row">
+  					 <div class="col-md-2">
+  					 	<ul class="list-group">
+  					 		<c:forEach var="fileName" items="${product.fileNames }">
+  					 		
+						 	<li class="list-group-item">
+						 		<img src = "/images/uploadFiles/${fileName }" alt="${product.prodName} 상품 이미지" class="img-fluid product-image" />
+						 	</li>
+						 	
+  					 		</c:forEach>
+						</ul>
+    					
+    				</div><!-- 사진 div -->
+    				
+    				<div class="col-md-4">
+    					<img src ="/images/uploadFiles/${product.fileNames[0] }" alt="${product.prodName} 상품 이미지" class="img-fluid" id="mainImage" />
+    				</div><!-- 사진 div -->
+    				
+    				<div class="col-md-6">
+      					<h2 class="mb-4">${product.prodName }</h2>
+      					<p class="text-muted mb-4">${product.prodDetail }</p>
+      					<p class="lead font-weight-bold"><fmt:formatNumber value="${product.price}" type="currency" pattern="#,##0원" /></p>
+      					
+      					<div class="row">
+      						<div class="col-md-3">
+      							
+      							<div class="row">
+      								<div class="col-md-7" style="padding:0;">
+	        							<input type="text" name="quantity" class="form-control text-center" min="1" value="1">
+      								</div>
+      								
+      								<div class="col-md-5" style="padding:0">
+      									<button type="button" class="btn btn-sm"><span class="glyphicon glyphicon-chevron-up"></span></button>
+        								<button type="button" class="btn btn-sm"><span class="glyphicon glyphicon-chevron-down"></span></button>
+      								</div>
+      							</div>
+        						
+      						</div>
+      						
+      						<div class="col-md-3">
+      							<button type="button" class="btn btn-default">장바구니 담기</button>
+      						</div>
+      						
+      						<div class="col-md-2">
+      							<button type="button" class="btn btn-primary">바로구매<span class="glyphicon glyphicon-chevron-right"></span></button>
+      						</div>
+      					</div><!-- 중첩 그리드 -->
+      					
+    				</div><!-- 설명 div -->
+  				</div><!-- 그리드 row -->
+			</div>
+			
+			<%-- <table class="table table-striped table-bordered">
 				<tr>
 					<td>상품명</td>
 					<td>${product.prodName }</td>
@@ -141,18 +211,13 @@
 						<button type="button" id="quantityPlus"><span class="glyphicon glyphicon-arrow-up"></span></button>
 					</td>
 				</tr>
-
-				<tr>
-					<td>등록일자</td>
-					<td>${product.regDate }</td>
-				</tr>
 			</table>
 
-			<div class="row">
+			<div class="container">
 				<button type="button" class="btn btn-default">장바구니</button>
 				<button type="button" class="btn btn-default">구매</button>
 				<button type="button" class="btn btn-primary">취소</button>
-			</div>
+			</div> --%>
 		</form>
 	</div>
 </body>

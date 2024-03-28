@@ -19,7 +19,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   	<script src="/javascript/bootstrap-dropdownhover.min.js"></script>
 	
-	<!--  CSS 추가 : 툴바에 화면 가리는 현상 해결 :  주석처리 전, 후 확인-->
+	<!--  CSS 가입하기 : 툴바에 화면 가리는 현상 해결 :  주석처리 전, 후 확인-->
 	<style>
         body {
             padding-top : 70px;
@@ -72,9 +72,9 @@
 		$("form").attr("method", "POST").attr("action", "/user/addUser").submit();
 	}
 
-	//==> 추가된부분 : "취소"  Event 처리 및  연결
+	//==> 가입하기된부분 : "취소"  Event 처리 및  연결
 	$(function() {
-		$("button[type='button']:contains('추가')").on("click", function() {
+		$("button[type='button']:contains('가입하기')").on("click", function() {
 			fncAddUser();
 		});
 		
@@ -151,26 +151,25 @@
 		
 		var userId = $("input[name='userId']").val();
 		
-			$.ajax(
-					{
-						url : "/user/json/checkDuplication",
-						method : "POST",
-						data: userId,
-						headers : {
-							"Accept" : "application/json",
-							"Content-Type" : "application/json"
-						},
-						dataType : "json",
-						success : function(JSONData , status) {
-							var flag = JSONData.result;
-							
-							if(flag){
-								$("input[name='userId']").next().css("color", "blue").text(JSONData.userId+ "는 사용 가능합니다");
-							}else{
-								$("input[name='userId']").next().css("color","red").text(JSONData.userId+ "는 사용 불가능합니다.");
-							}
+			$.ajax({
+				url : "/user/json/checkDuplication",
+				method : "POST",
+				data: userId,
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+					},
+					dataType : "json",
+					success : function(JSONData , status) {
+						var flag = JSONData.result;
+						
+						if(flag){
+							$("input[name='userId']").next().css("color", "blue").text(JSONData.userId+ "는 사용 가능합니다");
+						}else{
+							$("input[name='userId']").next().css("color","red").text(JSONData.userId+ "는 사용 불가능합니다.");
 						}
-				});
+					}
+			});
 	}
 </script>
 </head>
@@ -240,7 +239,7 @@
                     </div>
                     
                     <div class="form-group text-center">
-                        <button type="button" class="btn btn-default">추가</button>
+                        <button type="button" class="btn btn-default">가입하기</button>
                         <button type="button" class="btn btn-primary">취소</button>
                     </div>
                 </div>

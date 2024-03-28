@@ -80,142 +80,116 @@
    	<!-- ToolBar End /////////////////////////////////////-->
 
 	<div class="container">
-		<form name="detailForm">
+    	<h1 class="text-center">상품정보를 입력해주세요</h1>
+		<form name="detailForm" class="form-horizontal">
 			<div class="row">
-			<table class="table table-striped table-bordered">
-				<tr>
-					<td>
-						상품명
-					</td>
-					<c:choose>
-						<c:when test="${result == null }">
-							<td>
-								<input type="text" name="prodName" maxLength="20">
-							</td>
-						</c:when>
-
-						<c:otherwise>
-							<td>${result.prodName}</td>
-						</c:otherwise>
-					</c:choose>
-
-				</tr>
-
-				<tr>
-					<td>
-						상품상세정보 
-					</td>
-					
-					<c:choose>
-						<c:when test="${result == null }">
-							<td>
-								<input type="text" name="prodDetail" maxLength="10" minLength="6" />
-							</td>
-						</c:when>
-
-						<c:otherwise>
-							<td>${result.prodDetail}</td>
-						</c:otherwise>
-					</c:choose>
-				</tr>
-				
-				<tr>
-					<td>제조일자</td>
-					
-					<c:choose>
-						<c:when test="${result == null }">
-							<td>
-								<input type="text" name="manuDate" readonly="readonly" maxLength="10" minLength="6" />
-								<img src="../images/ct_icon_date.gif"/>
-							</td>
-						</c:when>
-
-						<c:otherwise>
-							<td>${result.manuDate}</td>
-						</c:otherwise>
-					</c:choose>
-				</tr>
-				
-				<tr>
-					<td>가격</td>
-					
-					<c:choose>
-						<c:when test="${result == null }">
-							<td>
-							<input type="text" name="price" maxLength="10">&nbsp;원</td>
-						</c:when>
-
-						<c:otherwise>
-							<td>${result.price}</td>
-						</c:otherwise>
-					</c:choose>
-				</tr>
-				
-				<tr>
-					<td>상품이미지</td>
-					
-					<c:choose>
-						<c:when test="${result == null }">
-							<td>
-								<input type="file" name="uploads" multiple="multiple" />
-							</td>
-						</c:when>
-
-						<c:otherwise>
-							<td>
-								<c:forEach var="fileName" items="${result.fileNames }">
-									<img src="/images/uploadFiles/${fileName}"/>
-								</c:forEach>
-							</td>
-						</c:otherwise>
-					</c:choose>
-				</tr>
-				
-				<tr>
-					<td>수량</td>
-					
-					<c:choose>
-						<c:when test="${result == null }">
-							<td><input type="text" name="quantity" maxLength="13" /></td>
-						</c:when>
-
-						<c:otherwise>
-							<td>${result.quantity}</td>
-						</c:otherwise>
-					</c:choose>
-				</tr>
-				
-				<tr>
-					<td>카테고리</td>
-					
-					<c:choose>
-						<c:when test="${result == null }">
-							<td><select name="categoryNo">
+                <div class="col-sm-6 col-sm-offset-3">
+                	<div class="form-group">
+                	<c:choose>
+                		<c:when test="${result == null }">
+                			<input type="text" name="prodName" maxLength="20" placeholder="상품명" class="form-control"/>
+                		</c:when>
+                		
+                		<c:otherwise>
+                			${result.prodName}
+                		</c:otherwise>
+                    </c:choose>
+                    </div>
+                    
+                    <div class="form-group">
+                    <c:choose>
+                		<c:when test="${result == null }">
+                			<input type="text" name="prodDetail" maxLength="10" minLength="6" placeholder="상세정보" class="form-control"/>
+                		</c:when>
+                		
+                		<c:otherwise>
+                			${result.prodDetail}
+                		</c:otherwise>
+                    </c:choose>
+                    </div>
+                    
+                    <div class="form-group">
+                    <c:choose>
+                		<c:when test="${result == null }">
+                			<input type="text" name="manuDate" readonly="readonly" maxLength="10" minLength="6" placeholder="제조 일자" class="form-control"/>
+                        	<img src="../images/ct_icon_date.gif"/>
+                		</c:when>
+                		
+                		<c:otherwise>
+                			${result.manuDate}
+                		</c:otherwise>
+                    </c:choose>
+                    </div>
+                    
+                    <div class="form-group">
+                    <c:choose>
+                		<c:when test="${result == null }">
+                			<input type="text" name="price" maxLength="10" placeholder="가격" class="form-control">
+                		</c:when>
+                		
+                		<c:otherwise>
+                			${result.price}
+                		</c:otherwise>
+                    </c:choose>
+                    </div>
+                    
+                    <div class="form-group">
+                    <c:choose>
+                		<c:when test="${result == null }">
+                			<span class="glyphicon glyphicon-open-file">
+                			<input type="file" name="uploads" multiple="multiple" style="display:none"/>
+                			</span>
+                		</c:when>
+                		
+                		<c:otherwise>
+                			<c:forEach var="fileName" items="${result.fileNames }">
+								<img src="/images/uploadFiles/${fileName}"/>
+							</c:forEach>
+                		</c:otherwise>
+                    </c:choose>
+                    </div>
+                    
+                    <div class="form-group">
+                    <c:choose>
+                		<c:when test="${result == null }">
+                			<input type="text" name="quantity" maxLength="13" placeholder="수량" class="form-control"/>
+                		</c:when>
+                		
+                		<c:otherwise>
+                			${result.quantity}
+                		</c:otherwise>
+                    </c:choose>
+                    </div>
+                    
+                    <div class="form-group">
+                    	<c:choose>
+							<c:when test="${result == null }">
+								<select name="categoryNo">
 									<option value="" selected disabled hidden>선택</option>
-									<c:forEach var="category" items="${categoryList}">
-										<c:choose>
-											<c:when test="${category.parentCategoryNo == 0 }">
-												<optgroup label="${category.categoryName }">
-											</c:when>
+										<c:forEach var="category" items="${categoryList}">
+											<c:choose>
+												<c:when test="${category.parentCategoryNo == 0 }">
+													<optgroup label="${category.categoryName }">
+												</c:when>
 
-											<c:otherwise>
-												<option align="center" value="${category.categoryNo}">${category.categoryName }</option>
-											</c:otherwise>
-										</c:choose>
-										</optgroup>
-									</c:forEach>
-							</select></td>
+												<c:otherwise>
+													<option align="center" value="${category.categoryNo}">${category.categoryName }</option>
+												</c:otherwise>
+											</c:choose>
+											</optgroup>
+										</c:forEach>
+								</select>
 						</c:when>
 
 						<c:otherwise>
 							<td>${result.category.categoryName}</td>
 						</c:otherwise>
-					</c:choose>
-				</tr>
-			</table>
-			</div>
+						</c:choose>
+                    </div>
+                </div><!-- col-sm-6 -->
+			</div><!-- row end -->
 			
-			<div id="row">
+			<div id="container">
 				<button type="button" class="btn btn-default">등록</button>
 				<button type="button" class="btn btn-primary">취소</button>
 			</div>

@@ -32,6 +32,11 @@
         box-shadow: 0 0 10px rgba(0,0,0,0.3);
         transform: translateY(-5px);
    	 	}
+   	 	
+   	 	img{
+   	 		width: 70%;
+   	 		height: auto;
+   	 	}
    	</style>
 
 	<script type="text/javascript">
@@ -42,7 +47,7 @@
 	}
 	
 	$(function () {
-		$(".card a").on("click", function() {
+		$(".product-link").on("click", function() {
 			var prodNo = $(this).data("prod-no");
 			$(this).attr("href", "/product/getProduct/"+prodNo+"/${menu}");
 		});
@@ -57,14 +62,14 @@
 			$("input[name=sorter]").val('priceASC');
 			
 			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
-		})
+		});
 		
 		$(".list td > span:eq(1)").on("click", function () {
 			$("#currentPage").val(1);
 			$("input[name=sorter]").val('priceDESC');
 			
 			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
-		})
+		});
 		
 		$("select[name=categoryNo]").on("change", function () {
 			$("#currentPage").val(1);
@@ -72,11 +77,11 @@
 			$('input[name="searchKeyword"]').val("");
 
 			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
-		})
+		});
 		
 		$("button[type='buutton']:contains('검색')").on("click", function () {
 			getList(${resultPage.now });
-		})
+		});
 		
 		$("select[name=searchCondition]").on("change", function() {
 			var searchCondition = $('select[name=searchCondition]');
@@ -136,28 +141,33 @@
 		
 		<div class="container">
 		
-		</div>
+		</div><!-- 정렬할 박스 -->
 		
-		<div class="container">
-    		<div class="row">
-       		 <c:forEach var="product" items="${list}">
-            		<div class="col-md-4 mb-4">
-                		<div class="card text-center">
-                		<a href="" data-prod-no="${product.prodNo }">
-                   		 <img src="/images/uploadFiles/${product.fileNames[0]}" class="card-img-top" style="width: 200px; height: 200px;">
-                    		<div class="card-body">
-                        		<h5 class="card-title">${product.prodName}</h5>
-                        		<p class="card-text"><fmt:formatNumber value="${product.price}" pattern="#,##0원" /></p>
-                        		<p class="card-text">${product.quantity} 개 남음</p>
-                    		</div>
-                    	</a>
-                		</div>
-            		</div>
-       		 	</c:forEach>
-    		</div>
-		</div>
-					<%-- 
-					<table class="table table-striped table-bordered list">
+		<c:choose>
+			<c:when test="${menu == 'search' }">
+				<div class="container">
+    				<div class="row">
+       		 			<c:forEach var="product" items="${list}">
+            				<div class="col-md-4">
+                				<a href="" data-prod-no="${product.prodNo }" class="product-link">
+                				<div class="card text-center">
+                   		 			<img src="/images/uploadFiles/${product.fileNames[0]}" class="card-img-top"/>
+                    					<div class="card-body">
+                        					<h5 class="card-title">${product.prodName}</h5>
+                        					<p class="card-text"><fmt:formatNumber value="${product.price}" pattern="#,##0원" /></p>
+                        					<p class="card-text">${product.quantity} 개 남음</p>
+                    					</div>
+                				</div>
+                    				</a>
+            				</div>
+       		 			</c:forEach>
+    				</div><!-- row end -->
+				</div><!-- list Container container end -->
+			</c:when>
+				
+			<c:otherwise>
+			<div class="container">
+				<table class="table table-striped table-bordered list text-center d-flex align-items-center">
 							<thead>
 								<tr>
 									<td>No</td>
@@ -206,7 +216,7 @@
 										<td>
 											<c:choose>
 												<c:when test="${not empty product.fileNames}">
-													<img src="/images/uploadFiles/${product.fileNames[0] }" style="width: 100px; height: 100px;" />
+													<img src="/images/uploadFiles/${product.fileNames[0] }" style="width:100px;"/>
 												</c:when>
 												
 												<c:otherwise>
@@ -215,7 +225,7 @@
 											</c:choose>
 											
 										</td>
-										<td data-prod-no="${product.prodNo }"><a href="">${product.prodName }</a></td>
+										<td><a href="" class="product-link" data-prod-no="${product.prodNo }">${product.prodName }</a></td>
 										<td><fmt:formatNumber value="${product.price}" pattern="#,##0원" /></td>
 										<td>${product.category.categoryName }</td>
 										<td data-prod-no="${product.prodNo }">
@@ -235,9 +245,9 @@
 								
 							</tbody>
 						</table>
-					</c:otherwise>
-				</c:choose> --%>
-
+						</div><!-- manage Container end -->
+			</c:otherwise>
+		</c:choose>
 			<!-- 페이지 Navigator -->
 			
 		<div class="container">
