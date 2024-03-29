@@ -14,14 +14,17 @@ import com.model2.mvc.service.domain.Category;
 @Repository("categoryDaoImpl")
 public class CategoryDaoImpl implements CategoryDao {
 
+	///Field
 	@Autowired
 	@Qualifier("sqlSessionTemplate")
 	private SqlSession sqlSession;
 
+	///Constructor
 	public CategoryDaoImpl() {
 	}
 
-	public void insertCategory(Category category) throws Exception {
+	///Method
+	public void addCategory(Category category) throws Exception {
 		sqlSession.insert("CategoryMapper.insertCategory" ,category);
 	}
 

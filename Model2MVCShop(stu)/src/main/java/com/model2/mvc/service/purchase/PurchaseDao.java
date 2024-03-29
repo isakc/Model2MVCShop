@@ -9,9 +9,9 @@ import com.model2.mvc.service.domain.Purchase;
 public interface PurchaseDao {
 	
 	//insert
-	public int insertPurchase(Purchase purchase) throws Exception;
+	public int addPurchase(Purchase purchase) throws Exception;
 	
-	public void insertOrderDetail(OrderDetail orderDetail) throws Exception;
+	public void addOrderDetail(OrderDetail orderDetail) throws Exception;
 	
 	//selectOne
 	public Purchase findPurchase(int tranNo) throws Exception;

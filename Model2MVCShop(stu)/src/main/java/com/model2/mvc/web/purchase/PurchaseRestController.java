@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -104,7 +102,7 @@ public class PurchaseRestController {
 				orderDetail.setProduct(new Product(prodNoList.get(i)));
 				orderDetail.setQuantity(quantityList.get(i));
 
-				purchaseService.insertOrderDetail(orderDetail);
+				purchaseService.addOrderDetail(orderDetail);
 				productService.updateQuantity(prodNoList.get(i), quantityList.get(i));
 			}
 

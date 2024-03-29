@@ -7,15 +7,21 @@
 <mapper namespace="CartMapper">
 
 	<resultMap id="cartSelectMap" type="cart">
-		<id property="cartNo" column="cart_no" jdbcType="NUMERIC"/>
-		<result property="user.userId" column="user_id" jdbcType="VARCHAR"/>
-		<result property="product.prodNo" column="prod_no" jdbcType="NUMERIC"/>
-		<result property="quantity" column="quantity" jdbcType="NUMERIC"/>
+		<id property="cartNo"				column="cart_no" 	jdbcType="NUMERIC"/>
+		<result property="user.userId"		column="user_id" 	jdbcType="VARCHAR"/>
+		<result property="product.prodNo"	column="prod_no" 	jdbcType="NUMERIC"/>
+		<result property="quantity"			column="quantity"	jdbcType="NUMERIC"/>
 	</resultMap>
 	
-	<insert id="insertCart" parameterType="cart" >
+	<insert id="addCart" parameterType="cart" >
 		INSERT INTO cart VALUES (seq_cart_cart_no.NEXTVAL, #{user.userId}, #{product.prodNo}, #{quantity})
 	 </insert>
+	 
+	 <select id="findCart" parameterType="cart" resultMap="cartSelectMap">
+	 	SELECT cart_no, user_id, prod_no, quantity
+	 	FROM cart
+	 	WHERE user_id = #{user.userId} AND prod_no = #{product.prodNo}
+	 </select>
 	 
 	 <select id="getCartList" parameterType="cart" resultMap="cartSelectMap">
 	 	SELECT cart_no, user_id, prod_no, quantity
@@ -28,12 +34,6 @@
 		SET quantity = #{quantity}
 		WHERE user_id = #{user.userId} AND prod_no = #{product.prodNo}
 	 </update>
-	 
-	 <select id="findCart" parameterType="cart" resultMap="cartSelectMap">
-	 	SELECT cart_no, user_id, prod_no, quantity
-	 	FROM cart
-	 	WHERE user_id = #{user.userId} AND prod_no = #{product.prodNo}
-	 </select>
 	 
 	 <delete id="deleteCart" parameterType="int">
 	 	DELETE cart

@@ -2,6 +2,7 @@ package com.model2.mvc.service.product.impl;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.model2.mvc.common.Search;
-import com.model2.mvc.service.category.CategoryDao;
+import com.model2.mvc.service.category.CategoryService;
 import com.model2.mvc.service.domain.Category;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.domain.ProductImage;
@@ -24,28 +25,22 @@ public class ProductDaoImpl implements ProductDao {
 	private SqlSession sqlSession;
 	
 	@Autowired
-	@Qualifier("categoryDaoImpl")
-	private CategoryDao categoryDao;
-	
-	public void setSqlSession(SqlSession sqlSession) {
-		this.sqlSession = sqlSession;
-	}
-	
-	public void setCategoryDao(CategoryDao categoryDao) {
-		this.categoryDao = categoryDao;
-	}
+	@Qualifier("categoryServiceImpl")
+	private CategoryService categoryService;
 
+	///Constructor
 	public ProductDaoImpl() {
 	}
 
+	///Method
 	@Override
-	public void insertProduct(Product product) throws Exception {
-		sqlSession.insert("ProductMapper.insertProduct", product);
+	public void addProduct(Product product) throws Exception {
+		sqlSession.insert("ProductMapper.addProduct", product);
 	}
 	
 	@Override
-	public void insertProudctImage(ProductImage productImage) throws Exception {
-		sqlSession.insert("ProductImageMapper.insertProductImage", productImage);
+	public void addProductImage(ProductImage productImage) throws Exception {
+		sqlSession.insert("ProductImageMapper.addProductImage", productImage);
 	}
 
 	@Override
@@ -57,21 +52,34 @@ public class ProductDaoImpl implements ProductDao {
 	public Product findProductByProdName(String prodName) throws Exception {
 		return sqlSession.selectOne("ProductMapper.findProductByName", prodName);
 	}
-	
+
 	@Override
-	public List<ProductImage> findProductImage(int prodNo) throws Exception {
-		return sqlSession.selectList("ProductImageMapper.findProductImage", prodNo);
+	public int getTotalCount(Search search, String sorter, Category category) throws Exception {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("search", search);
+		map.put("sorter", sorter);
+		map.put("category", category);
+		
+		return sqlSession.selectOne("ProductMapper.getTotalCount", map);
 	}
 
 	@Override
 	public List<Product> getProductList(Search search, String sorter, Category category) throws Exception {
-		List<Product> list = sqlSession.selectList("ProductMapper.getProductList", new HashMap<String, Object>(){{
-			put("search", search);
-			put("sorter", sorter);
-			put("category", category);
-		}});
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("search", search);
+		map.put("sorter", sorter);
+		map.put("category", category);
+		
+		List<Product> list = sqlSession.selectList("ProductMapper.getProductList", map);
 		
 		return list;
+	}
+
+	@Override
+	public List<ProductImage> getProductImageList(int prodNo) throws Exception {
+		return sqlSession.selectList("ProductImageMapper.getProductImageList", prodNo);
 	}
 
 	@Override
@@ -80,19 +88,12 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public int getTotalCount(Search search, String sorter, Category category) throws Exception {
-		return sqlSession.selectOne("ProductMapper.getTotalCount", new HashMap<String, Object>(){{
-			put("search", search);
-			put("sorter", sorter);
-			put("category", category);
-		}});
-	}
-
-	@Override
 	public void updateProductQuantity(int prodNo, int quantity) throws Exception {
-		sqlSession.update("ProductMapper.updateProductQuantity", new HashMap<String, Object>(){{
-			put("prodNo", prodNo);
-			put("quantity", quantity);
-		}});
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("prodNo", prodNo);
+		map.put("quantity", quantity);
+		
+		sqlSession.update("ProductMapper.updateProductQuantity", map);
 	}
 }

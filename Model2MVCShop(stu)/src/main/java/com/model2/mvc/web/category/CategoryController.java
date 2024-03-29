@@ -53,7 +53,7 @@ public class CategoryController {
 
 		System.out.println("/category/addCategory");
 
-		categoryService.insertCategory(category);
+		categoryService.addCategory(category);
 
 		return "redirect:/category/addCategory";
 	}

@@ -57,6 +57,7 @@ public class ProductController {
 		System.out.println("==> ProductController default Constructor call");
 	}
 	
+	///Method
 	@GetMapping("addProduct")
 	public String addProductView(Model model) throws Exception {
 
@@ -68,35 +69,23 @@ public class ProductController {
 	}
 
 	@PostMapping("addProduct")
-	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo, List<MultipartFile> uploads,
-			Model model, HttpServletRequest request) throws Exception {
+	public String addProduct(@ModelAttribute("product") Product product, @RequestParam("categoryNo") int categoryNo,
+			List<MultipartFile> uploads, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/addProduct : POST");
 		
-		String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
-		//String root = "C:\\Users\\bitcamp\\git\\Model2MVCShop\\Model2MVCShop(stu)\\src\\main\\webapp\\images\\uploadFiles"+File.separator;
 		List<String> fileNames = new ArrayList<String>();
 		
 		 for (MultipartFile upload : uploads) {
-			 UUID uuid = UUID.randomUUID();
-		        
-			 String fileName = uuid+"_"+upload.getOriginalFilename();
+			 String fileName = UUID.randomUUID()+"_"+upload.getOriginalFilename();
 			 fileNames.add(fileName);
-		     File destFile = new File(root + fileName);
+		     File destFile = new File(request.getServletContext().getRealPath("/images/uploadFiles")+File.separator + fileName);
 		     upload.transferTo(destFile);
 		 }
-		
-		product.setManuDate(product.getManuDate().replace("-", ""));
-		
-		Category category = new Category();
-		category.setCategoryNo(categoryNo);
-		product.setCategory(category);
 
-		productService.insertProduct(product, fileNames);
-		Product resultProduct = productService.findProduct(product.getProdNo());
-		model.addAttribute("result", resultProduct);
-
-		return "forward:/product/addProductView.jsp";
+		productService.addProduct(product, fileNames, categoryNo);
+		
+		return "redirect:/product/getProduct/"+product.getProdNo()+"/search";
 	}
 
 	@GetMapping("getProduct/{prodNo}/{menu}")

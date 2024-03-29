@@ -13,20 +13,19 @@ import com.model2.mvc.service.category.CategoryService;
 @Service("categoryServiceImpl")
 public class CategoryServiceImpl implements CategoryService {
 	
+	///Field
 	@Autowired
 	@Qualifier("categoryDaoImpl")
 	private CategoryDao categoryDao;
 
-	public void setCategoryDao(CategoryDao categoryDao) {
-		this.categoryDao = categoryDao;
-	}
-
+	///Constructor
 	public CategoryServiceImpl() {
 	}
 
+	///Method
 	@Override
-	public void insertCategory(Category category) throws Exception {
-		categoryDao.insertCategory(category);
+	public void addCategory(Category category) throws Exception {
+		categoryDao.addCategory(category);
 	}
 
 	@Override

@@ -6,9 +6,12 @@ import com.model2.mvc.service.domain.Category;
 
 public interface CategoryService {
 
-	public void insertCategory(Category Category) throws Exception;
+	//insert
+	public void addCategory(Category Category) throws Exception;
 
+	//selectOne
 	public Category findCategory(int categoryNo) throws Exception;
 
+	//selectList
 	public Map<String, Object> getCategoryList() throws Exception;
 }

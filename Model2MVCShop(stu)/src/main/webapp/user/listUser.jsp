@@ -145,29 +145,29 @@
 			var select = $(this);
 			var userId = select.text().trim();
 			
-			$.ajax(
-					{
-						url : "json/getUser/" + userId,
-						method : "GET",
-						headers : {
-							"Accept" : "application/json",
-							"Content-Type" : "application/json"
-						},
-						dataType : "json",
-						success : function(JSONData , status) {
-							var displayValue = "<td colspan='5'><h3>"
-								+"아이디 : "+JSONData.user.userId+"<br/>"
-								+"이  름 : "+JSONData.user.userName+"<br/>"
-								+"이메일 : "+JSONData.user.email+"<br/>"
-								+"ROLE : "+JSONData.user.role+"<br/>"
-								+"</h3>";
-							
-							$("h3").parent().remove();
-							select.parent().next().html(displayValue);
-						}
+			$.ajax({
+				url : "json/getUser/" + userId,
+				method : "GET",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+					},
+				dataType : "json",
+				success : function(JSONData , status) {
+					var displayValue = "<td colspan='5'><h3>"
+					+"아이디 : "+JSONData.user.userId+"<br/>"
+					+"이  름 : "+JSONData.user.userName+"<br/>"
+					+"이메일 : "+JSONData.user.email+"<br/>"
+					+"ROLE : "+JSONData.user.role+"<br/>"
+					+"</h3>";
+					
+					$("h3").parent().remove();
+					select.parent().next().html(displayValue);
+					}
 				}); 
-		});
-	})
+			});
+		
+		})
 </script>
 </head>
 

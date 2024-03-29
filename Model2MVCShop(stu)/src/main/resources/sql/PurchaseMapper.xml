@@ -7,19 +7,19 @@
 <mapper namespace="PurchaseMapper">
  	
 	<resultMap id="purchaseSelectMap" type="purchase">
-		<result property="tranNo" 	column="tran_no"/>
-		<result property="paymentOption" column="payment_option" jdbcType="VARCHAR" />
-		<result property="receiverName" column="receiver_name" 	jdbcType="VARCHAR" />
-		<result property="receiverPhone" column="receiver_phone" jdbcType="VARCHAR" />
-		<result property="divyAddr" column="demailaddr" jdbcType="VARCHAR" />
-		<result property="divyRequest" column="dlvy_request" jdbcType="VARCHAR"  />
-		<result property="tranCode" column="tran_status_code" jdbcType="VARCHAR" />
-		<result property="orderDate" column="order_data" jdbcType="DATE"  />
-		<result property="divyDate" column="dlvy_date" jdbcType="VARCHAR" />
-		<result property="buyer.userId" column="buyer_id" jdbcType="NUMERIC"/>
+		<result property="tranNo"			column="tran_no"/>
+		<result property="paymentOption"	column="payment_option"		jdbcType="VARCHAR" />
+		<result property="receiverName"		column="receiver_name" 		jdbcType="VARCHAR" />
+		<result property="receiverPhone"	column="receiver_phone"		jdbcType="VARCHAR" />
+		<result property="divyAddr"			column="demailaddr"			jdbcType="VARCHAR" />
+		<result property="divyRequest"		column="dlvy_request"		jdbcType="VARCHAR"  />
+		<result property="tranCode"			column="tran_status_code"	jdbcType="VARCHAR" />
+		<result property="orderDate"		column="order_data"			jdbcType="DATE"  />
+		<result property="divyDate"			column="dlvy_date"			jdbcType="VARCHAR" />
+		<result property="buyer.userId"		column="buyer_id"			jdbcType="NUMERIC"/>
 	</resultMap>
 	
-	<insert id="insertPurchase" parameterType="purchase">
+	<insert id="addPurchase" parameterType="purchase">
 	 	<selectKey keyProperty="tranNo" resultType="int" order="BEFORE">
 	 		SELECT seq_transaction_tran_no.NEXTVAL
 	 		FROM dual
@@ -34,8 +34,19 @@
 		tran_no, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, TRIM(tran_status_code) tran_status_code, order_data, To_char(dlvy_date, 'YYYY-MM-DD') dlvy_date, buyer_id
 		FROM transaction
 		<where>
-		tran_no=#{tranNo}
+			tran_no=#{tranNo}
 		</where>
+	 </select>
+	 
+	 <select id="getTotalCount" parameterType="search" resultType="int">
+	 SELECT COUNT(*)
+	 FROM (
+	 	SELECT tran_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, tran_status_code, 
+			   order_data, To_char(dlvy_date, 'YYYY-MM-DD') dlvy_date 
+		FROM transaction
+		WHERE buyer_id = #{searchKeyword}
+		ORDER BY tran_no
+	 	   ) countTable
 	 </select>
 	 
 	 <select id="getPurchaseList" parameterType="search" resultMap="purchaseSelectMap">
@@ -51,15 +62,15 @@
 		AND #{currentPage} * #{pageSize}
 	 </select>
 	 
-	 <select id="getSaleList">
-	 
-	 </select>
-	 
 	 <update id="updatePurchase" parameterType="purchase">
 	 	UPDATE transaction
 	 	<set>
-	 	payment_option = #{paymentOption:VARCHAR}, receiver_name = #{receiverName:VARCHAR}, receiver_phone = #{receiverPhone:VARCHAR},
-		demailaddr = #{divyAddr:VARCHAR}, dlvy_request=#{divyRequest:VARCHAR}, dlvy_date=#{divyDate:VARCHAR}
+	 		payment_option = #{paymentOption:VARCHAR},
+	 		receiver_name = #{receiverName:VARCHAR},
+	 		receiver_phone = #{receiverPhone:VARCHAR},
+			demailaddr = #{divyAddr:VARCHAR},
+			dlvy_request=#{divyRequest:VARCHAR},
+			dlvy_date=#{divyDate:VARCHAR}
 	 	</set>
 	 	<where>
 	 		tran_no= #{tranNo}
@@ -69,31 +80,10 @@
 	 <update id="updateTranCode" parameterType="purchase">
 	 	UPDATE transaction 
 	 	<set>
-	 	tran_status_code=#{tranCode}
+	 		tran_status_code = #{tranCode}
 	 	</set>
 	 	<where>
-	 	tran_no=#{tranNo}
+	 		tran_no = #{tranNo}
 	 	</where>
 	 </update>
-	 
-	 <!-- <update id="updateTranCodeByProd">
-	 	UPDATE transaction
-	 	<set>
-	 	tran_status_code=#{tranCode}
-	 	</set>
-	 	<where>
-	 	prod_no=#{purchaseProd.prodNo}
-	 	</where>
-	 </update> -->
-	 
-	 <select id="getTotalCount" parameterType="search" resultType="int">
-	 SELECT COUNT(*)
-	 FROM (
-	 	SELECT tran_no, buyer_id, payment_option, receiver_name, receiver_phone, demailaddr, dlvy_request, tran_status_code, 
-		order_data, To_char(dlvy_date, 'YYYY-MM-DD') dlvy_date 
-		FROM transaction
-		WHERE buyer_id = #{searchKeyword}
-		ORDER BY tran_no
-	 ) countTable
-	 </select>
 </mapper>

@@ -1,9 +1,7 @@
 package com.model2.mvc.service.cart.impl;
 
 import com.model2.mvc.service.domain.Cart;
-import com.model2.mvc.service.product.ProductDao;
 import com.model2.mvc.service.product.ProductService;
-import com.model2.mvc.service.user.UserDao;
 import com.model2.mvc.service.user.UserService;
 
 import java.util.List;
@@ -18,6 +16,7 @@ import com.model2.mvc.service.cart.CartService;
 @Service("cartServiceImpl")
 public class CartServiceImpl implements CartService {
 	
+	///Field
 	@Autowired
 	@Qualifier("cartDaoImpl")
 	private CartDao cartDao;
@@ -30,17 +29,25 @@ public class CartServiceImpl implements CartService {
 	@Qualifier("productServiceImpl")
 	private ProductService productService;
 	
+	///Constructor
 	public CartServiceImpl() {
 	}
 
+	///Method
 	public void addCart(Cart cart) throws Exception {
 		Cart dbCart = cartDao.findCart(cart);
+		
 		if(dbCart == null) {
-			cartDao.insertCart(cart);
+			cartDao.addCart(cart);
 		}else {
 			cart.setQuantity(cart.getQuantity()+1);
 			cartDao.updateCart(cart);
 		}
+	}
+
+	@Override
+	public Cart findCart(Cart cart) throws Exception {
+		return cartDao.findCart(cart);
 	}
 
 	public List<Cart> getCartList(String userId) throws Exception {

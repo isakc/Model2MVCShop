@@ -99,7 +99,7 @@ public class PurchaseController {
 			orderDetail.setProduct( new Product(prodNoList.get(i)) );
 			orderDetail.setQuantity(quantityList.get(i));
 			
-			purchaseService.insertOrderDetail(orderDetail);
+			purchaseService.addOrderDetail(orderDetail);
 			productService.updateQuantity(prodNoList.get(i), quantityList.get(i));
 		}
 		

@@ -1,14 +1,17 @@
 package com.model2.mvc.service.domain;
 
 public class Cart {
+	///Field
 	private int cartNo;
 	private User user;
 	private Product product;
 	private int quantity;
 	
+	///Constructor
 	public Cart() {
 	}
 
+	///Method
 	public int getCartNo() {
 		return cartNo;
 	}

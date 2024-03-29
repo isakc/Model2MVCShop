@@ -7,14 +7,14 @@
 <mapper namespace="OrderDetailMapper">
 
 	<resultMap id="orderDetailSelectMap" type="orderDetail">
-		<id property="orderNo" column="order_no" jdbcType="NUMERIC"/>
-		<result property="transaction.tranNo" column="tran_no" jdbcType="NUMERIC"/>
-		<result property="product.prodNo" column="prod_no" jdbcType="NUMERIC"/>
-		<result property="quantity" column="quantity" jdbcType="NUMERIC"/>
-		<result property="regDate" column="reg_date" jdbcType="DATE"/>
+		<id property="orderNo"					column="order_no"	jdbcType="NUMERIC"/>
+		<result property="transaction.tranNo"	column="tran_no"	jdbcType="NUMERIC"/>
+		<result property="product.prodNo"		column="prod_no"	jdbcType="NUMERIC"/>
+		<result property="quantity"				column="quantity"	jdbcType="NUMERIC"/>
+		<result property="regDate"				column="reg_date"	jdbcType="DATE"/>
 	</resultMap>
 	
-	<insert id="insertOrderDetail" parameterType="orderDetail">
+	<insert id="addOrderDetail" parameterType="orderDetail">
 	 	INSERT
 		INTO orderdetails(order_no, tran_no, prod_no, quantity, reg_date)
 		VALUES(seq_orderdetails_order_no.NEXTVAL, #{transaction.tranNo}, #{product.prodNo}, #{quantity}, SYSDATE)

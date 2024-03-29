@@ -7,9 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,7 +65,7 @@ public class CategoryRestController {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		try {
-			categoryService.insertCategory(category);
+			categoryService.addCategory(category);
 			map.put("message", "ok");
 		}catch (Exception e) {
 			map.put("message", "fail");

@@ -95,9 +95,27 @@
 		$("button[type='button']:contains('장바구니 담기')").on("click", function() {
 			var quantity = $("input[name='quantity']").val();
 			var prodNo = $("input[name='prodNo']").val();
-			var url = "/cart/addCart/" + prodNo + "/" + quantity;
-
-			window.location.href = url;
+			
+			var jsonData = {
+					"product": {
+						"prodNo": prodNo,
+				    },
+				    "quantity": quantity
+			};
+			
+			$.ajax({
+				url : "/cart/json/addCart",
+				method : "POST",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+					},
+				data: JSON.stringify(jsonData),
+				dataType : "json",
+				success : function(JSONData , status) {
+					alert("장바구니 담기 성공");
+				}
+			}); 
 		});
 		
 		$(".product-image").on("mouseover", function () {

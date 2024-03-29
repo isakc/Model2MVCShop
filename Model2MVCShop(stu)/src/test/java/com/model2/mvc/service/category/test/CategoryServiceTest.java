@@ -31,7 +31,7 @@ public class CategoryServiceTest {
 		Category category = new Category();
 		category.setCategoryName("카테고리테스트");
 		category.setParentCategoryNo(0);
-		categoryService.insertCategory(category);
+		categoryService.addCategory(category);
 		
 		//==> console 확인
 		//System.out.println(user);

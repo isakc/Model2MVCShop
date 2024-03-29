@@ -13,15 +13,22 @@ import com.model2.mvc.service.domain.Cart;
 @Repository("cartDaoImpl")
 public class CartDaoImpl implements CartDao {
 
+	///Field
 	@Autowired
 	@Qualifier("sqlSessionTemplate")
 	private SqlSession sqlSession;
 	
+	///Constructor
 	public CartDaoImpl() {
 	}
 
-	public void insertCart(Cart cart) throws Exception {
-		sqlSession.insert("CartMapper.insertCart", cart);
+	///Method
+	public void addCart(Cart cart) throws Exception {
+		sqlSession.insert("CartMapper.addCart", cart);
+	}
+
+	public Cart findCart(Cart cart) throws Exception {
+		return sqlSession.selectOne("CartMapper.findCart", cart);
 	}
 
 	public List<Cart> getCartList(String userId) throws Exception {
@@ -30,10 +37,6 @@ public class CartDaoImpl implements CartDao {
 
 	public void updateCart(Cart cart) throws Exception {
 		sqlSession.update("CartMapper.updateCart", cart);
-	}
-
-	public Cart findCart(Cart cart) throws Exception {
-		return sqlSession.selectOne("CartMapper.findCart", cart);
 	}
 	
 	public void deleteCart(int cartNo) throws Exception{

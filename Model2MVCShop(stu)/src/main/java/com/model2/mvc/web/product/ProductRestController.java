@@ -3,6 +3,7 @@ package com.model2.mvc.web.product;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -14,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,7 +35,7 @@ import com.model2.mvc.service.product.ProductService;
 @RequestMapping("/product/*")
 public class ProductRestController {
 
-	/// Field
+	///Field
 	@Autowired
 	@Qualifier("productServiceImpl")
 	private ProductService productService;
@@ -50,11 +50,12 @@ public class ProductRestController {
 	@Value("#{commonProperties['pageSize']}")
 	int pageSize;
 	
-	/// Constructor
+	///Constructor
 	public ProductRestController() {
 		System.out.println("==> ProductController default Constructor call");
 	}
 	
+	///Method
 	@GetMapping("json/addProduct")
 	public Map<String, Object> addProductView() throws Exception {
 
@@ -64,6 +65,7 @@ public class ProductRestController {
 		
 		try {
 			ArrayList<Category> list = (ArrayList<Category>) categoryService.getCategoryList().get("list");
+			
 			map.put("message", "ok");
 			map.put("list", list);
 		}catch (Exception e) {
@@ -74,7 +76,7 @@ public class ProductRestController {
 	}
 
 	@PostMapping("json/addProduct")
-	public Map<String, Object> addProduct(@RequestPart MultipartFile upload, @RequestPart Product product,
+	public Map<String, Object> addProduct(@RequestPart List<MultipartFile> uploads, @RequestPart Product product,
 			@RequestParam int categoryNo, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/json/addProduct : POST");
@@ -82,28 +84,18 @@ public class ProductRestController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try {
-			String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
-			UUID uuid = UUID.randomUUID();
-			String fileName = uuid+"_"+upload.getOriginalFilename();
-			File destFile = new File(root + fileName);
-			upload.transferTo(destFile);
-			//product.setFileName(fileName);
+			List<String> fileNames = new ArrayList<String>();
 			
-			if(product.getManuDate() != null) {
-				product.setManuDate(product.getManuDate().replace("-", ""));
-			}
-			
-			Category category = new Category();
-			category.setCategoryNo(categoryNo);
-			
-			product.setCategory(category);
+			 for (MultipartFile upload : uploads) {
+				 String fileName = UUID.randomUUID()+"_"+upload.getOriginalFilename();
+				 fileNames.add(fileName);
+			     File destFile = new File(request.getServletContext().getRealPath("/images/uploadFiles")+File.separator + fileName);
+			     upload.transferTo(destFile);
+			 }
 
-			//productService.insertProduct(product);
-			
-			Product resultProduct = productService.findProduct(product.getProdNo());
+			productService.addProduct(product, fileNames, categoryNo);
 			
 			map.put("message", "ok");
-			map.put("result", resultProduct);
 		}catch (Exception e) {
 			map.put("message", "fail");
 		}

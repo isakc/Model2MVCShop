@@ -12,7 +12,7 @@ public interface PurchaseService {
 	//insert
 	public int addPurchase(Purchase purchase) throws Exception;
 	
-	public void insertOrderDetail(OrderDetail orderDetail) throws Exception;
+	public void addOrderDetail(OrderDetail orderDetail) throws Exception;
 	
 	//selectOne
 	public Purchase findPurchase(int tranNo) throws Exception;

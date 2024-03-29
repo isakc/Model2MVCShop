@@ -33,7 +33,20 @@
 
 	$(function() {
 		$(".table-bordered tr td a:contains('»èÁ¦')").on("click", function () {
-			$(this).attr("href", "/cart/deleteCart/" + $(this).data("cart-no"));
+			var that = $(this);
+			
+			$.ajax({
+				url : "/cart/json/deleteCart/"+$(this).data("cart-no"),
+				method : "GET",
+				headers : {
+					"Accept" : "application/json",
+					"Content-Type" : "application/json"
+					},
+				dataType : "json",
+				success : function(JSONData , status) {
+					$(that).parent("tr").remove();
+				}
+			});
 		});
 		
 		$("#quantityMinus").on("click", function() {
@@ -58,13 +71,13 @@
 	})
 
 	function updateQuantity(type, elem) {
-		var prodNo = elem.data("prod-no");
 		var cartNo = elem.data("cart-no");
+		var prodNo = elem.data("prod-no");
 		var quantity = elem.val();
 		var maxQuantity = elem.data("max-quantity");
 
 		let number = quantity;
-
+		
 		if (type === 'plus') {
 			if (maxQuantity > number) {
 				number = parseInt(number) + 1;
@@ -80,9 +93,28 @@
 				return;
 			}
 		}
+		
+		var jsonData = {
+				"cartNo": cartNo,
+				"product": {
+					"prodNo": prodNo,
+			    },
+			    "quantity": quantity
+		};
 
-		var url = "/cart/updateCart/" + prodNo + "/" + cartNo + "/" + number;
-		window.location.href = url;
+		$.ajax({
+			url : "/cart/json/updateCart",
+			method : "POST",
+			headers : {
+				"Accept" : "application/json",
+				"Content-Type" : "application/json"
+			},
+			data: JSON.stringify(jsonData),
+			dataType : "json",
+			success : function(JSONData, status) {
+				elem.val(number);
+			}
+		});
 	}
 </script>
 </head>
@@ -148,8 +180,7 @@
 									<td>
 										<button type="button" id="quantityMinus">¡å</button>
 										<input type="text" id="quantity" name="quantity" value="${cart.quantity }"
-										data-prod-no="${cart.product.prodNo }" data-cart-no="${cart.cartNo }"
-										data-max-quantity="${cart.product.quantity }" />
+										data-cart-no="${cart.cartNo }" data-prod-no="${cart.product.prodNo }" data-max-quantity="${cart.product.quantity }" />
 										<button type="button" id="quantityPlus">¡ã</button>
 									</td>
 								</tr>

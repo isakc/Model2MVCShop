@@ -7,19 +7,17 @@ import com.model2.mvc.service.domain.User;
 
 public interface UserDao {
 	
-	public void insertUser(User user) throws Exception ;
+	//insert
+	public void addUser(User user) throws Exception ;
 
-	// SELECT ONE
+	//selectOne
 	public User findUser(String userId) throws Exception ;
-
-	// SELECT LIST
-	public List<User> getUserList(Search search) throws Exception ;
-
-	// UPDATE
-	public int updateUser(User user) throws Exception ;
 	
-	//ÃÑ °¹¼ö
 	public int getTotalCount(Search search) throws Exception ;
 
-	public List<User> getAllUserList() throws Exception ;
+	//selectList
+	public List<User> getUserList(Search search) throws Exception ;
+
+	//update
+	public int updateUser(User user) throws Exception ;
 }

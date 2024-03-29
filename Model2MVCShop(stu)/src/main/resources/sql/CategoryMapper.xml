@@ -7,13 +7,13 @@
 <mapper namespace="CategoryMapper">
 
 	<resultMap id="categorySelectMap" type="category">
-		<id property="categoryNo" column="category_no" jdbcType="NUMERIC"/>
-		<result property="parentCategoryNo" column="parent_category_no" jdbcType="NUMERIC"/>
-		<result property="categoryName" column="category_name" jdbcType="VARCHAR"/>
-		<result property="regDate" column="reg_date" jdbcType="DATE"/>
+		<id property="categoryNo" 			column="category_no" 		jdbcType="NUMERIC"/>
+		<result property="parentCategoryNo"	column="parent_category_no" jdbcType="NUMERIC"/>
+		<result property="categoryName" 	column="category_name" 		jdbcType="VARCHAR"/>
+		<result property="regDate" 			column="reg_date" 			jdbcType="DATE"/>
 	</resultMap>
 	
-	<insert id="insertCategory" parameterType="category" >
+	<insert id="addCategory" parameterType="category" >
 	 	INSERT
 		INTO categories(category_no, parent_category_no, category_name, reg_date)
 		VALUES(seq_categories_category_no.NEXTVAL, #{parentCategoryNo:NUMERIC}, #{categoryName:VARCHAR}, SYSDATE)

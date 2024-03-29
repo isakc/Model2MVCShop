@@ -31,6 +31,7 @@
 	             <ul class="nav navbar-nav">
 	             
 	              <!--  雀盔包府 DrowDown -->
+	              <c:if test="${user != null }">
 	              <li class="dropdown">
 	                     <a  href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 	                         <span >雀盔包府</span>
@@ -44,7 +45,7 @@
 	                         </c:if>
 	                     </ul>
 	                 </li>
-	                 
+	               </c:if>
 	              <!-- 魄概惑前包府 DrowDown  -->
 	               <c:if test="${sessionScope.user.role == 'admin'}">
 		              <li class="dropdown">

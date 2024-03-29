@@ -7,17 +7,17 @@
 <mapper namespace="ProductImageMapper">
 
 	<resultMap id="ProductImageSelectMap" type="productImage">
-		<id property="imgNo" column="img_no" jdbcType="NUMERIC"/>
-		<result property="fileName" column="file_name" jdbcType="VARCHAR"/>
-		<result property="prodNo" column="prod_no" jdbcType="NUMERIC"/>
+		<id property="imgNo"			column="img_no"		jdbcType="NUMERIC"/>
+		<result property="fileName"		column="file_name"	jdbcType="VARCHAR"/>
+		<result property="prodNo"		column="prod_no"	jdbcType="NUMERIC"/>
 	</resultMap>
 	
-	<insert id="insertProductImage" parameterType="productImage">
+	<insert id="addProductImage" parameterType="productImage">
 	 	INSERT INTO ProductImages(img_no, file_name, prod_no)
 		VALUES(seq_productImages_img_no.NEXTVAL, #{fileName}, #{prodNo})
 	 </insert>
 	 
-	 <select id="findProductImage" parameterType="int" resultMap="ProductImageSelectMap">
+	 <select id="getProductImageList" parameterType="int" resultMap="ProductImageSelectMap">
 		SELECT img_no, file_name, prod_no
 		FROM ProductImages
 		WHERE prod_no=#{prodNo}

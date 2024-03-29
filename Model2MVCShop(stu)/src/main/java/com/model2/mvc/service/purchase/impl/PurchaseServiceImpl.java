@@ -35,9 +35,17 @@ public class PurchaseServiceImpl implements PurchaseService{
 	@Qualifier("productServiceImpl")
 	private ProductService productService;
 	
+	///Constructor
+	public PurchaseServiceImpl() {
+	}
+	
 	///Method
 	public int addPurchase(Purchase purchase) throws Exception {
-		return purchaseDao.insertPurchase(purchase);
+		return purchaseDao.addPurchase(purchase);
+	}
+	
+	public void addOrderDetail(OrderDetail orderDetail) throws Exception {
+		purchaseDao.addOrderDetail(orderDetail);
 	}
 
 	public Purchase findPurchase(int tranNo) throws Exception {
@@ -69,27 +77,10 @@ public class PurchaseServiceImpl implements PurchaseService{
 		map.put("isDeliveredList", isDeliveredList);
 		map.put("list", list);
 		map.put("totalCount", purchaseDao.getTotalCount(search));
+		
 		return map;
 	}
-
-	public void updatePurchase(Purchase purchase) throws Exception {
-		purchaseDao.updatePurchase(purchase);
-	}
-
-	public void updateTranCode(Purchase purchase) throws Exception {
-		purchaseDao.updateTranCode(purchase);
-	}
-
-	public void updateTranCodeByProd(Purchase purchase) throws Exception {
-		purchaseDao.updateTranCodeByProd(purchase);
-	}
-
-	@Override
-	public void insertOrderDetail(OrderDetail orderDetail) throws Exception {
-		purchaseDao.insertOrderDetail(orderDetail);
-	}
-
-	@Override
+	
 	public List<OrderDetail> getOrderDetailList(int tranNo) throws Exception {
 		
 		List<OrderDetail> list = purchaseDao.getOrderDetailList(tranNo);
@@ -102,7 +93,6 @@ public class PurchaseServiceImpl implements PurchaseService{
 		return purchaseDao.getOrderDetailList(tranNo);
 	}
 
-	@Override
 	public Map<String, Object> getOrderDetailListByProdNo(int prodNo) throws Exception {
 		
 		ArrayList<String> statusList = new ArrayList<String>();
@@ -123,5 +113,17 @@ public class PurchaseServiceImpl implements PurchaseService{
 		map.put("list", list);
 		
 		return map;
+	}
+
+	public void updatePurchase(Purchase purchase) throws Exception {
+		purchaseDao.updatePurchase(purchase);
+	}
+
+	public void updateTranCode(Purchase purchase) throws Exception {
+		purchaseDao.updateTranCode(purchase);
+	}
+
+	public void updateTranCodeByProd(Purchase purchase) throws Exception {
+		purchaseDao.updateTranCodeByProd(purchase);
 	}
 }
