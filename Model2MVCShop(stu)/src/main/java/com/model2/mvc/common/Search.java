@@ -12,7 +12,8 @@ public class Search {
 	///////////////////////Ãß°¡/////////////////
 	private String sorter;
 	private Category category;
-
+	private String searchKeyword2;
+	
 	///Constructor
 	public Search() {
 	}
@@ -64,6 +65,14 @@ public class Search {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+	
+	public String getSearchKeyword2() {
+		return searchKeyword2;
+	}
+
+	public void setSearchKeyword2(String searchKeyword2) {
+		this.searchKeyword2 = searchKeyword2;
 	}
 
 	@Override

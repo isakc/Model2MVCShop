@@ -48,12 +48,11 @@
 						</if>
 					
 						<if test="searchCondition == 1 and searchKeyword !='' ">
-							prod_name = #{searchKeyword}
+							LOWER(prod_name) LIKE '%'||(#{searchKeyword})||'%'
 						</if>
 					
-						<if test="searchCondition == 2 and searchKeyword !='' ">
-							price BETWEEN SUBSTR(#{searchKeyword}, 1, INSTR(#{searchKeyword}, '-') - 1) 
-							      AND SUBSTR(#{searchKeyword}, INSTR(#{searchKeyword}, '-') + 1)
+						<if test="searchCondition == 2 and searchKeyword !='' and searchKeyword2 !=''">
+							price BETWEEN #{searchKeyword} AND #{searchKeyword2}
 						</if>
 					</if>
 				
@@ -69,16 +68,6 @@
 						</if>
 					</if>
 				</where>
-				
-				<choose>
-					<when test="sorter != null or sorter !='' ">
-						ORDER BY ${sorter}
-					</when>
-					
-					<otherwise>
-						ORDER BY prod_no
-					</otherwise>
-				</choose>
 				) countTable						
 	 </select>
 	 
@@ -94,17 +83,16 @@
 	  							</if>
 	  							
 	  							<if test="searchCondition == 1 and searchKeyword !='' ">
-	  								prod_name = #{searchKeyword}
+	  								LOWER(prod_name) LIKE '%'||LOWER(#{searchKeyword})||'%'
 	  							</if>
 	  							
-	  							<if test="searchCondition == 2 and searchKeyword !='' ">
-	  								price BETWEEN SUBSTR(#{searchKeyword}, 1, INSTR(#{searchKeyword}, '-') - 1) 
-	  									  AND SUBSTR(#{searchKeyword}, INSTR(#{searchKeyword}, '-') + 1)
+	  							<if test="searchCondition == 2 and searchKeyword !='' and searchKeyword2 !='' ">
+	  								price BETWEEN #{searchKeyword} AND #{searchKeyword2}
 								</if>
 							</if>
 							
-							<if test="category!=null">
-								<if test="category.categoryNo != -1 and category.parentCategoryNo!=0">
+							<if test="category != null">
+								<if test="category.parentCategoryNo!=0">
 									AND category_no = #{category.categoryNo}
 								</if>
 								
@@ -117,7 +105,7 @@
 						</where>
 						
 						<choose>
-							<when test="sorter != null or sorter !='' ">
+							<when test="sorter != null and sorter !='' ">
 								ORDER BY ${sorter}
 							</when>
 							

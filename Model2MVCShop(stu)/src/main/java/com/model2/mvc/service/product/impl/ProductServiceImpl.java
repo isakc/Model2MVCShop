@@ -94,9 +94,9 @@ public class ProductServiceImpl implements ProductService {
 		String sorter = search.getSorter();
 		
 		if(sorter != null && sorter.contains("DESC")) {
-			sorter = sorter.substring(0, sorter.indexOf("DESC"))+ " DESC";
+			sorter = sorter.trim().substring(0, sorter.indexOf("DESC"))+ " DESC";
 		}else if(sorter != null && sorter.contains("ASC")) {
-			sorter = sorter.substring(0, sorter.indexOf("ASC")) + " ASC";
+			sorter = sorter.trim().substring(0, sorter.indexOf("ASC")) + " ASC";
 		}
 		
 		search.setSorter(sorter);

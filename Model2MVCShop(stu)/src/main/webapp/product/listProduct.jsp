@@ -133,8 +133,8 @@
 
 				<c:choose>
 					<c:when test="${search.searchCondition == '2' }">
-						<input type="text" id="searchKeyword" name="searchKeyword" value="${searchPrice }" />
-						<input type="text" name="searchKeyword2" value="${searchPrice2 }" />
+						<input type="text" id="searchKeyword" name="searchKeyword" value="${search.searchKeyword }" />
+						<input type="text" name="searchKeyword2" value="${search.searchKeyword2 }" />
 					</c:when>
 
 					<c:otherwise>
@@ -189,13 +189,13 @@
 												<c:choose>
 													<c:when test="${category.parentCategoryNo == 0 }">
 														<option value="${category.categoryNo}"
-															${category.categoryNo == selectedCategoryNo ? 'selected' : ''}
+															${category.categoryNo == search.category.categoryNo ? 'selected' : ''}
 															style="font-weight: 700">${category.categoryName }</option>
 													</c:when>
 
 													<c:otherwise>
 														<option align="center" value="${category.categoryNo}"
-															${category.categoryNo == selectedCategoryNo ? 'selected' : ''}>${category.categoryName }</option>
+															${category.categoryNo == search.category.categoryNo ? 'selected' : ''}>${category.categoryName }</option>
 													</c:otherwise>
 												</c:choose>
 											</c:forEach>
@@ -261,8 +261,6 @@
 			<div class="text-center">
 				<input type="hidden" id="currentPage" name="currentPage" value="${resultPage.now }" />
 				<input type="hidden" id="sorter" name="sorter" value="${search.sorter }" />
-				<input type="hidden" name="preSearchCondition" value="${search.searchCondition }" />
-				<input type="hidden" name="preSearchKeyword" value="${search.searchKeyword }" />
 				<jsp:include page="../common/pageNavigator.jsp"/>
 			</div>
 			

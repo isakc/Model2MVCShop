@@ -130,25 +130,18 @@ public class ProductController {
 	}
 
 	@RequestMapping("listProduct/{menu}")
-	public String getListProduct(@ModelAttribute(value = "search") Search search, Model model,
-			@PathVariable("menu") String menu,
-			@RequestParam(value = "searchKeyword2", defaultValue = "") String searchKeyword2,
-			//@RequestParam(value = "sorter", defaultValue = "") String sorter,
-			@RequestParam(value = "preSearchCondition", defaultValue = "") String preSearchCondition,
-			@RequestParam(value = "preSearchKeyword", defaultValue = "") String preSearchKeyword
-			/*@RequestParam(value = "categoryNo", defaultValue = "-1") int categoryNo*/) throws Exception {
+	public String getListProduct(@PathVariable("menu") String menu, @ModelAttribute Search search,
+			@RequestParam(value="categoryNo", defaultValue = "-1") Integer categoryNo, Model model) throws Exception {
 
 		System.out.println("/product/listProduct GET/POST");
-
-		if (search.getSearchCondition() != null && search.getSearchCondition().equals("2")) {
-			search.setSearchKeyword(search.getSearchKeyword() + "-" + searchKeyword2);
-		}
 
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
 		}
 
 		search.setPageSize(pageSize);
+		Category category = categoryService.findCategory(categoryNo);
+		search.setCategory(category);
 		
 		HashMap<String, Object> resultMap = (HashMap<String, Object>) productService.getProductList(search);
 		int total = ((Integer) resultMap.get("totalCount")).intValue();
@@ -159,13 +152,6 @@ public class ProductController {
 		model.addAttribute("list", resultMap.get("list"));
 		model.addAttribute("search", search);
 		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
-		//model.addAttribute("selectedCategoryNo", search.getCategoryNo());
-		
-		if (search.getSearchCondition() != null && search.getSearchCondition().equals("2")) {
-			model.addAttribute("searchPrice",
-					search.getSearchKeyword().substring(0, search.getSearchKeyword().indexOf("-")));
-			model.addAttribute("searchPrice2", searchKeyword2);
-		}
 
 		return "forward:/product/listProduct.jsp?menu=" + menu;
 	}
