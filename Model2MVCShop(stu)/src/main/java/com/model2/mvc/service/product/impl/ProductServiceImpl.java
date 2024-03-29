@@ -14,7 +14,6 @@ import com.model2.mvc.service.category.CategoryDao;
 import com.model2.mvc.service.domain.Category;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.domain.ProductImage;
-import com.model2.mvc.service.orderDetail.OrderDetailDao;
 import com.model2.mvc.service.product.ProductDao;
 import com.model2.mvc.service.product.ProductService;
 
@@ -29,10 +28,6 @@ public class ProductServiceImpl implements ProductService {
 	@Autowired
 	@Qualifier("categoryDaoImpl")
 	private CategoryDao categoryDao;
-	
-	@Autowired
-	@Qualifier("orderDetailDaoImpl")
-	private OrderDetailDao orderDetailDao;
 
 	public ProductServiceImpl() {
 	}

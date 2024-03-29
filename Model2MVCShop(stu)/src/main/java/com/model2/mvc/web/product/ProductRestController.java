@@ -29,7 +29,6 @@ import com.model2.mvc.common.Search;
 import com.model2.mvc.service.category.CategoryService;
 import com.model2.mvc.service.domain.Category;
 import com.model2.mvc.service.domain.Product;
-import com.model2.mvc.service.orderDetail.OrderDetailService;
 import com.model2.mvc.service.product.ProductService;
 
 @RestController
@@ -44,10 +43,6 @@ public class ProductRestController {
 	@Autowired
 	@Qualifier("categoryServiceImpl")
 	private CategoryService categoryService;
-	
-	@Autowired
-	@Qualifier("orderDetailServiceImpl")
-	private OrderDetailService orderDetailService;
 
 	@Value("#{commonProperties['pageUnit']}")
 	int pageUnit;
@@ -261,26 +256,6 @@ public class ProductRestController {
 			productService.updateProduct(product);
 			
 			map.put("message", "ok");
-		}catch (Exception e) {
-			map.put("message", "fail");
-		}
-		
-		return map;
-	}
-	
-	@GetMapping("json/getOrderDetail/{prodNo}")
-	public Map<String, Object> getOrderDetail(@PathVariable("prodNo") int prodNo) throws Exception {
-
-		System.out.println("/product/json/getOrderDetail");
-		
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		try {
-			Map<String, Object> mapList = orderDetailService.getOrderDetailListByProdNo(prodNo);
-			
-			map.put("message", "ok");
-			map.put("list", mapList.get("list"));
-			map.put("statusList", mapList.get("statusList"));
 		}catch (Exception e) {
 			map.put("message", "fail");
 		}

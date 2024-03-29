@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.model2.mvc.common.Search;
-import com.model2.mvc.service.domain.Product;
+import com.model2.mvc.service.domain.OrderDetail;
 import com.model2.mvc.service.domain.Purchase;
-import com.model2.mvc.service.domain.User;
 import com.model2.mvc.service.product.ProductDao;
 import com.model2.mvc.service.purchase.PurchaseDao;
 import com.model2.mvc.service.user.UserDao;
@@ -36,22 +35,11 @@ public class PurchaseDaoImpl implements PurchaseDao{
 	}
 	
 	public Purchase findPurchase(int tranNo) throws Exception {
-		Purchase purchase = sqlSession.selectOne("PurchaseMapper.findPurchase", tranNo);
-		User buyer = userDao.findUser(purchase.getBuyer().getUserId());
-		purchase.setBuyer(buyer);
-		
-		return purchase;
+		return sqlSession.selectOne("PurchaseMapper.findPurchase", tranNo);
 	}
 
 	public List<Purchase> getPurchaseList(Search search) throws Exception {
-		List<Purchase> list = sqlSession.selectList("PurchaseMapper.getPurchaseList", search);
-		
-		for(Purchase purchase : list) {
-			User buyer = userDao.findUser(purchase.getBuyer().getUserId());
-			purchase.setBuyer(buyer);
-		}
-		
-		return list;
+		return sqlSession.selectList("PurchaseMapper.getPurchaseList", search);
 	}
 
 	public void updatePurchase(Purchase purchase) throws Exception {
@@ -68,5 +56,20 @@ public class PurchaseDaoImpl implements PurchaseDao{
 
 	public int getTotalCount(Search search) throws Exception {
 		return sqlSession.selectOne("PurchaseMapper.getTotalCount", search);
+	}
+
+	@Override
+	public void insertOrderDetail(OrderDetail orderDetail) throws Exception {
+		sqlSession.insert("OrderDetailMapper.insertOrderDetail", orderDetail);
+	}
+
+	@Override
+	public List<OrderDetail> getOrderDetailList(int tranNo) throws Exception {
+		return sqlSession.selectList("OrderDetailMapper.findProductList", tranNo);
+	}
+
+	@Override
+	public List<OrderDetail> getOrderDetailListByProdNo(int prodNo) throws Exception {
+		return sqlSession.selectList("OrderDetailMapper.findProductListByProdNo", prodNo);
 	}
 }

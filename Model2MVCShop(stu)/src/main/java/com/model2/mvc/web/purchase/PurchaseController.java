@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,6 @@ import com.model2.mvc.service.domain.OrderDetail;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.domain.User;
-import com.model2.mvc.service.orderDetail.OrderDetailService;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.purchase.PurchaseService;
 
@@ -42,10 +42,6 @@ public class PurchaseController {
 	@Autowired
 	@Qualifier("productServiceImpl")
 	private ProductService productService;
-
-	@Autowired
-	@Qualifier("orderDetailServiceImpl")
-	private OrderDetailService orderDetailService;
 	
 	@Autowired
 	@Qualifier("cartServiceImpl")
@@ -103,7 +99,7 @@ public class PurchaseController {
 			orderDetail.setProduct( new Product(prodNoList.get(i)) );
 			orderDetail.setQuantity(quantityList.get(i));
 			
-			orderDetailService.insertOrderDetail(orderDetail);
+			purchaseService.insertOrderDetail(orderDetail);
 			productService.updateQuantity(prodNoList.get(i), quantityList.get(i));
 		}
 		
@@ -163,7 +159,7 @@ public class PurchaseController {
 		System.out.println("/purchase/getPurchase/{tranNo} : GET");
 
 		Purchase purchase = purchaseService.findPurchase(tranNo);
-		List<OrderDetail> list = orderDetailService.getOrderDetailList(tranNo);
+		List<OrderDetail> list = purchaseService.getOrderDetailList(tranNo);
 
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.addObject("purchase", purchase);
@@ -233,5 +229,18 @@ public class PurchaseController {
 		modelAndView.setViewName("forward:/product/listProduct/manage");
 
 		return modelAndView;
+	}
+	
+	@GetMapping("getOrderDetail/{prodNo}")
+	public String getOrderDetail(@PathVariable("prodNo") int prodNo, Model model) throws Exception {
+
+		System.out.println("/product/getOrderDetail");
+		
+		Map<String, Object> map = purchaseService.getOrderDetailListByProdNo(prodNo);
+		
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("statusList", map.get("statusList"));
+		
+		return "forward:/product/orderDetail.jsp";
 	}
 }

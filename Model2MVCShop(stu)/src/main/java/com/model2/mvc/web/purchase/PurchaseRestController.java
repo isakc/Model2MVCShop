@@ -27,7 +27,6 @@ import com.model2.mvc.service.domain.OrderDetail;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.domain.User;
-import com.model2.mvc.service.orderDetail.OrderDetailService;
 import com.model2.mvc.service.product.ProductService;
 import com.model2.mvc.service.purchase.PurchaseService;
 
@@ -43,10 +42,6 @@ public class PurchaseRestController {
 	@Autowired
 	@Qualifier("productServiceImpl")
 	private ProductService productService;
-
-	@Autowired
-	@Qualifier("orderDetailServiceImpl")
-	private OrderDetailService orderDetailService;
 
 	@Autowired
 	@Qualifier("cartServiceImpl")
@@ -109,7 +104,7 @@ public class PurchaseRestController {
 				orderDetail.setProduct(new Product(prodNoList.get(i)));
 				orderDetail.setQuantity(quantityList.get(i));
 
-				orderDetailService.insertOrderDetail(orderDetail);
+				purchaseService.insertOrderDetail(orderDetail);
 				productService.updateQuantity(prodNoList.get(i), quantityList.get(i));
 			}
 
@@ -174,7 +169,7 @@ public class PurchaseRestController {
 		
 		try {
 			Purchase purchase = purchaseService.findPurchase(tranNo);
-			List<OrderDetail> list = orderDetailService.getOrderDetailList(tranNo);
+			List<OrderDetail> list = purchaseService.getOrderDetailList(tranNo);
 			
 			map.put("message", "ok");
 			map.put("purchase", purchase);
@@ -261,6 +256,26 @@ public class PurchaseRestController {
 			map.put("message", "fail");
 		}
 
+		return map;
+	}
+	
+	@GetMapping("json/getOrderDetail/{prodNo}")
+	public Map<String, Object> getOrderDetail(@PathVariable("prodNo") int prodNo) throws Exception {
+
+		System.out.println("/product/json/getOrderDetail");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		try {
+			Map<String, Object> mapList = purchaseService.getOrderDetailListByProdNo(prodNo);
+			
+			map.put("message", "ok");
+			map.put("list", mapList.get("list"));
+			map.put("statusList", mapList.get("statusList"));
+		}catch (Exception e) {
+			map.put("message", "fail");
+		}
+		
 		return map;
 	}
 }

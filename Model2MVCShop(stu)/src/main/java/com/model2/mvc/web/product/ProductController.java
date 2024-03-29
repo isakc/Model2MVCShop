@@ -1,14 +1,11 @@
 package com.model2.mvc.web.product;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.Servlet;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +28,6 @@ import com.model2.mvc.common.Search;
 import com.model2.mvc.service.category.CategoryService;
 import com.model2.mvc.service.domain.Category;
 import com.model2.mvc.service.domain.Product;
-import com.model2.mvc.service.orderDetail.OrderDetailService;
 import com.model2.mvc.service.product.ProductService;
 
 @Controller
@@ -46,10 +42,6 @@ public class ProductController {
 	@Autowired
 	@Qualifier("categoryServiceImpl")
 	private CategoryService categoryService;
-	
-	@Autowired
-	@Qualifier("orderDetailServiceImpl")
-	private OrderDetailService orderDetailService;
 
 	@Value("#{commonProperties['pageUnit']}")
 	int pageUnit;
@@ -238,18 +230,5 @@ public class ProductController {
 		productService.updateProduct(product);
 
 		return "redirect:/product/getProduct/+" + product.getProdNo() + "/search";
-	}
-	
-	@GetMapping("getOrderDetail/{prodNo}")
-	public String getOrderDetail(@PathVariable("prodNo") int prodNo, Model model) throws Exception {
-
-		System.out.println("/product/getOrderDetail");
-		
-		Map<String, Object> map = orderDetailService.getOrderDetailListByProdNo(prodNo);
-		
-		model.addAttribute("list", map.get("list"));
-		model.addAttribute("statusList", map.get("statusList"));
-		
-		return "forward:/product/orderDetail.jsp";
 	}
 }

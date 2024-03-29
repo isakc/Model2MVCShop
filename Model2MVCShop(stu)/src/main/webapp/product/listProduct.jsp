@@ -61,7 +61,7 @@
 		
 		$("tbody td:nth-child(6):contains('판매목록')").on("click", function() {
 			var prodNo = $(this).data("prod-no");
-			$(this).find("a").attr("href", "/product/getOrderDetail/"+prodNo);
+			$(this).find("a").attr("href", "/purchase/getOrderDetail/"+prodNo);
 		});
 		
 		$(".list td > span:eq(0)").on("click", function () {
