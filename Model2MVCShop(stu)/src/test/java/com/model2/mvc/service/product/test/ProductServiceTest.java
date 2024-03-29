@@ -111,7 +111,7 @@ public class ProductServiceTest {
 	 	search.setSearchKeyword("");
 	 	
 	 	Category category = null;
-	 	Map<String,Object> map = productService.getProductList(search, "", category);
+	 	Map<String,Object> map = productService.getProductList(search);
 	 	
 	 	List<Object> list = (List<Object>)map.get("list");
 	 	List<Object> isDeliveredList = (List<Object>)map.get("isDeliveredList");

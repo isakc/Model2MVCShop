@@ -54,27 +54,13 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
-	public int getTotalCount(Search search, String sorter, Category category) throws Exception {
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		map.put("search", search);
-		map.put("sorter", sorter);
-		map.put("category", category);
-		
-		return sqlSession.selectOne("ProductMapper.getTotalCount", map);
+	public int getTotalCount(Search search) throws Exception {
+		return sqlSession.selectOne("ProductMapper.getTotalCount", search);
 	}
 
 	@Override
-	public List<Product> getProductList(Search search, String sorter, Category category) throws Exception {
-		Map<String, Object> map = new HashMap<String, Object>();
-		
-		map.put("search", search);
-		map.put("sorter", sorter);
-		map.put("category", category);
-		
-		List<Product> list = sqlSession.selectList("ProductMapper.getProductList", map);
-		
-		return list;
+	public List<Product> getProductList(Search search) throws Exception {
+		return sqlSession.selectList("ProductMapper.getProductList", search);
 	}
 
 	@Override

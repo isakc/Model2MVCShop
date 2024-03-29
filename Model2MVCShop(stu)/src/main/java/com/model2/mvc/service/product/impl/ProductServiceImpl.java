@@ -90,15 +90,19 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Map<String, Object> getProductList(Search search, String sorter, Category category) throws Exception {
-		if(sorter.contains("DESC")) {
+	public Map<String, Object> getProductList(Search search) throws Exception {
+		String sorter = search.getSorter();
+		
+		if(sorter != null && sorter.contains("DESC")) {
 			sorter = sorter.substring(0, sorter.indexOf("DESC"))+ " DESC";
-		}else if(sorter.contains("ASC")) {
+		}else if(sorter != null && sorter.contains("ASC")) {
 			sorter = sorter.substring(0, sorter.indexOf("ASC")) + " ASC";
 		}
 		
+		search.setSorter(sorter);
+		
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		List<Product> productList = productDao.getProductList(search, sorter, category);
+		List<Product> productList = productDao.getProductList(search);
 		
 		for(Product product : productList) {
 			Category productCategory = categoryService.findCategory(product.getCategory().getCategoryNo());
@@ -115,7 +119,7 @@ public class ProductServiceImpl implements ProductService {
 		}//product category ³Ö±â
 		
 		map.put("list", productList);
-		map.put("totalCount", productDao.getTotalCount(search, sorter, category));
+		map.put("totalCount", productDao.getTotalCount(search));
 		
 		return map;
 	}

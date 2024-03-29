@@ -260,7 +260,7 @@
 		<div class="container">
 			<div class="text-center">
 				<input type="hidden" id="currentPage" name="currentPage" value="${resultPage.now }" />
-				<input type="hidden" id="sorter" name="sorter" value="${sorter }" />
+				<input type="hidden" id="sorter" name="sorter" value="${search.sorter }" />
 				<input type="hidden" name="preSearchCondition" value="${search.searchCondition }" />
 				<input type="hidden" name="preSearchKeyword" value="${search.searchKeyword }" />
 				<jsp:include page="../common/pageNavigator.jsp"/>
