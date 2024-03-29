@@ -180,7 +180,7 @@ public class ProductRestController {
 		
 		try {
 			Category category = categoryService.findCategory(categoryNo);
-			HashMap<String, Object> resultMap = (HashMap<String, Object>) productService.getProductList(search, sorter, category);
+			HashMap<String, Object> resultMap = (HashMap<String, Object>) productService.getProductList(search);
 			int total = ((Integer) resultMap.get("totalCount")).intValue();
 			Paginate resultPage = new Paginate(search.getCurrentPage(), total, pageUnit, pageSize);
 			

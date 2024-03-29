@@ -19,10 +19,10 @@ public interface ProductDao {
 
 	public Product findProductByProdName(String prodName) throws Exception ;
 	
-	public int getTotalCount(Search search, String sorter, Category category) throws Exception ;
+	public int getTotalCount(Search search) throws Exception ;
 
 	//selectList
-	public List<Product> getProductList(Search search, String sorter, Category category) throws Exception ;
+	public List<Product> getProductList(Search search) throws Exception ;
 	
 	public List<ProductImage> getProductImageList(int prodNo) throws Exception ;
 

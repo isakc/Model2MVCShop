@@ -7,7 +7,7 @@
 <mapper namespace="ProductMapper">
  	
 	<resultMap id="productSelectMap" type="product">
-		<result property="prodNo"				column="prod_no"/>
+		<id property="prodNo"					column="prod_no"			jdbcType="VARCHAR"/>
 		<result property="prodName"				column="prod_name"			jdbcType="VARCHAR" />
 		<result property="prodDetail"			column="prod_detail"		jdbcType="VARCHAR" />
 		<result property="manuDate"				column="manufacture_day"	jdbcType="VARCHAR" />
@@ -37,23 +37,22 @@
 		WHERE prod_name=#{prodName}
 	 </select>
 	 
-	 <select  id="getTotalCount"  parameterType="map" resultType="int">
+	 <select  id="getTotalCount"  parameterType="search" resultType="int">
 	  	SELECT COUNT(*)
 	  	FROM(	SELECT p.prod_no, p.prod_name, p.prod_detail, p.manufacture_day, p.price, category_no, quantity, p.reg_date
 				FROM product p
 				<where>
-					<if test="search.searchCondition != null">
-						<if test="search.searchCondition == 0 and search.searchKeyword !='' ">
-							prod_no = #{search.searchKeyword}
+					<if test="searchCondition != null">
+						<if test="searchCondition == 0 and searchKeyword !='' ">
+							prod_no = #{searchKeyword}
 						</if>
 					
-						<if test="search.searchCondition == 1 and search.searchKeyword !='' ">
-							prod_name = #{search.searchKeyword}
+						<if test="searchCondition == 1 and searchKeyword !='' ">
+							LOWER(prod_name) LIKE '%'||(#{searchKeyword})||'%'
 						</if>
 					
-						<if test="search.searchCondition == 2 and search.searchKeyword !='' ">
-							price BETWEEN SUBSTR(#{search.searchKeyword}, 1, INSTR(#{search.searchKeyword}, '-') - 1) 
-							      AND SUBSTR(#{search.searchKeyword}, INSTR(#{search.searchKeyword}, '-') + 1)
+						<if test="searchCondition == 2 and searchKeyword !='' and searchKeyword2 !=''">
+							price BETWEEN #{searchKeyword} AND #{searchKeyword2}
 						</if>
 					</if>
 				
@@ -69,42 +68,31 @@
 						</if>
 					</if>
 				</where>
-				
-				<choose>
-					<when test="sorter != ''">
-						ORDER BY ${sorter}
-					</when>
-					
-					<otherwise>
-						ORDER BY prod_no
-					</otherwise>
-				</choose>
 				) countTable						
 	 </select>
 	 
-	 <select  id="getProductList" parameterType="map" resultMap="productSelectMap">
+	 <select  id="getProductList" parameterType="search" resultMap="productSelectMap">
 	  	SELECT *
 	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
 	  			FROM (  SELECT p.prod_no, p.prod_name, p.prod_detail, p.manufacture_day, p.price, category_no, quantity, p.reg_date
 	  					FROM product p
 	  					<where>
-	  						<if test="search.searchCondition != null">
-	  							<if test="search.searchCondition == 0 and search.searchKeyword !='' ">
-	  								prod_no = #{search.searchKeyword}
+	  						<if test="searchCondition != null">
+	  							<if test="searchCondition == 0 and searchKeyword !='' ">
+	  								prod_no = #{searchKeyword}
 	  							</if>
 	  							
-	  							<if test="search.searchCondition == 1 and search.searchKeyword !='' ">
-	  								prod_name = #{search.searchKeyword}
+	  							<if test="searchCondition == 1 and searchKeyword !='' ">
+	  								LOWER(prod_name) LIKE '%'||LOWER(#{searchKeyword})||'%'
 	  							</if>
 	  							
-	  							<if test="search.searchCondition == 2 and search.searchKeyword !='' ">
-	  								price BETWEEN SUBSTR(#{search.searchKeyword}, 1, INSTR(#{search.searchKeyword}, '-') - 1) 
-	  									  AND SUBSTR(#{search.searchKeyword}, INSTR(#{search.searchKeyword}, '-') + 1)
+	  							<if test="searchCondition == 2 and searchKeyword !='' and searchKeyword2 !='' ">
+	  								price BETWEEN #{searchKeyword} AND #{searchKeyword2}
 								</if>
 							</if>
 							
-							<if test="category!=null">
-								<if test="category.categoryNo != -1 and category.parentCategoryNo!=0">
+							<if test="category != null">
+								<if test="category.parentCategoryNo!=0">
 									AND category_no = #{category.categoryNo}
 								</if>
 								
@@ -117,7 +105,7 @@
 						</where>
 						
 						<choose>
-							<when test="sorter != ''">
+							<when test="sorter != null and sorter !='' ">
 								ORDER BY ${sorter}
 							</when>
 							
@@ -126,8 +114,8 @@
 							</otherwise>
 						</choose>
 						) inner_table
-				WHERE ROWNUM &lt;= #{search.currentPage} * #{search.pageSize} )
-		WHERE row_seq BETWEEN + ((#{search.currentPage} - 1) * #{search.pageSize} + 1)  AND #{search.currentPage} * #{search.pageSize}
+				WHERE ROWNUM &lt;= #{currentPage} * #{pageSize} )
+		WHERE row_seq BETWEEN + ((#{currentPage} - 1) * #{pageSize} + 1)  AND #{currentPage} * #{pageSize}
 	 </select>
 	 
 	 <update id="updateProduct"	parameterType="product" >
@@ -144,10 +132,10 @@
 	 </update>
 	 
 	 <update id="updateProductQuantity" parameterType="product">
-	 UPDATE product
-	 <set>
-	 	quantity = quantity - #{quantity}
-	 </set>
-	 WHERE prod_no = #{prodNo}
+	 	UPDATE product
+	 	<set>
+	 		quantity = quantity - #{quantity}
+	 	</set>
+	 	WHERE prod_no = #{prodNo}
 	 </update>
 </mapper>

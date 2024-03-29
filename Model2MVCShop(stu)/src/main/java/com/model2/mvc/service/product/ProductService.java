@@ -19,7 +19,7 @@ public interface ProductService {
 	public Product findProductByProdName(String prodName) throws Exception;
 	
 	//selectList
-	public Map<String, Object> getProductList(Search search, String sorter, Category category) throws Exception;
+	public Map<String, Object> getProductList(Search search) throws Exception;
 	
 	//update
 	public void updateProduct(Product product) throws Exception;
