@@ -32,7 +32,6 @@
 	
 	$(function() {
 		$("button[type='button']:contains('µî·Ï')").on("click",function() {
-			
 			$("form").attr("method", "POST").attr("action","/category/addCategory").submit();
 		})
 	})

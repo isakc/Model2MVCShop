@@ -80,11 +80,11 @@
 	}
 	
 	$(function () {
-		$("#quantityMinus").on("click", function () {
+		$(".glyphicon-chevron-down").on("click", function () {
 			changeQuantity('minus');
 		});
 		
-		$("#quantityPlus").on("click", function () {
+		$(".glyphicon-chevron-up").on("click", function () {
 			changeQuantity('plus');
 		});
 		

@@ -144,8 +144,7 @@ public class ProductController {
 		search.setCategory(category);
 		
 		HashMap<String, Object> resultMap = (HashMap<String, Object>) productService.getProductList(search);
-		int total = ((Integer) resultMap.get("totalCount")).intValue();
-		Paginate resultPage = new Paginate(search.getCurrentPage(), total, pageUnit, pageSize);
+		Paginate resultPage = new Paginate(search.getCurrentPage(), ((Integer) resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
 		
 		model.addAttribute("menu", menu);
 		model.addAttribute("resultPage", resultPage);
@@ -153,7 +152,7 @@ public class ProductController {
 		model.addAttribute("search", search);
 		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
 
-		return "forward:/product/listProduct.jsp?menu=" + menu;
+		return "forward:/product/listProduct.jsp";
 	}
 
 	@GetMapping("updateProduct/{prodNo}")
@@ -185,8 +184,6 @@ public class ProductController {
 			 fileNames.add(fileName);
 		     File destFile = new File(root + fileName);
 		     upload.transferTo(destFile);
-		     
-		     //product.setFileName(fileNames);
 		 }
 		
 		product.setManuDate(product.getManuDate().replace("-", ""));

@@ -25,7 +25,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
 	///Method
 	public void addCategory(Category category) throws Exception {
-		sqlSession.insert("CategoryMapper.insertCategory" ,category);
+		sqlSession.insert("CategoryMapper.addCategory" ,category);
 	}
 
 	public Category findCategory(int categoryNo) throws Exception {

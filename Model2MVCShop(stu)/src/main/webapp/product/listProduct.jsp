@@ -44,6 +44,23 @@
     		max-width: 70%;
     		height: 70%;
   		}
+  		
+  		.horizontal-list-group {
+        	display: flex;
+        	flex-direction: row;
+        	padding-left: 0;
+       	 	margin-bottom: 0;
+        	list-style: none;
+    	}
+
+    	.horizontal-list-group .list-group-item {
+        	margin-bottom: 0;
+		}
+		
+		.horizontal-list-group .list-group-item:hover {
+        	cursor: pointer;
+        	color: blue;
+		}
    	</style>
 
 	<script type="text/javascript">
@@ -64,16 +81,23 @@
 			$(this).find("a").attr("href", "/purchase/getOrderDetail/"+prodNo);
 		});
 		
-		$(".list td > span:eq(0)").on("click", function () {
+		$(".horizontal-list-group li:nth-child(1)").on("click", function () {
 			$("#currentPage").val(1);
 			$("input[name=sorter]").val('priceASC');
 			
 			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
 		});
 		
-		$(".list td > span:eq(1)").on("click", function () {
+		$(".horizontal-list-group li:nth-child(2)").on("click", function () {
 			$("#currentPage").val(1);
 			$("input[name=sorter]").val('priceDESC');
+			
+			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
+		});
+		
+		$(".horizontal-list-group li:nth-child(3)").on("click", function () {
+			$("#currentPage").val(1);
+			$("input[name=sorter]").val('reg_dateDESC');
 			
 			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
 		});
@@ -86,8 +110,9 @@
 			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
 		});
 		
-		$("button[type='buutton']:contains('검색')").on("click", function () {
-			getList(${resultPage.now });
+		$("button[type='submit']:contains('검색')").on("click", function () {
+			$("#currentPage").val(1);
+			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
 		});
 		
 		$("select[name=searchCondition]").on("change", function() {
@@ -97,16 +122,9 @@
 
 			if (selectedValue == '2') {
 				searchKeyword.val(0);
-				searchKeyword.css("width", "90px");
-
 				searchKeyword.after('<input name="searchKeyword2"/>');
-				$('input[name=searchKeyword2]').css({
-					"width" : "90px",
-					"height" : "19px"
-				});
 			} else {
 				searchKeyword.val("");
-				searchKeyword.css("width", "200px");
 				$("input[name=searchKeyword2]").remove();
 			}
 		});
@@ -121,7 +139,43 @@
    	
 	<form>
 		<div class="container">
-			<div class="col text-right">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="form-group">
+						<select name="categoryNo" class="form-control">
+							<option value="-1" style="font-weight: 700">전체</option>
+
+							<c:forEach var="category" items="${categoryList}">
+								<c:choose>
+									<c:when test="${category.parentCategoryNo == 0 }">
+										<option value="${category.categoryNo}"
+											${category.categoryNo == search.category.categoryNo ? 'selected' : ''}
+											style="font-weight: 700">${category.categoryName }</option>
+									</c:when>
+
+									<c:otherwise>
+										<option align="center" value="${category.categoryNo}"
+											${category.categoryNo == search.category.categoryNo ? 'selected' : ''}>${category.categoryName }</option>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<ul class="list-group horizontal-list-group">
+						<li class="list-group-item">낮은 가격순</li>
+						<li class="list-group-item">높은 가격순</li>
+						<li class="list-group-item">최신순</li>
+					</ul>
+				</div>
+			
+			<div class="col-md-6 text-right">
 				<select id="searchCondition" name="searchCondition">
 					<option value="" selected disabled hidden>선택</option>
 					<c:if test="${user.role == 'admin' && user!=null}">
@@ -144,10 +198,7 @@
 
 				<button type="submit" class="btn btn-success">검색</button>
 			</div>
-		</div>
-		
-		<div class="container">
-		
+			</div><!-- row -->
 		</div><!-- 정렬할 박스 -->
 		
 		<c:choose>
@@ -180,27 +231,8 @@
 									<td>No</td>
 									<td>이미지</td>
 									<td>상품명</td>
-									<td>가격 <span>▲</span> <span>▼</span></td>
-									<td>카테고리
-									<select name="categoryNo">
-											<option value="-1" style="font-weight: 700">전체</option>
-
-											<c:forEach var="category" items="${categoryList}">
-												<c:choose>
-													<c:when test="${category.parentCategoryNo == 0 }">
-														<option value="${category.categoryNo}"
-															${category.categoryNo == search.category.categoryNo ? 'selected' : ''}
-															style="font-weight: 700">${category.categoryName }</option>
-													</c:when>
-
-													<c:otherwise>
-														<option align="center" value="${category.categoryNo}"
-															${category.categoryNo == search.category.categoryNo ? 'selected' : ''}>${category.categoryName }</option>
-													</c:otherwise>
-												</c:choose>
-											</c:forEach>
-									</select>
-									</td>
+									<td>가격</td>
+									<td>카테고리</td>
 
 									<c:choose>
 										<c:when test="${menu == 'manage' }">

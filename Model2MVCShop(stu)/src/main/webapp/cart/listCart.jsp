@@ -49,11 +49,11 @@
 			});
 		});
 		
-		$("#quantityMinus").on("click", function() {
+		$(".quantityMinus").on("click", function() {
 			updateQuantity('minus', $(this).next());
 		});
 
-		$("#quantityPlus").on("click", function() {
+		$(".quantityPlus").on("click", function() {
 			updateQuantity('plus', $(this).prev());
 		});
 		
@@ -178,10 +178,10 @@
 								<tr>
 									<td>¼ö·®</td>
 									<td>
-										<button type="button" id="quantityMinus">¡å</button>
+										<button type="button" class="quantityMinus">¡å</button>
 										<input type="text" id="quantity" name="quantity" value="${cart.quantity }"
 										data-cart-no="${cart.cartNo }" data-prod-no="${cart.product.prodNo }" data-max-quantity="${cart.product.quantity }" />
-										<button type="button" id="quantityPlus">¡ã</button>
+										<button type="button" class="quantityPlus">¡ã</button>
 									</td>
 								</tr>
 

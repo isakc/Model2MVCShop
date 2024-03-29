@@ -104,11 +104,20 @@
 	                 
 	             </ul>
 	             
-	             <c:if test="${user != null }">
-	             	<ul class="nav navbar-nav navbar-right">
-	                	<li><a href="#">로그아웃</a></li>
-	           	 	</ul>
-	            </c:if>
+	             <c:choose>
+	             	<c:when test="${user != null }">
+	             		<ul class="nav navbar-nav navbar-right">
+	                		<li><a href="#">로그아웃</a></li>
+	           	 		</ul>
+	           	 	
+	             	</c:when>
+	             	
+	             	<c:otherwise>
+	             		<ul class="nav navbar-nav navbar-right">
+	                		<li><a href="#">로그인</a></li>
+	                	</ul>
+	             	</c:otherwise>
+	             </c:choose>
 		</div>
 		<!-- dropdown hover END -->	       
 	    
@@ -124,6 +133,12 @@
 				$(self.location).attr("href","/user/logout");
 			}); 
 		 });
+		
+		 $(function() {
+			 $("a:contains('로그인')").on("click" , function() {
+				$(self.location).attr("href","/user/login");
+			}); 
+		});
 		
 		//============= 회원정보조회 Event  처리 =============	
 		 $(function() {
