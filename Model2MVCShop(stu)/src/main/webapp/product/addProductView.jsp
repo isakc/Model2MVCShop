@@ -11,11 +11,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
 	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" >
-	<link href="/css/animate.min.css" rel="stylesheet">
-  	<link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet">
+	<c:import url="../common/link.jsp"/>
   	
 	<script type="text/javascript" src="../javascript/calendar.js"></script>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
@@ -112,173 +108,90 @@
 	<!-- ToolBar Start /////////////////////////////////////-->
 	<jsp:include page="/layout/toolbar.jsp" />
    	<!-- ToolBar End /////////////////////////////////////-->
-
-	<c:choose>
-		<c:when test="">
-		
-		</c:when>
-		
-		<c:otherwise>
-		
-		</c:otherwise>
-	</c:choose>
 	
 	<div class="container">
     	<h1 class="text-center">상품정보를 입력해주세요</h1>
 			<div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
 				<form name="detailForm" class="form-horizontal">
+				
                 	<div class="form-group">
-                	<c:choose>
-                		<c:when test="${result == null }">
-                			<div class="input-group">
-                    			<span class="input-group-addon"><i class="fas fa-tag"></i></span>
-                    			<input type="text" name="prodName" maxLength="20" placeholder="상품명" class="form-control"/>
-    						</div>
-                			
-                		</c:when>
-                		
-                		<c:otherwise>
-                			<div class="input-group">
-                    			<label>상품명</label>
-                    			<input type="text" name="prodName" maxLength="20" placeholder="상품명" class="form-control" value="${result.prodName}"/>
-    						</div>
-                		</c:otherwise>
-                    </c:choose>
+                		<div class="input-group">
+                    		<span class="input-group-addon"><i class="fas fa-tag"></i></span>
+                    		<input type="text" name="prodName" maxLength="20" placeholder="상품명" class="form-control input-lg"/>
+    					</div>
                     </div>
                     
                     <div class="form-group">
-                    <c:choose>
-                		<c:when test="${result == null }">
-                			<div class="input-group">
-                    			<span class="input-group-addon"><i class="fas fa-info-circle"></i></span>
-                    			<textarea class="form-control" rows="3" name="prodDetail" placeholder="상세정보"></textarea>
-    						</div>
-                		</c:when>
-                		
-                		<c:otherwise>
-                			${result.prodDetail}
-                		</c:otherwise>
-                    </c:choose>
+                		<div class="input-group">
+                    		<span class="input-group-addon"><i class="fas fa-info-circle"></i></span>
+                    		<textarea class="form-control input-lg" rows="3" name="prodDetail" placeholder="상세정보"></textarea>
+    					</div>
                     </div>
                     
                     <div class="form-group">
-                    <c:choose>
-                		<c:when test="${result == null }">
-                			<div class="input-group">
-                    			<span class="input-group-addon"><i class="far fa-calendar-alt"></i></span>
-                    			<input type="text" name="manuDate" readonly="readonly" maxLength="10" minLength="6" placeholder="제조 일자" class="form-control"/>
-    						</div>
-                		</c:when>
-                		
-                		<c:otherwise>
-                			${result.manuDate}
-                		</c:otherwise>
-                    </c:choose>
+                		<div class="input-group">
+                    		<span class="input-group-addon"><i class="far fa-calendar-alt"></i></span>
+                    		<input type="text" name="manuDate" readonly="readonly" maxLength="10" minLength="6" placeholder="제조 일자" class="form-control input-lg"/>
+    					</div>
                     </div>
                     
                     <div class="form-group row">
-                    <div class="col-sm-6" style="padding-left:0;">
-                    <c:choose>
-                		<c:when test="${result == null }">
+                    	<div class="col-sm-6" style="padding-left:0;">
                 			<div class="input-group">
                     			<span class="input-group-addon"><i class="fas fa-money-bill-alt"></i></span>
-                    			<input type="text" name="price" maxLength="10" placeholder="가격" class="form-control">
+                    			<input type="text" name="price" maxLength="10" placeholder="가격" class="form-control input-lg">
     						</div>
-                			
-                		</c:when>
-                		
-                		<c:otherwise>
-                			${result.price}
-                		</c:otherwise>
-                    </c:choose>
-                    </div>
+                    	</div>
                     
-                    
-                    <div class="col-sm-6">
-                    <c:choose>
-                		<c:when test="${result == null }">
+                    	<div class="col-sm-6">
                 			<div class="input-group">
                     			<span class="input-group-addon"><i class="fas fa-warehouse"></i></span>
-                    			<input type="text" name="quantity" maxLength="13" placeholder="수량" class="form-control"/>
+                    			<input type="text" name="quantity" maxLength="13" placeholder="수량" class="form-control input-lg"/>
     						</div>
-                		</c:when>
-                		
-                		<c:otherwise>
-                			${result.quantity}
-                		</c:otherwise>
-                    </c:choose>
-                    </div>
+                    	</div>
                     </div>
                     
                     <div class="form-group">
-                    	<c:choose>
-							<c:when test="${result == null }">
-								<select name="categoryNo" class="form-control">
-									<option value="" selected disabled hidden>상품 카테고리 선택</option>
-										<c:forEach var="category" items="${categoryList}">
-											<c:choose>
-												<c:when test="${category.parentCategoryNo == 0 }">
-													<optgroup label="${category.categoryName }">
-												</c:when>
+                    	<select name="categoryNo" class="form-control input-lg">
+							<option value="" selected disabled hidden>상품 카테고리 선택</option>
+								<c:forEach var="category" items="${categoryList}">
+									<c:choose>
+										<c:when test="${category.parentCategoryNo == 0 }">
+											<optgroup label="${category.categoryName }">
+										</c:when>
 
-												<c:otherwise>
-													<option align="center" value="${category.categoryNo}">${category.categoryName }</option>
-												</c:otherwise>
-											</c:choose>
-											</optgroup>
-										</c:forEach>
-								</select>
-						</c:when>
-
-						<c:otherwise>
-							<td>${result.category.categoryName}</td>
-						</c:otherwise>
-						</c:choose>
+										<c:otherwise>
+											<option align="center" value="${category.categoryNo}">${category.categoryName }</option>
+										</c:otherwise>
+									</c:choose>
+									</optgroup>
+								</c:forEach>
+						</select>
                     </div>
                     
                     <div class="form-group">
-                    <c:choose>
-                		<c:when test="${result == null }">
-                				<div class="col-sm-7">
-                					<div class="input-group">
-                						<label>
-                							<i class="fas fa-image" style="font-size: 90px;"></i>
-                          					<input type="file" multiple="multiple" name="uploads" accept="image/*" style="display:none"/>
-                      					</label>
-                					</div>
-    							</div>
-                		</c:when>
-                		
-                		<c:otherwise>
-                			<c:forEach var="fileName" items="${result.fileNames }">
-								<img src="/images/uploadFiles/${fileName}"/>
-							</c:forEach>
-                		</c:otherwise>
-                    </c:choose>
+                    	<div class="col-sm-7">
+                			<div class="input-group">
+                				<label>
+                					<i class="fas fa-image" style="font-size: 90px;"></i>
+                          			<input type="file" multiple="multiple" name="uploads" accept="image/*" style="display:none"/>
+                      			</label>
+                			</div>
+    					</div>
                     </div>
                     
-                    <div class="form-group" id="preview">
-                    </div>
+                    <div class="form-group" id="preview"></div>
                     
 				</form>
                 </div><!-- col-sm-6 -->
 			</div><!-- row end -->
 			
-			<c:choose>
-				<c:when test="${result==null }">
-					<div class="container text-center">
-						<button type="button" class="btn btn-primary">등록</button>
-						<button type="button" class="btn btn-default">리셋</button>
-					</div>
-				</c:when>
-				
-				<c:otherwise>
-					<div class="container text-center">
-						<button type="button" class="btn btn-primary">추가등록</button>
-					</div>
-				</c:otherwise>
-			</c:choose>
+		<div class="container text-center">
+			<button type="button" class="btn btn-primary">등록</button>
+			<button type="button" class="btn btn-default">리셋</button>
+		</div>
 	</div>
+	
 </body>
 </html>

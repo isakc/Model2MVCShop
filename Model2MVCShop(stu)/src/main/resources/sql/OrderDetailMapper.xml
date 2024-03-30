@@ -26,9 +26,17 @@
 	 	WHERE tran_no = #{tranNo}
 	 </select>
 	 
-	 	 <select id="findProductListByProdNo" parameterType="int" resultMap="orderDetailSelectMap">
+	 <select id="findProductListByProdNo" parameterType="int" resultMap="orderDetailSelectMap">
 	 	SELECT *
 	 	FROM orderdetails
 	 	WHERE prod_no = #{prodNo}
 	 </select>
+	 
+	 <select id="findQuantity" resultMap="orderDetailSelectMap">
+	 	SELECT prod_no, SUM(quantity) AS total_sales
+		FROM orderDetail
+		GROUP BY prod_no
+		ORDER BY total_sales DESC;
+	 </select>
+	
 </mapper>

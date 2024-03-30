@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=euc-kr" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <html lang="ko">
 
@@ -9,11 +10,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
 	<!--  ///////////////////////// Bootstrap, jQuery CDN ////////////////////////// -->
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"/>
-	<link href="/css/animate.min.css" rel="stylesheet"/>
-  	<link href="/css/bootstrap-dropdownhover.min.css" rel="stylesheet"/>
+	<c:import url="../common/link.jsp"/>
   	
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -23,6 +20,10 @@
 	<style>
         body {
             padding-top : 70px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
         }
    	</style>
 
@@ -119,10 +120,10 @@
 		ssn = $("input[name='ssn']").val();
 		// 유효한 주민번호 형식인 경우만 나이 계산 진행, PortalJuminCheck 함수는 CommonScript.js 의 공통 주민번호 체크 함수임 
 		if (!PortalJuminCheck(ssn)) {
-			$("input[name='ssn']").next().css("color", "red").text("잘못된 주민번호입니다.");
+			$("input[name='ssn']").parent().next().css("color", "red").text("잘못된 주민번호입니다.");
 			return false;
 		}else{
-			$("input[name='ssn']").next().text("");
+			$("input[name='ssn']").parent().next().text("");
 			return true;
 		}
 	}
@@ -159,17 +160,18 @@
 					"Accept" : "application/json",
 					"Content-Type" : "application/json"
 					},
-					dataType : "json",
-					success : function(JSONData , status) {
-						var flag = JSONData.result;
+				dataType : "json",
+				success : function(JSONData , status) {
+					
+				var flag = JSONData.result;
 						
-						if(flag){
-							$("input[name='userId']").next().css("color", "blue").text(JSONData.userId+ "는 사용 가능합니다");
-						}else{
-							$("input[name='userId']").next().css("color","red").text(JSONData.userId+ "는 사용 불가능합니다.");
-						}
+				if(flag){
+					$("input[name='userId']").parent().next().css("color", "blue").text(JSONData.userId+ "는 사용 가능합니다");
+				}else{
+					$("input[name='userId']").parent().next().css("color","red").text(JSONData.userId+ "는 사용 불가능합니다.");
 					}
-			});
+				}
+		});
 	}
 </script>
 </head>
@@ -181,40 +183,59 @@
    	<!-- ToolBar End /////////////////////////////////////-->
 
 	<div class="container">
-    <h1 class="text-center">회원정보를 입력해주세요</h1>
-        <form class="form-horizontal">
+    	<h1 class="text-center">회원정보를 입력해주세요</h1>
             <div class="row">
                 <div class="col-sm-6 col-sm-offset-3">
+       			<form class="form-horizontal">
                 
                     <div class="form-group">
-                        <input type="text" name="userId" maxLength="20" placeholder="아이디" class="form-control" />
-                        <span>아이디를 입력해주세요</span>
+                    	<div class="input-group">
+                    		<span class="input-group-addon"><i class="fa fa-user"></i></span>
+                    		<input type="text" name="userId" maxLength="20" placeholder="아이디" class="form-control input-lg"/>
+    					</div>
+    					<span></span>
                     </div>
                     
                     <div class="form-group">
-                        <input type="password" name="password" maxLength="10" placeholder="비밀번호" class="form-control" />
+                    	<div class="input-group">
+                    		<span class="input-group-addon"><i class="fa fa-key"></i></span>
+                    		<input type="password" name="password" maxLength="10" placeholder="비밀번호" class="form-control input-lg" />
+    					</div>
+                        
                     </div>
                     
                     <div class="form-group">
-                        <input type="password" name="password2" maxLength="10" placeholder="비밀번호 확인" class="form-control" />
+                    	<div class="input-group">
+                    		<span class="input-group-addon"><i class="fa fa-check"></i></span>
+                    		<input type="password" name="password2" maxLength="10" placeholder="비밀번호 확인" class="form-control input-lg" />
+    					</div>
                     </div>
                     
                     <div class="form-group">
-                        <input type="text" name="userName" maxLength="50" placeholder="이름" class="form-control" />
+                    	<div class="input-group">
+                    		<span class="input-group-addon"><i class="fa fa-user-circle"></i></span>
+                    		<input type="text" name="userName" maxLength="50" placeholder="이름" class="form-control input-lg" />
+    					</div>
                     </div>
                     
                     <div class="form-group">
-                        <input type="text" name="ssn" maxLength="13" placeholder="주민번호" class="form-control" />
+                    	<div class="input-group">
+                    		<span class="input-group-addon"><i class="fa fa-id-card"></i></span>
+                    		<input type="text" name="ssn" maxLength="13" placeholder="주민번호" class="form-control input-lg" />
+    					</div>
                         <span>-제외, 13자리 입력</span>
                     </div>
                     
                     <div class="form-group">
-                        <input type="text" name="addr" id="addr" maxLength="100" placeholder="주소" class="form-control" />
+                    	<div class="input-group">
+                    		<span class="input-group-addon"><i class="fa fa-home"></i></span>
+                    		 <input type="text" name="addr" id="addr" maxLength="100" placeholder="주소" class="form-control input-lg" />
+    					</div>
                     </div>
                     
                     <div class="form-group row">
                     	<div class="col-sm-4">
-                    		<select name="phone1" class="form-control">
+                    		<select name="phone1" class="form-control input-lg">
                             	<option value="010">010</option>
                             	<option value="011">011</option>
                             	<option value="016">016</option>
@@ -224,27 +245,36 @@
                     	</div>
                         
                         <div class="col-sm-4">
-                        	<input type="text" name="phone2" maxLength="4" placeholder="전화번호" class="form-control" />
+                        	<div class="input-group">
+                    			<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                    		 	<input type="text" name="phone2" maxLength="4" placeholder="전화번호" class="form-control input-lg" />
+    						</div>
                         </div>
                         
                         <div class="col-sm-4">
-                        	<input type="text" name="phone3" maxLength="4" placeholder="전화번호" class="form-control" />
+                        	<div class="input-group">
+                    			<span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                    		 	<input type="text" name="phone3" maxLength="4" placeholder="전화번호" class="form-control input-lg" />
+    						</div>
                         </div>
                         
                         <input type="hidden" name="phone">
                     </div>
                     
                     <div class="form-group">
-                        <input type="text" name="email" maxLength="50" placeholder="이메일" class="form-control" />
+                    	<div class="input-group">
+                    		<span class="input-group-addon"><i class="fa fa-at"></i></span>
+                    		<input type="text" name="email" maxLength="50" placeholder="이메일" class="form-control input-lg" />
+    					</div>
                     </div>
                     
+        			</form>
                     <div class="form-group text-center">
                         <button type="button" class="btn btn-default">가입하기</button>
                         <button type="button" class="btn btn-primary">취소</button>
                     </div>
                 </div>
             </div>
-        </form>
 </div>
 
 </body>
