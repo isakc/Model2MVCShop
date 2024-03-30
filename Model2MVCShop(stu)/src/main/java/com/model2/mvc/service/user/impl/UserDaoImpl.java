@@ -29,7 +29,7 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	public User findUser(String userId) throws Exception {
-		return sqlSession.selectOne("UserMapper.getUser", userId);
+		return sqlSession.selectOne("UserMapper.findUser", userId);
 	}
 	
 	public int getTotalCount(Search search) throws Exception {

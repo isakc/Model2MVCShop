@@ -59,7 +59,7 @@
 			
 			<tr>
 				<td>ÁÖ¼Ò</td>
-				<td>${user.addr }</td>
+				<td>${user.addr1 } ${user.addr2 } ${user.addr3 }</td>
 			</tr>
 			
 			<tr>

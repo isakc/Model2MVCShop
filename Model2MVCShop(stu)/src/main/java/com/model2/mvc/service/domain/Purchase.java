@@ -31,7 +31,7 @@ public class Purchase {
 	}
 
 	public void setDivyAddr(String divyAddr) {
-		this.divyAddr = divyAddr;
+		this.divyAddr = divyAddr.replace("/", "");
 	}
 
 	public String getDivyDate() {
@@ -66,12 +66,6 @@ public class Purchase {
 		this.paymentOption = paymentOption.trim();
 	}
 
-//	public Product getPurchaseProd() {
-//		return purchaseProd;
-//	}
-//	public void setPurchaseProd(Product purchaseProd) {
-//		this.purchaseProd = purchaseProd;
-//	}
 	public String getReceiverName() {
 		return receiverName;
 	}
