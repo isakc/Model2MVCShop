@@ -173,6 +173,7 @@
       								</div>
       							</div>
       						
+      							<c:if test="${product.quantity != 0 }">
       							<div class="col-md-3">
       								<button type="button" class="btn btn-default">장바구니 담기</button>
       							</div>
@@ -180,6 +181,7 @@
       							<div class="col-md-2">
       								<button type="button" class="btn btn-primary">바로구매<span class="glyphicon glyphicon-chevron-right"></span></button>
       							</div>
+      							</c:if>
       						</div><!-- 중첩 그리드 -->
       					</c:if>
       					

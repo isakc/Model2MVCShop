@@ -98,6 +98,10 @@
 			$("form").attr("method", "POST").attr("action", "/product/listProduct/${menu }").submit();
 		});
 		
+		$(".horizontal-list-group li:nth-child(4)").on("click", function () {
+			self.location = "/product/listProduct/search";
+		});
+		
 		$("select[name=categoryNo]").on("change", function () {
 			$("#currentPage").val(1);
 			$('input[name="searchCondition"]').val("");
@@ -235,6 +239,7 @@
 						<li class="list-group-item">낮은 가격순</li>
 						<li class="list-group-item">높은 가격순</li>
 						<li class="list-group-item">최신순</li>
+						<li class="list-group-item">초기화</li>
 					</ul>
 				</div>
 			
