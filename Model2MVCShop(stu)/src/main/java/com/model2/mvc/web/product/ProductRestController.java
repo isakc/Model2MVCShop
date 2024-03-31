@@ -93,7 +93,7 @@ public class ProductRestController {
 			     upload.transferTo(destFile);
 			 }
 
-			productService.addProduct(product, fileNames, categoryNo);
+			productService.addProduct(product, fileNames);
 			
 			map.put("message", "ok");
 		}catch (Exception e) {
@@ -201,26 +201,28 @@ public class ProductRestController {
 	}
 
 	@PostMapping("json/updateProduct")
-	public Map<String, Object> updateProduct(@RequestPart MultipartFile upload, @RequestPart Product product,
+	public Map<String, Object> updateProduct(@RequestPart List<MultipartFile> uploads, @RequestPart Product product,
 											@RequestParam int categoryNo, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/json/updateProduct : POST");
 		
 		Map<String, Object> map = new HashMap<String, Object>();
 		try {
-			String root = request.getServletContext().getRealPath("/images/uploadFiles")+File.separator;
-			UUID uuid = UUID.randomUUID();
-			String fileName = uuid+"_"+upload.getOriginalFilename();
-			File destFile = new File(root + fileName);
-			upload.transferTo(destFile);
-			//product.setFileName(fileName);
+			List<String> fileNames = new ArrayList<String>();
+			
+			 for (MultipartFile upload : uploads) {
+				 String fileName = UUID.randomUUID()+"_"+upload.getOriginalFilename();
+				 fileNames.add(fileName);
+			     File destFile = new File(request.getServletContext().getRealPath("/images/uploadFiles")+File.separator + fileName);
+			     upload.transferTo(destFile);
+			 }
 			
 			if(product.getManuDate() != null) {
 				product.setManuDate(product.getManuDate().replace("-", ""));
 			}
 			product.setCategory(categoryService.findCategory(categoryNo));
 			
-			productService.updateProduct(product);
+			productService.updateProduct(product, fileNames);
 			
 			map.put("message", "ok");
 		}catch (Exception e) {

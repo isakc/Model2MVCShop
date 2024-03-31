@@ -38,13 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
 	///Method
 	@Override
-	public void addProduct(Product product, List<String> fileNames, int categoryNo) throws Exception {
-		product.setManuDate(product.getManuDate().replace("-", ""));
-		
-		Category category = new Category();
-		category.setCategoryNo(categoryNo);
-		product.setCategory(category);
-		
+	public void addProduct(Product product, List<String> fileNames) throws Exception {
 		productDao.addProduct(product);
 		
 		for(int i=0; i<fileNames.size(); i++) {
@@ -128,13 +122,27 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void updateProduct(Product product) throws Exception {
+	public void updateProduct(Product product, List<String> fileNames) throws Exception {
 		productDao.updateProduct(product);
+		
+		deleteProductImage(product.getProdNo());
+		
+		for(int i=0; i<fileNames.size(); i++) {
+			ProductImage image = new ProductImage();
+			image.setFileName(fileNames.get(i));
+			image.setProdNo(product.getProdNo());
+			productDao.addProductImage(image);
+		}
 	}
 
 	@Override
 	public void updateQuantity(int prodNo, int quantity) throws Exception {
 		productDao.updateProductQuantity(prodNo, quantity);
+	}
+	
+	@Override
+	public void deleteProductImage(int prodNo) throws Exception {
+		productDao.deleteProductImage(prodNo);
 	}
 
 	@Override

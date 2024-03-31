@@ -11,7 +11,7 @@ import com.model2.mvc.service.domain.Product;
 public interface ProductService {
 	
 	//insert
-	public void addProduct(Product product, List<String> fileNames, int categoryNo) throws Exception;
+	public void addProduct(Product product, List<String> fileNames) throws Exception;
 	
 	//selectOne
 	public Product findProduct(int prodNo) throws Exception;
@@ -22,9 +22,12 @@ public interface ProductService {
 	public Map<String, Object> getProductList(Search search) throws Exception;
 	
 	//update
-	public void updateProduct(Product product) throws Exception;
+	public void updateProduct(Product product, List<String> fileNames) throws Exception;
 	
 	public void updateQuantity(int prodNo, int quantity) throws Exception;
+	
+	//delete
+	public void deleteProductImage(int prodNo) throws Exception;
 	
 	//etc
 	public List<Product> getRecentProduct(HttpServletRequest request) throws Exception;

@@ -45,7 +45,7 @@
    		</mvc:interceptor>
 
    		<mvc:interceptor>
-			<mvc:mapping path="/product/getProduct/**/*"/>
+			<mvc:mapping path="/product/getProduct/*/search"/>
 			<bean class="com.model2.mvc.common.web.CookieSettingInterceptor" />
    		</mvc:interceptor>
    	</mvc:interceptors>

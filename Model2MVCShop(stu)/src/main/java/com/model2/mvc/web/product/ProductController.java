@@ -71,6 +71,11 @@ public class ProductController {
 			List<MultipartFile> uploads, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/addProduct : POST");
+
+		product.setManuDate(product.getManuDate().replace("-", ""));
+		Category category = new Category();
+		category.setCategoryNo(categoryNo);
+		product.setCategory(category);
 		
 		List<String> fileNames = new ArrayList<String>();
 		
@@ -81,7 +86,7 @@ public class ProductController {
 		     upload.transferTo(destFile);
 		 }
 
-		productService.addProduct(product, fileNames, categoryNo);
+		productService.addProduct(product, fileNames);
 		
 		return "redirect:/product/getProduct/"+product.getProdNo()+"/search";
 	}
@@ -164,7 +169,7 @@ public class ProductController {
 		product.setManuDate(product.getManuDate().replace("-", ""));
 		product.setCategory(categoryService.findCategory(categoryNo));
 
-		productService.updateProduct(product);
+		productService.updateProduct(product, fileNames);
 
 		return "redirect:/product/getProduct/+" + product.getProdNo() + "/search";
 	}

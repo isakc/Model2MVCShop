@@ -81,4 +81,9 @@ public class ProductDaoImpl implements ProductDao {
 		
 		sqlSession.update("ProductMapper.updateProductQuantity", map);
 	}
+
+	@Override
+	public void deleteProductImage(int prodNo) throws Exception {
+		sqlSession.delete("ProductImageMapper.deleteProductImage", prodNo);
+	}
 }

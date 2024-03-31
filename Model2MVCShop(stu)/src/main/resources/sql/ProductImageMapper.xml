@@ -22,4 +22,9 @@
 		FROM ProductImages
 		WHERE prod_no=#{prodNo}
 	 </select>
+	 
+	 <delete id="deleteProductImage" parameterType="int">
+	 	DELETE productImages
+	 	WHERE prod_no = #{prodNo}
+	 </delete>
 </mapper>

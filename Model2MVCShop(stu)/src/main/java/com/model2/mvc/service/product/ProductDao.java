@@ -29,4 +29,7 @@ public interface ProductDao {
 	public void updateProduct(Product product) throws Exception ;
 
 	public void updateProductQuantity(int prodNo, int quantity) throws Exception ;
+	
+	//delete
+	public void deleteProductImage(int prodNo) throws Exception ;
 }

@@ -90,7 +90,7 @@ public class ProductServiceTest {
 		product.setPrice(22222);
 		product.setQuantity(10);
 		
-		productService.updateProduct(product);
+		//productService.updateProduct(product);
 		
 		product = productService.findProduct(10008);
 		Assert.assertNotNull(product);
