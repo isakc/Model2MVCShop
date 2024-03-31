@@ -103,7 +103,7 @@
 					+"이  름 : "+JSONData.user.userName+"<br/>"
 					+"이메일 : "+JSONData.user.email+"<br/>"
 					+"ROLE : "+JSONData.user.role+"<br/>"
-					+"등록일 : "+JSONData.user.regDateString+"<br/>"
+					+"등록일 : "+JSONData.user.regDate+"<br/>"
 					+"</h3>";
 					
 					$("h3").parent().remove();

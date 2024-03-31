@@ -5,7 +5,7 @@
 <html lang="ko">
 
 <head>
-	<title>회원정보조회</title>
+	<title>카테고리추가</title>
 
 	<meta charset="EUC-KR">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />

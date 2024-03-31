@@ -2,6 +2,8 @@ package com.model2.mvc.service.domain;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class User {
 	
 	private String userId;
@@ -12,6 +14,7 @@ public class User {
 	private String phone;
 	private String addr;
 	private String email;
+	@JsonFormat(pattern="yyyy-MM-dd")
 	private Date regDate;
 	/////////////// EL 적용 위해 추가된 Field ///////////
 	private String phone1;
@@ -90,7 +93,9 @@ public class User {
 		if(addr != null && addr.length() !=0 && addr.split("/").length > 1){
 			addr1 = addr.split("/")[0];
 			addr2 = addr.split("/")[1];
-			addr3 = addr.split("/")[2];
+			if(addr.split("/").length == 3) {
+				addr3 = addr.split("/")[2];
+			}
 		}
 	}
 

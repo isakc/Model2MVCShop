@@ -3,7 +3,6 @@ package com.model2.mvc.service.product;
 import java.util.List;
 
 import com.model2.mvc.common.Search;
-import com.model2.mvc.service.domain.Category;
 import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.domain.ProductImage;
 

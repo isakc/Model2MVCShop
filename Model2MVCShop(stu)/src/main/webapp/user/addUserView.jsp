@@ -113,14 +113,6 @@
 			}
 		})
 		
-		$("input[name = 'ssn']").on("change", function () {
-			if ($("input[name='ssn']").val() != null && $("input[name='ssn']").val().length > 0) {
-				checkSsn();
-			}else{
-				$("input[name='ssn']").next().css("color", "black").text("-제외, 13자리 입력");
-			}
-		});
-		
 		$("button[type='button']:contains('주소검색')").on("click", function () {
 			getAddress();
 		});
@@ -174,7 +166,7 @@
 				data: userId,
 				headers : {
 					"Accept" : "application/json",
-					"Content-Type" : "application/json"
+					"Content-Type" : "application/json; charset=utf-8"
 					},
 				dataType : "json",
 				success : function(JSONData , status) {
@@ -251,7 +243,7 @@
                     	</div>
                     	
                     	<div class="col-sm-5">
-                    		<button type="button" class="btn btn-secondary btn-lg">주소검색</button>
+                    		<button type="button" class="btn btn-info btn-lg">주소검색</button>
                     	</div>
     					
     					<div class="col-sm-7">

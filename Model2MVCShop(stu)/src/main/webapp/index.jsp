@@ -7,6 +7,7 @@
  
 <html>
 <head>
+	<title>MEET PLAY SHARE</title>
 	<!-- 참조 : http://getbootstrap.com/css/   -->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	
@@ -128,9 +129,6 @@
 						  <li class="list-group-item">
 						  	<a href="#">구매이력조회</a> <span class="glyphicon glyphicon-ban-circle"></span>
 						  </li>
-						 <li class="list-group-item">
-						 	<a href="#">최근본상품</a> <span class="glyphicon glyphicon-ban-circle"></span>
-						 </li>
 					</ul>
 				</div>
 				
