@@ -65,8 +65,8 @@ public class ProductServiceImpl implements ProductService {
 		List<ProductImage> images = productDao.getProductImageList(prodNo);
 		List<String> fileNames = new ArrayList<String>();
 				
-		for(int i=0; i<images.size(); i++) {
-			fileNames.add(images.get(i).getFileName());
+		for(ProductImage image: images) {
+			fileNames.add(image.getFileName());
 		}
 		
 		product.setFileNames(fileNames);
@@ -153,8 +153,10 @@ public class ProductServiceImpl implements ProductService {
 			}
 		}
 		
-		for(String prodNo : history.split("/")) {
-			recentProductList.add(findProduct(Integer.parseInt(prodNo)));
+		if(history != null) {
+			for(String prodNo : history.split("/")) {
+				recentProductList.add(findProduct(Integer.parseInt(prodNo)));
+			}
 		}
 		
 		return recentProductList;

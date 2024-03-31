@@ -30,7 +30,7 @@
    	 	}
    	 	
    	 	.card {
-    		height: 330px;
+    		height: 335px;
     		margin-top: 25px;
     		border-bottom: 3px solid #424242;
   		}
@@ -50,7 +50,7 @@
     	}
 
     	.horizontal-list-group .list-group-item {
-        	margin-bottom: 0;
+        	margin-bottom: 80;
 		}
 		
 		.horizontal-list-group .list-group-item:hover {
@@ -124,50 +124,67 @@
 				$("input[name=searchKeyword2]").remove();
 			}
 		});
-		
-		//현재 스크롤 위치 저장
-		let lastScroll = 0;
 
 		//데이터 가져오는 함수
 		function getData(){
 			//다음페이지
-
+			var data = {
+					searchCondition: $("select[name=searchCondition]").val(),
+					searchKeyword: $("input[name=searchKeyword]").val(),
+					searchKeyword2: $("input[name=searchKeyword2]").val(),
+					sorter: $("input[name=sorter]").val(),
+					currentPage: parseInt($("input[name=currentPage]").val())+1,
+					pageSize: 6,
+					category: {categoryNo: $("select[name=categoryNo]").val()}
+			}
+			
 			$.ajax({
-				url: "json/listUser",
+				url: "/product/json/listProduct/search",
 				type: "POST",
 				headers: {
 					"Accept": "application/json",
 					"Content-Type": "application/json"
 				},
-				data: JSON.stringify({
-					searchCondition: $("select[name=searchCondition]").val(),
-					searchKeyword: $("input[name=searchKeyword]").val(),
-					pageSize: 10
-				}),
-				
+				data: JSON.stringify(data),
 				success: function(data){
-					console.log(data);
+					$("#currentPage").val(data.resultPage.now);
+					var productList = data.list; // 받아온 상품 목록 데이터
+				    var container = $(".col-md-11"); // 상품 목록을 추가할 컨테이너 요소 선택
+				    
+				    productList.forEach(function(product) {
+				    	var card =
+				            "<div class='col-md-4'>"
+				           +"<a href=/product/getProduct/"+product.prodNo+"/search class=product-link data-prod-no="+product.prodNo+">"
+				                +"<div class='card text-center fixed-height'>"
+				                    +"<img src='/images/uploadFiles/"+product.fileNames[0] +"'class=card-img-top/>"
+				                    +"<div class='card-body'>"
+				                        +"<h5 class='card-title'>"+product.prodName+"</h5>"
+				                        +"<p class='card-text'>"+product.price+"</p>"
+				                        +"<p class='card-text'>"+product.quantity+" 개 남음</p>"
+				                    +"</div></div></a></div>";
+				        container.append(card); // 컨테이너에 상품 카드 추가
+				    });
 				}
 			});
 		}
 
+		let lastScroll = 0; //현재 스크롤 위치 저장
+		
 		$(document).scroll(function(e){
-		    //현재 높이 저장
-		    var currentScroll = $(this).scrollTop();
-		    //전체 문서의 높이
-		    var documentHeight = $(document).height();
-
-		    //(현재 화면상단 + 현재 화면 높이)
-		    var nowHeight = $(this).scrollTop() + $(window).height();
-
-		    //스크롤이 아래로 내려갔을때만 해당 이벤트 진행.
-		    if(currentScroll > lastScroll){
+		    var currentScroll = $(this).scrollTop(); //현재높이
+		    var documentHeight = $(document).height();//전체 문서의 높이
+		    
+		    var nowHeight = $(this).scrollTop() + $(window).height();//(현재 화면상단 + 현재 화면 높이)
+		    
+		    if(currentScroll > lastScroll){//스크롤이 아래로 내려갔을때만 해당 이벤트 진행.
 
 		        //nowHeight을 통해 현재 화면의 끝이 어디까지 내려왔는지 파악가능 
 		        //즉 전체 문서의 높이에 일정량 근접했을때 글 더 불러오기)
 		        if(documentHeight < (nowHeight + (documentHeight*0.1))){
 		        	//함수콜
-				getData(50);
+		        	if(${resultPage.totalPage} > $("#currentPage").val()){
+						getData();
+		        	}
 		        }
 		    }
 
@@ -264,7 +281,7 @@
                         					<p class="card-text">${product.quantity} 개 남음</p>
                     					</div>
                 				</div>
-                    				</a>
+                    			</a>
             				</div>
        		 			</c:forEach>
        		 			</div>
@@ -368,7 +385,7 @@
 			<div class="text-center">
 				<input type="hidden" id="currentPage" name="currentPage" value="${resultPage.now }" />
 				<input type="hidden" id="sorter" name="sorter" value="${search.sorter }" />
-				<jsp:include page="../common/pageNavigator.jsp"/>
+				<%-- <jsp:include page="../common/pageNavigator.jsp"/> --%>
 			</div>
 			
 		</div>

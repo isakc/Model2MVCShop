@@ -148,38 +148,21 @@ public class ProductRestController {
 	}
 
 	@RequestMapping("json/listProduct/{menu}")
-	public Map<String, Object> getListProduct(@RequestBody Search search,
-			@PathVariable("menu") String menu,
-			@RequestParam(value = "searchKeyword2", defaultValue = "") String searchKeyword2,
-			@RequestParam(value = "sorter", defaultValue = "") String sorter,
-			@RequestParam(value = "preSearchCondition", defaultValue = "") String preSearchCondition,
-			@RequestParam(value = "preSearchKeyword", defaultValue = "") String preSearchKeyword,
-			@RequestParam(value = "categoryNo", defaultValue = "-1") int categoryNo) throws Exception {
+	public Map<String, Object> getListProduct(@RequestBody Search search, @PathVariable("menu") String menu) throws Exception {
 
 		System.out.println("/product/json/listProduct GET/POST");
-
-		if (search.getSearchCondition() != null && search.getSearchCondition().equals("2")) {
-			search.setSearchKeyword(search.getSearchKeyword() + "-" + searchKeyword2);
-		}
 
 		if (search.getCurrentPage() == 0) {
 			search.setCurrentPage(1);
 		}
 
-		if (search.getSearchCondition() == null) {
-			search.setSearchCondition("");
-		}
-
-		if (search.getSearchKeyword() == null) {
-			search.setSearchKeyword("");
-		}
-
 		search.setPageSize(pageSize);
+		Category category = categoryService.findCategory(search.getCategory().getCategoryNo());
+		search.setCategory(category);
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		try {
-			Category category = categoryService.findCategory(categoryNo);
 			HashMap<String, Object> resultMap = (HashMap<String, Object>) productService.getProductList(search);
 			int total = ((Integer) resultMap.get("totalCount")).intValue();
 			Paginate resultPage = new Paginate(search.getCurrentPage(), total, pageUnit, pageSize);
@@ -189,15 +172,7 @@ public class ProductRestController {
 			map.put("resultPage", resultPage);
 			map.put("list", resultMap.get("list"));
 			map.put("search", search);
-			map.put("sorter", sorter);
 			map.put("categoryList", categoryService.getCategoryList().get("list"));
-			map.put("selectedCategoryNo", categoryNo);
-			
-			if (search.getSearchCondition() != null && search.getSearchCondition().equals("2")) {
-				map.put("searchPrice", search.getSearchKeyword().substring(0, search.getSearchKeyword().indexOf("-")));
-				map.put("searchPrice2", searchKeyword2);
-			}
-			
 		}catch (Exception e) {
 			map.put("message", "fail");
 		}

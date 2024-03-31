@@ -118,7 +118,6 @@ public class ProductController {
 		
 		HashMap<String, Object> resultMap = (HashMap<String, Object>) productService.getProductList(search);
 		Paginate resultPage = new Paginate(search.getCurrentPage(), ((Integer) resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
-		
 		List<Product> history = productService.getRecentProduct(request);
 		
 		model.addAttribute("menu", menu);
