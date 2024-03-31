@@ -8,7 +8,7 @@
 
 </head>
 <body>
-	당신이 열어본 상품을 알고 있다
+	<%-- 당신이 열어본 상품을 알고 있다
 <br>
 <br>
 <%
@@ -35,7 +35,17 @@
 			}
 		}
 	}
-%>
+%> --%>
 
+<h1>최근 본 상품</h1>
+    <c:if test="${not empty cookie.history}">
+        <ul>
+            <c:forEach var="productId" items="${cookie.history.value.split('/')}">
+                <li>${productId}</li>
+            </c:forEach>
+        </ul>
+    </c:if>
+    
+    
 </body>
 </html>

@@ -44,6 +44,10 @@
 			<bean class="com.model2.mvc.common.web.LogonCheckInterceptor" />
    		</mvc:interceptor>
 
+   		<mvc:interceptor>
+			<mvc:mapping path="/product/getProduct/**/*"/>
+			<bean class="com.model2.mvc.common.web.CookieSettingInterceptor" />
+   		</mvc:interceptor>
    	</mvc:interceptors>
    	<!-- :: 본실습에서는 주석처리 : 추후 PJT 시 RestFul 고려 LogonCheckInterceptor 조건 추가할것 -->
    	
@@ -53,11 +57,17 @@
 	 <bean
 	 class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
 	 	<property name="order" value="0"></property>
-	 	<property name="interceptors" ref="logonCheckInterceptor"/>
+	 	<property name="interceptors">
+	 		<list>
+	 			<ref bean="logonCheckInterceptor"/>
+	 			<ref bean="CookieSettingInterceptor"/>
+	 		</list>
+	 	</property>
 	 </bean>
 	 
 	 <!-- :: Interceptor 선언 : 로그인 유무확인 -->
 	 <bean id="logonCheckInterceptor" class="com.model2.mvc.common.web.LogonCheckInterceptor"/>
+	 <bean id="CookieSettingInterceptor" class="com.model2.mvc.common.web.CookieSettingInterceptor"/>
 	 <!-- ////////////////////////////////////////////////////////////////////////// -->
 
 	<!--  :: ViewResolver 선언 -->	

@@ -30,7 +30,7 @@
    	 	}
    	 	
    	 	.card {
-    		height: 350px;
+    		height: 330px;
     		margin-top: 25px;
     		border-bottom: 3px solid #424242;
   		}
@@ -251,6 +251,8 @@
 			<c:when test="${menu == 'search' }">
 				<div class="container">
     				<div class="row">
+    					<div class="col-md-11">
+    					
        		 			<c:forEach var="product" items="${list}">
             				<div class="col-md-4">
                 				<a href="" data-prod-no="${product.prodNo }" class="product-link">
@@ -265,8 +267,34 @@
                     				</a>
             				</div>
        		 			</c:forEach>
+       		 			</div>
+       		 			
+       		 			<div class="col-md-1">
+       		 			<!-- 최근 본 상품 목록을 표시할 사이드바 또는 푸터 영역 -->
+							<div class="container">
+								<div class="row">
+									<div class="col-md-3">
+									<!-- 최근 본 상품 목록 제목 -->
+									<h4>최근 본 상품</h4>
+									<ul class="list-group">
+									<!-- 최근 본 상품 목록 -->
+										<c:forEach var="recentProduct" items="${history}">
+										<li class="list-group-item">
+											<a href="/product/getProduct/${recentProduct.prodNo}/${menu}">
+												<img src="/images/uploadFiles/${recentProduct.fileNames[0]}" alt="${recentProduct.prodName}" style="max-width: 50px; max-height: 50px;">
+												${recentProduct.prodName}
+                        					</a>
+                    					</li>
+                    					</c:forEach>
+                    				</ul>
+                    				</div>
+                    			</div>
+                    		</div>
+       		 			</div>
+       		 			
     				</div><!-- row end -->
 				</div><!-- list Container container end -->
+			
 			</c:when>
 				
 			<c:otherwise>
@@ -333,6 +361,7 @@
 						</div><!-- manage Container end -->
 			</c:otherwise>
 		</c:choose>
+		
 			<!-- 페이지 Navigator -->
 			
 		<div class="container">

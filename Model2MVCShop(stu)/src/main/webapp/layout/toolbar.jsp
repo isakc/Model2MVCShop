@@ -74,7 +74,6 @@
 	                           <li><a href="#">구매이력조회</a></li>
 	                         </c:if>
 	                         
-	                         <li><a href="#">최근본상품</a></li>
 	                     </ul>
 	                 </li>
 	                 
@@ -114,6 +113,7 @@
 	             	
 	             	<c:otherwise>
 	             		<ul class="nav navbar-nav navbar-right">
+	                		<li><a href="#">회원가입</a></li>
 	                		<li><a href="#">로그인</a></li>
 	                	</ul>
 	             	</c:otherwise>
@@ -137,6 +137,12 @@
 		 $(function() {
 			 $("a:contains('로그인')").on("click" , function() {
 				$(self.location).attr("href","/user/login");
+			}); 
+		});
+		 
+		 $(function() {
+			 $("a:contains('회원가입')").on("click" , function() {
+				$(self.location).attr("href","/user/addUser");
 			}); 
 		});
 		
@@ -168,10 +174,6 @@
 	 	
 	 	$( "a:contains('구매이력조회')" ).on("click" , function() {
 			$(self.location).attr("href","/purchase/listPurchase");
-		});
-	 	
-	 	$( "a:contains('최근 본 상품')" ).on("click" , function() {
-			$(self.location).attr("href","/product/listProduct/manage");
 		});
 	 	
 	 	$( "a:contains('카테고리등록')" ).on("click" , function() {

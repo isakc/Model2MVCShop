@@ -6,9 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -89,38 +87,13 @@ public class ProductController {
 	}
 
 	@GetMapping("getProduct/{prodNo}/{menu}")
-	public String getProduct(@PathVariable("prodNo") int prodNo, @PathVariable("menu") String menu, Model model,
-			HttpServletRequest request, HttpServletResponse response) throws Exception {
+	public String getProduct(@PathVariable("prodNo") int prodNo, @PathVariable("menu") String menu, Model model) throws Exception {
 
 		System.out.println("/product/getProduct : GET");
 		
 		Product findProduct = productService.findProduct(prodNo);
 
 		model.addAttribute("product", findProduct);
-
-		// 최근 본 상품 Cookie start
-		Cookie[] cookies = request.getCookies();
-		String value = null;
-
-		if (cookies != null) {
-			for (int i = 0; i < cookies.length; i++) {
-				if (cookies[i].getName().equals("history")) {
-					value = cookies[i].getValue();
-				}
-			}
-		}
-
-		if (value == null || value.isEmpty()) {
-			value = String.valueOf(prodNo);
-		} else {
-			if (!value.contains(String.valueOf(prodNo))) {
-				value += "/" + String.valueOf(prodNo);
-			}
-		}
-
-		Cookie cookie = new Cookie("history", value);
-		cookie.setMaxAge(60 * 60);
-		response.addCookie(cookie);
 
 		if (menu.equals("manage")) {
 			return "forward:/product/updateProduct/"+prodNo;
@@ -131,7 +104,7 @@ public class ProductController {
 
 	@RequestMapping("listProduct/{menu}")
 	public String getListProduct(@PathVariable("menu") String menu, @ModelAttribute Search search,
-			@RequestParam(value="categoryNo", defaultValue = "-1") Integer categoryNo, Model model) throws Exception {
+			@RequestParam(value="categoryNo", defaultValue = "-1") Integer categoryNo, Model model, HttpServletRequest request) throws Exception {
 
 		System.out.println("/product/listProduct GET/POST");
 
@@ -146,10 +119,13 @@ public class ProductController {
 		HashMap<String, Object> resultMap = (HashMap<String, Object>) productService.getProductList(search);
 		Paginate resultPage = new Paginate(search.getCurrentPage(), ((Integer) resultMap.get("totalCount")).intValue(), pageUnit, pageSize);
 		
+		List<Product> history = productService.getRecentProduct(request);
+		
 		model.addAttribute("menu", menu);
 		model.addAttribute("resultPage", resultPage);
 		model.addAttribute("list", resultMap.get("list"));
 		model.addAttribute("search", search);
+		model.addAttribute("history", history);
 		model.addAttribute("categoryList", categoryService.getCategoryList().get("list"));
 
 		return "forward:/product/listProduct.jsp";

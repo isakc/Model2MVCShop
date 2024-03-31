@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -132,5 +135,28 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public void updateQuantity(int prodNo, int quantity) throws Exception {
 		productDao.updateProductQuantity(prodNo, quantity);
+	}
+
+	@Override
+	public List<Product> getRecentProduct(HttpServletRequest request) throws Exception {
+		Cookie[] cookies = request.getCookies();
+		List<Product> recentProductList = new ArrayList<Product>();
+		String history = null;
+		
+		if (cookies!=null && cookies.length > 0) {
+			for (int i = 0; i < cookies.length; i++) {
+				Cookie cookie = cookies[i];
+				
+				if (cookie.getName().equals("history")) {
+					history = cookie.getValue();
+				}
+			}
+		}
+		
+		for(String prodNo : history.split("/")) {
+			recentProductList.add(findProduct(Integer.parseInt(prodNo)));
+		}
+		
+		return recentProductList;
 	}
 }
