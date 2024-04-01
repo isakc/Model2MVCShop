@@ -72,7 +72,7 @@
 
 				<tr>
 					<td>구매자이름</td>
-					<td>${purchase.buyer.userName }</td>
+					<td>${purchase.receiverName }</td>
 				</tr>
 
 				<tr>

@@ -69,13 +69,17 @@
 	function setImageFromFile(input) {
 		
 	    if (input.files) {
+	    	
 	    	for(let i=0; i<input.files.length; i++){
+	    		
 	    		var reader = new FileReader();
+	    		
 		        reader.onload = function (e) {
 		        	let img = $("<img />");
 		            $(img).attr('src', e.target.result);
 	                $('#preview').append(img);
 		        }
+		        
 		        reader.readAsDataURL(input.files[i]);
 	    	}
 	    }

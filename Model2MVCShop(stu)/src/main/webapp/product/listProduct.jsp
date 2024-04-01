@@ -99,7 +99,7 @@
 		});
 		
 		$(".horizontal-list-group li:nth-child(4)").on("click", function () {
-			self.location = "/product/listProduct/search";
+			self.location = "/product/listProduct/${menu}";
 		});
 		
 		$("select[name=categoryNo]").on("change", function () {
@@ -128,7 +128,7 @@
 				$("input[name=searchKeyword2]").remove();
 			}
 		});
-
+		
 		//데이터 가져오는 함수
 		function getData(){
 			//다음페이지
@@ -163,7 +163,7 @@
 				                    +"<img src='/images/uploadFiles/"+product.fileNames[0] +"'class=card-img-top/>"
 				                    +"<div class='card-body'>"
 				                        +"<h5 class='card-title'>"+product.prodName+"</h5>"
-				                        +"<p class='card-text'>"+product.price+"</p>"
+				                        +"<p class='card-text'>"+product.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"원</p>"
 				                        +"<p class='card-text'>"+product.quantity+" 개 남음</p>"
 				                    +"</div></div></a></div>";
 				        container.append(card); // 컨테이너에 상품 카드 추가
@@ -172,7 +172,7 @@
 			});
 		}
 
-		let lastScroll = 0; //현재 스크롤 위치 저장
+		 let lastScroll = 0; //현재 스크롤 위치 저장
 		
 		$(document).scroll(function(e){
 		    var currentScroll = $(this).scrollTop(); //현재높이
@@ -390,7 +390,9 @@
 			<div class="text-center">
 				<input type="hidden" id="currentPage" name="currentPage" value="${resultPage.now }" />
 				<input type="hidden" id="sorter" name="sorter" value="${search.sorter }" />
-				<%-- <jsp:include page="../common/pageNavigator.jsp"/> --%>
+				<c:if test="${menu == 'manage' }">
+					<jsp:include page="../common/pageNavigator.jsp"/>
+				</c:if>
 			</div>
 			
 		</div>
