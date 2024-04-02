@@ -18,7 +18,7 @@ public class OpenAPIServiceImpl implements OpenAPIService {
 	final String key = "183da6c4fa3be1aadb21ae6ca7cdf1c0";
 	String targetDt = "20240401";
 	
-	String apiURL = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.xml?key="+key+"&targetDt="+targetDt;
+	String apiURL = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key="+key+"&targetDt="+targetDt;
 	
 	///Constructor
 	public OpenAPIServiceImpl() {
