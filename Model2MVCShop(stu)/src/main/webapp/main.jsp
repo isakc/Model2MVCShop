@@ -28,6 +28,23 @@
         }
    	</style>
    	
+   	<script type="text/javascript">
+   		$(function () {
+			$.ajax({
+				url: "/openAPI/json/main",
+				method: "GET",
+				headers: {
+					"Accept": "application/json",
+					"Content-Type": "application/json"
+				},
+					
+				success: function(data) {
+					console.log(data);		
+				}
+			})
+		})
+   	</script>
+   	
      <!--  ///////////////////////// JavaScript ////////////////////////// -->
 </head>
 	
