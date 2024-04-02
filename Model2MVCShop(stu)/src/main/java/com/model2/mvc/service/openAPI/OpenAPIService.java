@@ -2,10 +2,10 @@ package com.model2.mvc.service.openAPI;
 
 import java.util.List;
 
-import com.model2.mvc.service.domain.KobisAPI;
+import com.model2.mvc.service.domain.DailyBoxOffice;
 
 public interface OpenAPIService {
 	
 	//selectList
-	public List<KobisAPI> getMoiveList() throws Exception;
+	public List<DailyBoxOffice> getMoiveList() throws Exception;
 }

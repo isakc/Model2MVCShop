@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.model2.mvc.service.openAPI.OpenAPIService;
@@ -25,6 +26,7 @@ public class OpenAPIRestController {
 	}
 	
 	@RequestMapping(value="/json/main")
+	@ResponseBody
 	public Map<String, Object> listBoxOffice() throws Exception {
 		System.out.println("/main : GET / POST");
 
