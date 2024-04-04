@@ -46,8 +46,8 @@
 				          row.append('<td>' + movie.rank + '위</td>');
 				          row.append('<td>' + movie.movieNm + '</td>');
 				          row.append('<td>' + movie.openDt + '</td>');
-				          row.append('<td>' + movie.salesAmt + '원</td>');
-				          row.append('<td>' + movie.audiCnt + '명</td>');
+				          row.append('<td>' + movie.salesAmt.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '원</td>');
+				          row.append('<td>' + movie.audiCnt.replace(/\B(?=(\d{3})+(?!\d))/g, ',') + '명</td>');
 				          tableBody.append(row);
 				        });
 				}
