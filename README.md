@@ -1,6 +1,6 @@
 ## Model2MVCShop
-[![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
+## 소개
 개인프로젝트로 Spring을 사용하여 쇼핑몰 사이트를 개발
 
 12단계의 Refactoring을 거치고 추가 기능 개발
