@@ -1,5 +1,4 @@
 ## Model2MVCShop
-[![Build Status](https://img.shields.io/travis/username/repo.svg?style=flat-square)](https://travis-ci.org/username/repo)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](LICENSE)
 
 개인프로젝트로 Spring을 사용하여 쇼핑몰 사이트를 개발
