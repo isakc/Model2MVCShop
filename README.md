@@ -15,10 +15,10 @@
 * 사용자로 상품을 구매, 배송상황 조회
 
 ## 기술 스택
-Java 1.8
-Spring 5.2.5
-OracleDB Database
-JUnit 4
+* Java 1.8
+* Spring 5.2.5
+* OracleDB Database
+* JUnit 4
 
 ## Refactoring
 -------------------------------------------------
